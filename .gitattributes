@@ -1,0 +1,9 @@
+* text=auto eol=lf
+*.sh text eol=lf
+*.py text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.png binary
+*.ttf binary
+# Retain upstream font-licence text verbatim, including its whitespace.
+frontend/public/fonts/*/OFL.txt -whitespace

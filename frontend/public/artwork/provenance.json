@@ -1,0 +1,20 @@
+{
+  "generator": "OpenAI built-in ImageGen",
+  "created": "2026-11-07",
+  "reference": {
+    "source": "User-supplied traditional drawing reference",
+    "role": "Drawing style only; original subject not reproduced"
+  },
+  "assets": [
+    {
+      "file": "sampati-folk-sky.png",
+      "prompt": "Use case: illustration-story. Asset type: original horizontal background artwork for the SAMPATI software workspace, not a UI mockup.\nInput image 1 is a DRAWING-STYLE REFERENCE ONLY: borrow its old Indian folk-art feeling, fine ink outlines, flat hand-painted pigments, lyrical feathers and small ornament. Invent an entirely new subject and composition.\nSubject: Sampati as a single majestic mythic eagle/vulture with a strong hooked beak, soaring in side view, curved outstretched wings with graceful layered feathers. No people or deity figures.\nComposition: very wide landscape approximately 3:1. The entire bird is visible in the RIGHT 45 percent of the frame, head pointing left, one sweeping wing rising; left 55 percent is almost empty dark charcoal negative space, designed to hold readable software headings. Sparse stylised manuscript cloud curls close to the bird and lower right edge, not across the empty left.\nPalette: near-black and charcoal #101013 ground, ivory feather highlights, deep crimson red #b72e48 wing plumage, small muted saffron-gold #d6a05a details. Restrained, atmospheric contrast on the background but a distinct recognizable bird silhouette. Match the reference's organic, hand-drawn charm and flat pigments; subtle aged painted texture, no literal antique paper border.\nConstraints: no text, no letters, no logo lockup, no watermark, no interface, no humans, no weapons, no aircraft, no military or national insignia, no green background. No photorealism, 3D, neon, glowing VFX or glossy digital fantasy. Premium original folk illustration with enough broad shapes to remain attractive in a short panoramic header.",
+      "approval": "User selected this generated composition as the visual direction."
+    },
+    {
+      "file": "sampati-emblem.png",
+      "prompt": "Use case: logo-brand. Asset type: one isolated illustrated bird emblem for the SAMPATI app, transparent background.\nInput image 1 is a DRAWING-STYLE REFERENCE ONLY, not content to reproduce. Draw an original Sampati eagle/vulture in a traditional Indian folk illustration voice, with confident clean ink contours and flat warm pigments.\nDesign: compact asymmetric soaring bird silhouette, head facing left with a distinctive hooked beak, one wing curves upward in a broad crescent, the other folds beneath, short three-feather tail. Use 5 to 7 broad feather divisions and very little internal decoration so the silhouette reads well at 48 pixels. Ivory main feathers, deep crimson red underside, tiny saffron-gold beak/eye detail, thin dark contours. Balanced negative space and crisp edges.\nThe bird fills about 85 percent of a square composition, centered. This is an actual simple emblem, not a detailed scene or a brand board. Warm, crafted and dignified; flatter and simpler than the reference's full painting.\nConstraints: genuine transparent background, no text or letters, no circle or shield enclosing the bird, no crown, no human/deity, no weapons, no military/national insignia, no gradients, no drop shadow, no glow, no 3D. Output only one bird emblem.",
+      "transparent": true
+    }
+  ]
+}

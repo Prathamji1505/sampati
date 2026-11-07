@@ -1,0 +1,242 @@
+.welcome-screen {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+}
+.welcome-header,
+.welcome-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 64px;
+}
+.welcome-header {
+  position: relative;
+  z-index: 1;
+}
+.welcome-header .brand {
+  padding: 0;
+}
+.welcome-header .brand-symbol {
+  width: 48px;
+  height: 48px;
+}
+.welcome-header .brand-wordmark strong {
+  font-size: 25px;
+  letter-spacing: 0.04em;
+}
+.welcome-main {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-height: 580px;
+  padding: 48px 88px 64px;
+}
+.welcome-art {
+  position: absolute;
+  z-index: -2;
+  inset: 50% 0 auto;
+  width: 100%;
+  height: auto;
+  transform: translateY(-50%);
+  pointer-events: none;
+  user-select: none;
+}
+.welcome-main::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--ground) 8%,
+    #101013a6 35%,
+    #10101300 62%
+  );
+  pointer-events: none;
+}
+.welcome-copy {
+  max-width: 490px;
+}
+.welcome-copy h1 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  font-size: 96px;
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: 0.01em;
+  outline: none;
+}
+.welcome-devanagari {
+  font-family: "Nirmala UI", "Noto Sans Devanagari", sans-serif;
+  font-size: 27px;
+  line-height: 1.6;
+  color: var(--saffron);
+  margin-top: 12px;
+}
+.welcome-purpose {
+  color: var(--ink);
+  font-size: 22px;
+  font-weight: 450;
+  line-height: 1.55;
+  margin-top: 26px;
+}
+.welcome-description {
+  max-width: 36ch;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.8;
+  margin-top: 20px;
+}
+.welcome-screen .welcome-enter {
+  min-height: 50px;
+  min-width: 204px;
+  font-size: 14px;
+  gap: 18px;
+  padding: 14px 22px;
+  margin-top: 32px;
+}
+.welcome-enter > svg {
+  transition: transform 150ms ease-out;
+}
+@media (hover: hover) and (pointer: fine) {
+  .welcome-enter:hover > svg {
+    transform: translateX(3px);
+  }
+}
+.welcome-footer {
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+  padding-bottom: 22px;
+}
+.welcome-footer p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.welcome-footer p > span {
+  padding: 0 6px;
+}
+.welcome-screen .welcome-guide {
+  min-height: 44px;
+  font-size: 12px;
+}
+@media (max-width: 1180px) {
+  .welcome-header,
+  .welcome-footer {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+  .welcome-main {
+    min-height: 540px;
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+  .welcome-copy {
+    max-width: 44%;
+  }
+  .welcome-copy h1 {
+    font-size: 80px;
+  }
+  .welcome-purpose {
+    font-size: 20px;
+  }
+}
+@media (max-width: 760px) {
+  .welcome-header,
+  .welcome-footer {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .welcome-main {
+    min-height: auto;
+    padding: 0 24px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .welcome-main::before {
+    display: none;
+  }
+  .welcome-art {
+    position: relative;
+    inset: auto;
+    transform: none;
+    z-index: 0;
+    width: calc(100% + 48px);
+    height: 230px;
+    margin: 0 -24px 12px;
+    object-fit: cover;
+    object-position: right center;
+    mask-image: linear-gradient(to bottom, #000 86%, transparent);
+  }
+  .welcome-copy {
+    max-width: 100%;
+  }
+  .welcome-copy h1 {
+    font-size: 64px;
+  }
+  .welcome-devanagari {
+    font-size: 23px;
+    margin-top: 4px;
+  }
+  .welcome-purpose {
+    font-size: 19px;
+    margin-top: 20px;
+  }
+  .welcome-description {
+    margin-top: 16px;
+  }
+  .welcome-footer {
+    flex-wrap: wrap;
+    gap: 8px 20px;
+  }
+}
+@media (max-width: 480px) {
+  .welcome-header {
+    padding: 20px;
+    gap: 12px;
+  }
+  .welcome-header .brand-symbol {
+    width: 40px;
+    height: 40px;
+  }
+  .welcome-header .brand-wordmark strong {
+    font-size: 22px;
+  }
+  .welcome-header .brand-devanagari {
+    font-size: 12px;
+  }
+  .welcome-main {
+    padding: 0 20px 32px;
+  }
+  .welcome-art {
+    width: calc(100% + 40px);
+    height: 190px;
+    margin: 0 -20px 14px;
+  }
+  .welcome-copy h1 {
+    font-size: 58px;
+  }
+  .welcome-enter {
+    width: 100%;
+    margin-top: 26px;
+  }
+  .welcome-footer {
+    padding: 16px 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .welcome-enter > svg {
+    transition: none;
+  }
+}
+@media (max-width: 480px) and (max-height: 720px) {
+  .welcome-art {
+    height: 150px;
+  }
+}

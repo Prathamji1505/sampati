@@ -1,0 +1,8 @@
+{
+  "generator": "OpenAI built-in ImageGen",
+  "created": "2026-11-07",
+  "file": "sampati-cloud-edge.png",
+  "styleReference": "Approved Sampati folk-style bird panorama; cloud drawing style only",
+  "prompt": "Asset: one very wide horizontal painted CLOUD BACKGROUND for the bottom edge of the SAMPATI software, approximately 3:1 landscape.\nThe reference image supplies ONLY the traditional Indian folk/minia­ture cloud drawing style and warm ink/pigment palette.\nCreate a low, continuous bank of stylised curling clouds that grows naturally out of the LOWER LEFT and BOTTOM edges of the canvas. The clouds must extend beyond both those edges, like the edge of a larger painting, with thin cloud wisps continuing horizontally to the right. This is environmental scenery framing the edge of the software, not an isolated icon, sticker or ornamental badge.\nKeep the upper 70 percent of the image empty PURE BLACK. A few thin cloud curls rise slightly in the lower left; the main connected shapes remain close to the bottom edge. Use restrained ivory pigment, fine muted saffron-gold and dark brown ink contours, subtle hand-painted detail inside cloud shapes, and broad calm silhouettes that can be displayed faintly behind UI.\nOpaque pure black background, no paper rectangle or border; no gradient or glow surrounding the clouds. Flat old folk-painting treatment, cohesive with the reference.\nAbsolutely no feathers, birds, people, deities, plants, weapons, text, letters, symbols, logos, medallions, circles or interface. No spotlight, glow, 3D or dramatic scene. Output only the quiet cloud-edge panorama.",
+  "placement": "A low-contrast painted background at the bottom-left edge of the workspace canvas; no standalone foreground ornament."
+}

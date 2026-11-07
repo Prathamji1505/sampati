@@ -1,0 +1,677 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-07T11:01:23Z",
+  "title": "Design System: SAMPATI · सम्पाति",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Crimson Action",
+        "tonalRamp": [
+          "oklch(15% 0.0483 15.10)",
+          "oklch(26% 0.0897 15.10)",
+          "oklch(38% 0.1380 15.10)",
+          "oklch(50% 0.1726 15.10)",
+          "oklch(62% 0.1726 15.10)",
+          "oklch(74% 0.1467 15.10)",
+          "oklch(86% 0.0863 15.10)",
+          "oklch(95% 0.0311 15.10)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Bright Crimson Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0515 14.40)",
+          "oklch(26% 0.0956 14.40)",
+          "oklch(38% 0.1470 14.40)",
+          "oklch(50% 0.1838 14.40)",
+          "oklch(62% 0.1838 14.40)",
+          "oklch(74% 0.1562 14.40)",
+          "oklch(86% 0.0919 14.40)",
+          "oklch(95% 0.0331 14.40)"
+        ]
+      },
+      "accent-text": {
+        "role": "primary",
+        "displayName": "Rose Foreground",
+        "tonalRamp": [
+          "oklch(15% 0.0328 8.10)",
+          "oklch(26% 0.0610 8.10)",
+          "oklch(38% 0.0938 8.10)",
+          "oklch(50% 0.1173 8.10)",
+          "oklch(62% 0.1173 8.10)",
+          "oklch(74% 0.0997 8.10)",
+          "oklch(86% 0.0586 8.10)",
+          "oklch(95% 0.0211 8.10)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Crimson Selection",
+        "tonalRamp": [
+          "oklch(15% 0.0135 356.64)",
+          "oklch(26% 0.0250 356.64)",
+          "oklch(38% 0.0385 356.64)",
+          "oklch(50% 0.0481 356.64)",
+          "oklch(62% 0.0481 356.64)",
+          "oklch(74% 0.0409 356.64)",
+          "oklch(86% 0.0241 356.64)",
+          "oklch(95% 0.0087 356.64)"
+        ]
+      },
+      "on-accent": {
+        "role": "primary",
+        "displayName": "Warm White on Crimson",
+        "tonalRamp": [
+          "oklch(15% 0.0024 44.89)",
+          "oklch(26% 0.0044 44.89)",
+          "oklch(38% 0.0068 44.89)",
+          "oklch(50% 0.0085 44.89)",
+          "oklch(62% 0.0085 44.89)",
+          "oklch(74% 0.0072 44.89)",
+          "oklch(86% 0.0043 44.89)",
+          "oklch(95% 0.0015 44.89)"
+        ]
+      },
+      "saffron": {
+        "role": "secondary",
+        "displayName": "Saffron Identity",
+        "tonalRamp": [
+          "oklch(15% 0.0304 71.95)",
+          "oklch(26% 0.0564 71.95)",
+          "oklch(38% 0.0868 71.95)",
+          "oklch(50% 0.1085 71.95)",
+          "oklch(62% 0.1085 71.95)",
+          "oklch(74% 0.0922 71.95)",
+          "oklch(86% 0.0542 71.95)",
+          "oklch(95% 0.0195 71.95)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Warm Ivory",
+        "tonalRamp": [
+          "oklch(15% 0.0027 72.66)",
+          "oklch(26% 0.0050 72.66)",
+          "oklch(38% 0.0077 72.66)",
+          "oklch(50% 0.0097 72.66)",
+          "oklch(62% 0.0097 72.66)",
+          "oklch(74% 0.0082 72.66)",
+          "oklch(86% 0.0048 72.66)",
+          "oklch(95% 0.0017 72.66)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Warm Gray",
+        "tonalRamp": [
+          "oklch(15% 0.0022 345.42)",
+          "oklch(26% 0.0042 345.42)",
+          "oklch(38% 0.0064 345.42)",
+          "oklch(50% 0.0080 345.42)",
+          "oklch(62% 0.0080 345.42)",
+          "oklch(74% 0.0068 345.42)",
+          "oklch(86% 0.0040 345.42)",
+          "oklch(95% 0.0014 345.42)"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Black Canvas",
+        "tonalRamp": [
+          "oklch(15% 0.0017 285.74)",
+          "oklch(26% 0.0032 285.74)",
+          "oklch(38% 0.0049 285.74)",
+          "oklch(50% 0.0061 285.74)",
+          "oklch(62% 0.0061 285.74)",
+          "oklch(74% 0.0052 285.74)",
+          "oklch(86% 0.0031 285.74)",
+          "oklch(95% 0.0011 285.74)"
+        ]
+      },
+      "nav": {
+        "role": "neutral",
+        "displayName": "Navigation Black",
+        "tonalRamp": [
+          "oklch(15% 0.0018 285.58)",
+          "oklch(26% 0.0033 285.58)",
+          "oklch(38% 0.0051 285.58)",
+          "oklch(50% 0.0064 285.58)",
+          "oklch(62% 0.0064 285.58)",
+          "oklch(74% 0.0055 285.58)",
+          "oklch(86% 0.0032 285.58)",
+          "oklch(95% 0.0012 285.58)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Charcoal Work Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0022 285.69)",
+          "oklch(26% 0.0041 285.69)",
+          "oklch(38% 0.0063 285.69)",
+          "oklch(50% 0.0079 285.69)",
+          "oklch(62% 0.0079 285.69)",
+          "oklch(74% 0.0067 285.69)",
+          "oklch(86% 0.0039 285.69)",
+          "oklch(95% 0.0014 285.69)"
+        ]
+      },
+      "surface-raised": {
+        "role": "neutral",
+        "displayName": "Raised Charcoal",
+        "tonalRamp": [
+          "oklch(15% 0.0026 294.88)",
+          "oklch(26% 0.0049 294.88)",
+          "oklch(38% 0.0075 294.88)",
+          "oklch(50% 0.0094 294.88)",
+          "oklch(62% 0.0094 294.88)",
+          "oklch(74% 0.0080 294.88)",
+          "oklch(86% 0.0047 294.88)",
+          "oklch(95% 0.0017 294.88)"
+        ]
+      },
+      "surface-hover": {
+        "role": "neutral",
+        "displayName": "Charcoal Hover",
+        "tonalRamp": [
+          "oklch(15% 0.0032 308.01)",
+          "oklch(26% 0.0060 308.01)",
+          "oklch(38% 0.0093 308.01)",
+          "oklch(50% 0.0116 308.01)",
+          "oklch(62% 0.0116 308.01)",
+          "oklch(74% 0.0098 308.01)",
+          "oklch(86% 0.0058 308.01)",
+          "oklch(95% 0.0021 308.01)"
+        ]
+      },
+      "skeleton-highlight": {
+        "role": "neutral",
+        "displayName": "Loading Highlight",
+        "tonalRamp": [
+          "oklch(15% 0.0047 305.52)",
+          "oklch(26% 0.0087 305.52)",
+          "oklch(38% 0.0134 305.52)",
+          "oklch(50% 0.0167 305.52)",
+          "oklch(62% 0.0167 305.52)",
+          "oklch(74% 0.0142 305.52)",
+          "oklch(86% 0.0083 305.52)",
+          "oklch(95% 0.0030 305.52)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Content Divider",
+        "tonalRamp": [
+          "oklch(15% 0.0037 310.92)",
+          "oklch(26% 0.0069 310.92)",
+          "oklch(38% 0.0107 310.92)",
+          "oklch(50% 0.0134 310.92)",
+          "oklch(62% 0.0134 310.92)",
+          "oklch(74% 0.0114 310.92)",
+          "oklch(86% 0.0067 310.92)",
+          "oklch(95% 0.0024 310.92)"
+        ]
+      },
+      "control-line": {
+        "role": "neutral",
+        "displayName": "Control Boundary",
+        "tonalRamp": [
+          "oklch(15% 0.0053 313.50)",
+          "oklch(26% 0.0099 313.50)",
+          "oklch(38% 0.0153 313.50)",
+          "oklch(50% 0.0191 313.50)",
+          "oklch(62% 0.0191 313.50)",
+          "oklch(74% 0.0162 313.50)",
+          "oklch(86% 0.0095 313.50)",
+          "oklch(95% 0.0034 313.50)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Rose Focus",
+        "tonalRamp": [
+          "oklch(15% 0.0328 8.10)",
+          "oklch(26% 0.0610 8.10)",
+          "oklch(38% 0.0938 8.10)",
+          "oklch(50% 0.1173 8.10)",
+          "oklch(62% 0.1173 8.10)",
+          "oklch(74% 0.0997 8.10)",
+          "oklch(86% 0.0586 8.10)",
+          "oklch(95% 0.0211 8.10)"
+        ]
+      },
+      "success": {
+        "role": "semantic",
+        "displayName": "Available / Success",
+        "tonalRamp": [
+          "oklch(15% 0.0218 162.13)",
+          "oklch(26% 0.0405 162.13)",
+          "oklch(38% 0.0623 162.13)",
+          "oklch(50% 0.0779 162.13)",
+          "oklch(62% 0.0779 162.13)",
+          "oklch(74% 0.0662 162.13)",
+          "oklch(86% 0.0390 162.13)",
+          "oklch(95% 0.0140 162.13)"
+        ]
+      },
+      "success-soft": {
+        "role": "semantic",
+        "displayName": "Success Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0082 169.82)",
+          "oklch(26% 0.0152 169.82)",
+          "oklch(38% 0.0234 169.82)",
+          "oklch(50% 0.0293 169.82)",
+          "oklch(62% 0.0293 169.82)",
+          "oklch(74% 0.0249 169.82)",
+          "oklch(86% 0.0147 169.82)",
+          "oklch(95% 0.0053 169.82)"
+        ]
+      },
+      "success-line": {
+        "role": "semantic",
+        "displayName": "Success Boundary",
+        "tonalRamp": [
+          "oklch(15% 0.0151 161.32)",
+          "oklch(26% 0.0281 161.32)",
+          "oklch(38% 0.0432 161.32)",
+          "oklch(50% 0.0540 161.32)",
+          "oklch(62% 0.0540 161.32)",
+          "oklch(74% 0.0459 161.32)",
+          "oklch(86% 0.0270 161.32)",
+          "oklch(95% 0.0097 161.32)"
+        ]
+      },
+      "warning": {
+        "role": "semantic",
+        "displayName": "Review / Warning",
+        "tonalRamp": [
+          "oklch(15% 0.0286 76.52)",
+          "oklch(26% 0.0531 76.52)",
+          "oklch(38% 0.0817 76.52)",
+          "oklch(50% 0.1021 76.52)",
+          "oklch(62% 0.1021 76.52)",
+          "oklch(74% 0.0868 76.52)",
+          "oklch(86% 0.0511 76.52)",
+          "oklch(95% 0.0184 76.52)"
+        ]
+      },
+      "warning-soft": {
+        "role": "semantic",
+        "displayName": "Warning Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0075 73.62)",
+          "oklch(26% 0.0140 73.62)",
+          "oklch(38% 0.0215 73.62)",
+          "oklch(50% 0.0269 73.62)",
+          "oklch(62% 0.0269 73.62)",
+          "oklch(74% 0.0229 73.62)",
+          "oklch(86% 0.0135 73.62)",
+          "oklch(95% 0.0048 73.62)"
+        ]
+      },
+      "warning-line": {
+        "role": "semantic",
+        "displayName": "Warning Boundary",
+        "tonalRamp": [
+          "oklch(15% 0.0153 77.25)",
+          "oklch(26% 0.0284 77.25)",
+          "oklch(38% 0.0437 77.25)",
+          "oklch(50% 0.0546 77.25)",
+          "oklch(62% 0.0546 77.25)",
+          "oklch(74% 0.0464 77.25)",
+          "oklch(86% 0.0273 77.25)",
+          "oklch(95% 0.0098 77.25)"
+        ]
+      },
+      "error": {
+        "role": "semantic",
+        "displayName": "Validation Error",
+        "tonalRamp": [
+          "oklch(15% 0.0290 17.46)",
+          "oklch(26% 0.0538 17.46)",
+          "oklch(38% 0.0827 17.46)",
+          "oklch(50% 0.1034 17.46)",
+          "oklch(62% 0.1034 17.46)",
+          "oklch(74% 0.0879 17.46)",
+          "oklch(86% 0.0517 17.46)",
+          "oklch(95% 0.0186 17.46)"
+        ]
+      },
+      "error-soft": {
+        "role": "semantic",
+        "displayName": "Error Surface",
+        "tonalRamp": [
+          "oklch(15% 0.0110 1.32)",
+          "oklch(26% 0.0204 1.32)",
+          "oklch(38% 0.0314 1.32)",
+          "oklch(50% 0.0392 1.32)",
+          "oklch(62% 0.0392 1.32)",
+          "oklch(74% 0.0333 1.32)",
+          "oklch(86% 0.0196 1.32)",
+          "oklch(95% 0.0071 1.32)"
+        ]
+      },
+      "error-line": {
+        "role": "semantic",
+        "displayName": "Error Boundary",
+        "tonalRamp": [
+          "oklch(15% 0.0215 5.51)",
+          "oklch(26% 0.0399 5.51)",
+          "oklch(38% 0.0614 5.51)",
+          "oklch(50% 0.0767 5.51)",
+          "oklch(62% 0.0767 5.51)",
+          "oklch(74% 0.0652 5.51)",
+          "oklch(86% 0.0384 5.51)",
+          "oklch(95% 0.0138 5.51)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Page headline",
+        "purpose": "Yatra One page h1 only; tables, body copy, controls and other headings retain DM Sans.",
+        "cssVariable": "--font-display",
+        "responsive": [
+          {
+            "query": "(min-width: 1600px)",
+            "fontSize": "42px"
+          },
+          {
+            "query": "(max-width: 850px)",
+            "fontSize": "32px"
+          }
+        ]
+      },
+      "title": {
+        "displayName": "Work-area title",
+        "purpose": "Empty-state and upload headings."
+      },
+      "body": {
+        "displayName": "Supporting reading",
+        "purpose": "Page descriptions; longer guide copy has its own line-height."
+      },
+      "label": {
+        "displayName": "Status label",
+        "purpose": "Text inside source-reported status tags."
+      },
+      "button": {
+        "displayName": "Standard action",
+        "purpose": "Standard primary and secondary buttons; compact variants remain local."
+      },
+      "wordmark": {
+        "displayName": "Latin wordmark",
+        "purpose": "Yatra One SAMPATI paired with the existing Devanagari identity.",
+        "cssVariable": "--font-display",
+        "responsive": [
+          {
+            "query": "(max-width: 850px)",
+            "fontSize": "21px",
+            "letterSpacing": "0.02em"
+          },
+          {
+            "query": "(max-width: 640px)",
+            "fontSize": "19px",
+            "letterSpacing": "0.04em"
+          }
+        ]
+      },
+      "devanagari": {
+        "displayName": "Hindi wordmark",
+        "purpose": "सम्पाति with Hindi language semantics and Devanagari font fallbacks."
+      }
+    },
+    "shadows": [
+      {
+        "name": "detail-dialog",
+        "value": "0 20px 70px #00000066",
+        "purpose": "Structural lift for the native record/import dialog."
+      },
+      {
+        "name": "mobile-drawer",
+        "value": "12px 0 35px #00000066",
+        "purpose": "Separation for the open mobile navigation drawer."
+      }
+    ],
+    "motion": [
+      {
+        "name": "button-feedback",
+        "value": "background-color 140ms, border-color 140ms",
+        "purpose": "Standard action hover feedback."
+      },
+      {
+        "name": "navigation-feedback",
+        "value": "background-color 150ms, color 150ms",
+        "purpose": "Navigation hover feedback."
+      },
+      {
+        "name": "dropzone-feedback",
+        "value": "background-color 150ms, border-color 150ms",
+        "purpose": "Dragging state feedback."
+      },
+      {
+        "name": "loading-pulse",
+        "value": "pulse 1.5s ease-in-out infinite",
+        "purpose": "Loading skeleton; midpoint uses the skeleton highlight."
+      },
+      {
+        "name": "refresh-rotation",
+        "value": "rotate 1s linear infinite",
+        "purpose": "Refresh icon while data is being refreshed."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "wide-workspace",
+        "value": "1600px",
+        "query": "(min-width: 1600px)"
+      },
+      {
+        "name": "narrow-desktop",
+        "value": "1180px",
+        "query": "(max-width: 1180px)"
+      },
+      {
+        "name": "compact-workspace",
+        "value": "850px",
+        "query": "(max-width: 850px)"
+      },
+      {
+        "name": "mobile",
+        "value": "640px",
+        "query": "(max-width: 640px)"
+      }
+    ],
+    "focus": {
+      "value": "3px solid var(--focus)",
+      "outlineOffset": "4px",
+      "searchInputOffset": "1px"
+    },
+    "backdrops": {
+      "detailDialog": "#050507bb"
+    },
+    "interactionMedia": {
+      "hover": "(hover: hover) and (pointer: fine)",
+      "touch": "(pointer: coarse)",
+      "reducedMotion": "(prefers-reduced-motion: reduce)"
+    },
+    "tonalRampPurpose": "Synthesized OKLCH reference strips for the panel, dark to light. They are not implemented UI tokens or permission to add new shades.",
+    "reducedMotion": "Disable animations and transitions and use automatic scroll behavior.",
+    "fontSources": [
+      {
+        "refersTo": [
+          "headline",
+          "wordmark"
+        ],
+        "url": "/fonts/yatra-one/YatraOne-Regular.ttf",
+        "format": "truetype",
+        "fontStyle": "normal",
+        "fontDisplay": "swap",
+        "provenance": "Yatra One, unmodified from google/fonts; SIL OFL 1.1 retained in frontend/public/fonts/yatra-one/OFL.txt. Replaces the privately retained personal-use prototype font for publication.",
+        "usageContext": "Local personal learning prototype."
+      }
+    ],
+    "assets": [
+      {
+        "name": "Sampati bird emblem",
+        "url": "/artwork/sampati-emblem.png",
+        "format": "PNG",
+        "transparent": true,
+        "purpose": "Folk-style soaring-bird identity with its full silhouette contained.",
+        "displaySize": "48px",
+        "responsive": [
+          {
+            "query": "(max-width: 850px)",
+            "displaySize": "31px"
+          },
+          {
+            "query": "(max-width: 640px)",
+            "displaySize": "36px"
+          }
+        ]
+      },
+      {
+        "name": "Sampati folk sky",
+        "url": "/artwork/sampati-folk-sky.png",
+        "format": "PNG",
+        "purpose": "Approved crimson/ivory/gold soaring-bird panorama behind page headings; bird on the right and quiet space for text on the left."
+      }
+    ],
+    "assetProvenance": {
+      "manifest": "frontend/public/artwork/provenance.json",
+      "referenceRole": "Original user drawing used for folk-art drawing style only.",
+      "promptStorage": "Exact generation prompts are recorded in the manifest and embedded in both PNGs."
+    },
+    "headerArtwork": {
+      "target": ".main-shell::before",
+      "position": "absolute",
+      "inset": "65px 0 auto",
+      "zIndex": -1,
+      "height": "250px",
+      "backgroundImage": "linear-gradient(90deg, var(--ground) 12%, #101013b3 42%, #10101300 68%), url(\"/artwork/sampati-folk-sky.png\")",
+      "backgroundSize": "100% 100%, auto 250px",
+      "backgroundPosition": "left top, right top",
+      "backgroundRepeat": "no-repeat",
+      "maskImage": "linear-gradient(to bottom, #000 80%, transparent)",
+      "pointerEvents": "none",
+      "mobile": {
+        "query": "(max-width: 640px)",
+        "top": "64px",
+        "height": "220px",
+        "backgroundImage": "linear-gradient(90deg, #101013f5 5%, #101013e6 48%, #10101380 100%), url(\"/artwork/sampati-folk-sky.png\")",
+        "backgroundSize": "100% 100%, auto 210px",
+        "backgroundPosition": "left top, right -110px top"
+      }
+    },
+    "pageHeading": {
+      "minHeight": "200px",
+      "copyMaxWidth": "52%",
+      "actionPlacement": "Aligned to the lower edge of the desktop heading region.",
+      "compact": {
+        "query": "(max-width: 850px)",
+        "minHeight": "185px"
+      },
+      "mobile": {
+        "query": "(max-width: 640px)",
+        "copyMaxWidth": "88%",
+        "actionPlacement": "Below heading text with 18px top margin."
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Primary button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Crimson action for importing and confirming a dataset.",
+      "html": "<button class=\"ds-primary\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12\"/></svg>Import dataset</button>",
+      "css": ".ds-primary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:10px 15px;border:1px solid transparent;border-radius:6px;font-family:\"DM Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;font-size:12px;font-weight:550;white-space:nowrap;text-decoration:none;cursor:pointer;touch-action:manipulation;transition:background-color 140ms,border-color 140ms}.ds-primary:disabled{opacity:.55;cursor:not-allowed}.ds-primary:active:not(:disabled){transform:translateY(1px)}.ds-primary:focus-visible{outline:3px solid var(--focus,#f292a4);outline-offset:4px}@media(pointer:coarse){.ds-primary{min-height:44px;}}.ds-primary{background:var(--accent,#b72e48);color:var(--on-accent,#fff8f5)}@media(hover:hover) and (pointer:fine){.ds-primary:hover:not(:disabled){background:var(--accent-hover,#ca3653)}}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+    },
+    {
+      "name": "Secondary button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Bordered charcoal action for supporting workflow choices.",
+      "html": "<button class=\"ds-secondary\">Download CSV template</button>",
+      "css": ".ds-secondary{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:40px;padding:10px 15px;border:1px solid transparent;border-radius:6px;font-family:\"DM Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;font-size:12px;font-weight:550;white-space:nowrap;text-decoration:none;cursor:pointer;touch-action:manipulation;transition:background-color 140ms,border-color 140ms}.ds-secondary:disabled{opacity:.55;cursor:not-allowed}.ds-secondary:active:not(:disabled){transform:translateY(1px)}.ds-secondary:focus-visible{outline:3px solid var(--focus,#f292a4);outline-offset:4px}@media(pointer:coarse){.ds-secondary{min-height:44px;}}.ds-secondary{background:var(--surface-raised,#222126);color:var(--ink,#f2ede7);border-color:var(--control-line,#6c6570)}@media(hover:hover) and (pointer:fine){.ds-secondary:hover:not(:disabled){background:var(--surface-hover,#2c292f);border-color:var(--muted,#b3adb0)}}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+    },
+    {
+      "name": "Text action",
+      "kind": "button",
+      "refersTo": "button-text",
+      "description": "Quiet rose action for supplementary workflow links.",
+      "html": "<button class=\"ds-text-action\">Download an error example</button>",
+      "css": ".ds-text-action{display:inline-flex;align-items:center;gap:7px;padding:5px 0;border:0;background:none;color:var(--accent-text,#f292a4);font-family:\"DM Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;font-size:11px;font-weight:500;cursor:pointer;text-decoration:none}@media(hover:hover) and (pointer:fine){.ds-text-action:hover{text-decoration:underline;text-underline-offset:3px}}.ds-text-action:focus-visible{outline:3px solid var(--focus,#f292a4);outline-offset:4px}"
+    },
+    {
+      "name": "Search field",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Constrained desktop search that fills its toolbar on mobile.",
+      "html": "<label class=\"ds-search\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg><input aria-label=\"Search aircraft\" placeholder=\"Search aircraft\" /></label>",
+      "css": ".ds-search{display:flex;align-items:center;gap:9px;width:300px;max-width:100%;min-width:0;padding:0 10px;background:var(--surface,#17171b);border:1px solid var(--control-line,#6c6570);border-radius:6px;color:var(--muted,#b3adb0)}.ds-search input{min-width:0;width:100%;height:38px;padding:1px 2px;border:0;background:transparent;color:var(--ink,#f2ede7);caret-color:var(--accent-text,#f292a4);font-family:\"DM Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;font-size:12px}.ds-search input::placeholder{color:var(--muted,#b3adb0)}.ds-search input:focus-visible{outline:3px solid var(--focus,#f292a4);outline-offset:1px}@media(max-width:640px){.ds-search{width:100%}}@media(pointer:coarse){.ds-search input{font-size:16px;height:44px}}"
+    },
+    {
+      "name": "Sidebar navigation item",
+      "kind": "nav",
+      "refersTo": "navigation-active",
+      "description": "Selected view with a soft crimson fill and rose icon.",
+      "html": "<nav aria-label=\"Workspace\"><button class=\"ds-nav-item\" aria-current=\"page\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"17\" height=\"17\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z\"/></svg>Aircraft register</button></nav>",
+      "css": ".ds-nav-item{display:flex;align-items:center;gap:12px;width:100%;min-height:44px;padding:10px 14px;background:transparent;border:0;border-radius:7px;color:var(--muted,#b3adb0);font-family:\"DM Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;font-size:13px;font-weight:500;text-align:left;cursor:pointer;transition:background-color 150ms,color 150ms}.ds-nav-item[aria-current=page]{background:var(--accent-soft,#391c27);color:var(--ink,#f2ede7)}.ds-nav-item[aria-current=page] svg{color:var(--accent-text,#f292a4)}@media(hover:hover) and (pointer:fine){.ds-nav-item:hover:not([aria-current=page]){background:var(--surface-raised,#222126);color:var(--ink,#f2ede7)}}.ds-nav-item:focus-visible{outline:3px solid var(--focus,#f292a4);outline-offset:4px}@media(prefers-reduced-motion:reduce){.ds-nav-item{transition:none}}@media(max-width:850px){.ds-nav-item{font-size:11px;padding:10px;gap:9px}}"
+    },
+    {
+      "name": "Reported status tag",
+      "kind": "chip",
+      "refersTo": "tag-available",
+      "description": "Source-reported availability; separate from freshness.",
+      "html": "<span class=\"ds-status\"><span aria-hidden=\"true\"></span>Reported available</span>",
+      "css": ".ds-status{display:inline-flex;align-items:center;gap:6px;padding:5px 7px;border-radius:4px;background:var(--success-soft,#172b24);color:var(--success,#87c5a6);font-family:\"DM Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif;font-size:11px;font-weight:500;line-height:1.2;white-space:nowrap}.ds-status>span{width:4px;height:4px;border-radius:50%;background:currentColor}"
+    },
+    {
+      "name": "Import work panel",
+      "kind": "card",
+      "refersTo": "panel-import",
+      "description": "Flat bordered container for the import workflow.",
+      "html": "<section class=\"ds-import-panel\"><h2>Review your import</h2><p>Check the details before anything changes in your register.</p></section>",
+      "css": ".ds-import-panel{min-width:0;padding:25px;background:var(--surface,#17171b);border:1px solid var(--line,#363239);border-radius:10px;color:var(--ink,#f2ede7);font-family:\"DM Sans\",-apple-system,BlinkMacSystemFont,\"Segoe UI\",sans-serif}.ds-import-panel h2{margin:0;font-size:18px;font-weight:550;letter-spacing:-.3px}.ds-import-panel p{margin:10px 0 0;font-size:13px;line-height:1.7;color:var(--muted,#b3adb0)}@media(max-width:1180px){.ds-import-panel{padding:20px}}@media(max-width:640px){.ds-import-panel{padding:17px}}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Source first.",
+    "overview": "SAMPATI · सम्पाति pairs a quiet black-and-charcoal workspace with crimson actions, warm ivory text and restrained saffron. The approved descriptor is “Air Operations & Resource Decision Support”. A folk-style soaring-bird emblem, Yatra One display lettering and an approved crimson/ivory/gold panorama express the identity in the header; the interface stays focused on scanning reports and completing an import.\n\nThis documents the implemented local, fictional aircraft-report prototype. The descriptor names the broader project and does not imply that future operations, live feeds or AI capabilities exist. This approved theme supersedes the provisional Airframe name, ink-blue navigation and white reading surfaces; the table, sidebar, import workflow and source-first principles remain.",
+    "keyCharacteristics": [
+      "Task-focused hierarchy and compact, structured data.",
+      "Bilingual bird identity and an illustrated header with restrained gold.",
+      "Tonal surfaces, clear borders and visible keyboard focus.",
+      "Reported status and report freshness shown separately."
+    ],
+    "rules": [
+      {
+        "name": "The Identity Accent Rule",
+        "body": "Reserve saffron for identity and the approved artwork; use crimson for actions and the semantic families for data states.",
+        "section": "colors"
+      },
+      {
+        "name": "The Reading Hierarchy Rule",
+        "body": "Keep instructions and decisions at the established reading scale; do not borrow tiny metadata styles for essential content.",
+        "section": "typography"
+      }
+    ],
+    "dos": [
+      "Do keep scanning, source context and import completion ahead of decoration.",
+      "Do preserve the bilingual wordmark and the approved descriptor.",
+      "Do use text as well as color for status, freshness and validation.",
+      "Do keep keyboard focus visible and honor reduced motion.",
+      "Do label fictional local data honestly and preview changes before confirmation."
+    ],
+    "donts": [
+      "Don't use saffron as a general action, status or chart color.",
+      "Don't collapse reported status and freshness into one signal.",
+      "Don't add decorative entrance motion to this workflow.",
+      "Don't turn tiny metadata sizes into a target for new reading content.",
+      "Don't imply live tracking, AI decisions, flight authorization or airworthiness certification."
+    ]
+  }
+}

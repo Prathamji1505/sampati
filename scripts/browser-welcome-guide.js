@@ -1,0 +1,60 @@
+async page => {
+  const check = (ok, message) => { if (!ok) throw new Error(message) }
+  const origin = 'http://127.0.0.1:5173/'
+  const dataRequests = []
+  const errors = []
+  const dataRequest = request => { if (/\/api\/(?:demo\/)?(?:workspace|imports|overview|sources|team)(?:[/?]|$)/.test(request.url())) dataRequests.push(request.url()) }
+  const consoleError = message => { if (message.type() === 'error') errors.push(message.text()) }
+  page.on('request', dataRequest)
+  page.on('console', consoleError)
+  const guide = () => page.getByRole('heading', { name: 'Your workspace, explained', exact: true })
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.goto(origin)
+  await page.getByRole('heading', { name: 'Sampati', exact: true }).waitFor()
+  await page.getByRole('button', { name: 'Read workspace guide', exact: true }).click()
+  await guide().waitFor()
+  check(await page.getByRole('navigation', { name: 'Main navigation' }).count() === 0, 'Welcome guide entered the workspace frame')
+  check(dataRequests.length === 0, 'Welcome guide loaded workspace data')
+  const guideUrl = page.url()
+  await page.waitForFunction(() => document.activeElement?.id === 'page-title')
+  await page.reload()
+  await guide().waitFor()
+  check(page.url() === guideUrl && await page.locator('.sidebar').count() === 0, 'Guide reload entered workspace')
+  await page.getByRole('button', { name: 'Back to welcome', exact: true }).click()
+  await page.getByRole('heading', { name: 'Sampati', exact: true }).waitFor()
+  await page.goBack()
+  await guide().waitFor()
+  await page.goForward()
+  await page.getByRole('heading', { name: 'Sampati', exact: true }).waitFor()
+  await page.goBack()
+  await guide().waitFor()
+  for (const width of [1440, 1024, 390, 320]) {
+    await page.setViewportSize({ width, height: 1000 })
+    await page.evaluate(async () => { await document.fonts.ready; document.activeElement?.blur(); scrollTo(0,0) })
+    const layout = await page.evaluate(() => ({ viewport: innerWidth, content: document.documentElement.scrollWidth }))
+    check(layout.content <= layout.viewport, 'Guide overflows at ' + width)
+    await page.screenshot({ path: '.impeccable/review/welcome-guide-' + width + '.png', fullPage: true })
+  }
+  check(dataRequests.length === 0, 'Reading, reloading or navigating the guide fetched workspace data')
+  await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.getByRole('button', { name: 'Enter workspace', exact: true }).click()
+  await page.getByRole('heading', { name: 'Aircraft register', exact: true }).waitFor()
+  check(dataRequests.length > 0, 'Explicit workspace entry did not load the register')
+  await page.getByRole('button', { name: 'Workspace guide', exact: true }).click()
+  await guide().waitFor()
+  check(await page.getByRole('navigation', { name: 'Main navigation' }).count() === 1, 'In-workspace guide lost its navigation')
+  await page.getByRole('button', { name: 'Start an import', exact: true }).click()
+  await page.getByRole('heading', { name: 'Import a dataset', exact: true }).waitFor()
+  const offlineContext = await page.context().browser().newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
+  const offline = await offlineContext.newPage()
+  await offline.route('**/api/**', route => route.abort())
+  await offline.goto(guideUrl)
+  await offline.getByRole('heading', { name: 'Your workspace, explained', exact: true }).waitFor()
+  check(await offline.locator('.sidebar').count() === 0, 'Guide needs the API or a workspace session')
+  await offlineContext.close()
+  page.off('request', dataRequest)
+  page.off('console', consoleError)
+  check(errors.length === 0, 'Unexpected browser errors: ' + errors.join('; '))
+  await page.goto(origin)
+  return { passed: ['standalone guide from welcome', 'zero workspace data reads before entry', 'guide works without API', 'direct guide and reload', 'Back/Forward and return to welcome', 'heading focus', '1440/1024/390/320px containment', 'explicit entry loads register', 'in-workspace guide and import still work', 'zero new console errors'] }
+}

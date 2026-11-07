@@ -1,0 +1,13 @@
+aircraft_id,display_name,reported_status,source_updated_at,source_name,note
+DEMO-001,Cedar,available,2026-11-07T09:49:14+00:00,Fictional civil fleet register,Fictional civilian transport report.
+DEMO-002,Willow,available,2026-11-07T09:32:14+00:00,Fictional civil fleet register,Fictional civilian transport report.
+DEMO-003,Birch,unavailable,2026-11-07T09:15:14+00:00,Fictional civil fleet register,Fictional maintenance hold reported by the source.
+DEMO-004,Maple,available,2026-11-07T08:58:14+00:00,Fictional civil fleet register,Fictional civilian transport report.
+DEMO-005,Aspen,unknown,2026-11-06T02:41:14+00:00,Fictional civil fleet register,Fictional record awaiting a confirmed source update.
+DEMO-006,Alder,available,2026-11-07T08:24:14+00:00,Fictional civil fleet register,Fictional civilian transport report.
+DEMO-007,Juniper,unavailable,2026-11-07T08:07:14+00:00,Fictional civil fleet register,Fictional maintenance hold reported by the source.
+DEMO-008,Elm,available,2026-11-07T07:50:14+00:00,Fictional civil fleet register,Fictional civilian transport report.
+DEMO-009,Hazel,available,2026-11-07T07:33:14+00:00,Fictional civil fleet register,Fictional civilian transport report.
+DEMO-010,Pine,unknown,2026-11-06T01:16:14+00:00,Fictional civil fleet register,Fictional record awaiting a confirmed source update.
+DEMO-011,Oak,available,2026-11-07T06:59:14+00:00,Fictional civil fleet register,Fictional civilian transport report.
+DEMO-012,Ash,unavailable,2026-11-07T06:42:14+00:00,Fictional civil fleet register,Fictional maintenance hold reported by the source.

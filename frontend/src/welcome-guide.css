@@ -1,0 +1,87 @@
+.public-guide-page {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+}
+
+.public-guide-main {
+  width: min(1100px, calc(100% - 128px));
+  margin: 42px auto 64px;
+  flex: 1;
+}
+
+.public-guide-heading {
+  margin-bottom: 40px;
+}
+
+.public-guide-heading h1 {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 3.2vw, 44px);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+  outline: none;
+}
+
+.public-guide-heading p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
+  margin-top: 14px;
+}
+
+.public-guide-page .guide-content > h2 {
+  margin-top: 32px;
+}
+
+.public-guide-page .guide-content > h2:first-child {
+  margin-top: 0;
+}
+
+.public-guide-footer strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 550;
+  line-height: 1.7;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.public-guide-footer {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 850px) {
+  .public-guide-main {
+    width: calc(100% - 64px);
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .public-guide-main {
+    width: calc(100% - 40px);
+    margin-bottom: 40px;
+  }
+
+  .public-guide-heading {
+    margin-bottom: 32px;
+  }
+
+  .public-guide-page .welcome-header {
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .public-guide-page .welcome-header .button {
+    font-size: 11px;
+    padding: 10px;
+    gap: 6px;
+  }
+
+  .public-guide-page .guide-content > .button {
+    width: 100%;
+  }
+}

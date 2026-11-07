@@ -1,0 +1,350 @@
+.auth-page {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--ground);
+}
+.auth-header {
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 24px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.auth-header .brand {
+  width: auto;
+}
+.auth-layout {
+  width: min(1120px, 100%);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  gap: 80px;
+  margin: auto;
+  padding: 44px 40px 48px;
+  align-items: center;
+  flex: 1;
+}
+.auth-story {
+  position: relative;
+  min-width: 0;
+  padding: 16px 0 100px;
+}
+.auth-story-icon {
+  display: inline-flex;
+  color: var(--saffron);
+  margin-bottom: 26px;
+}
+.auth-story h1 {
+  font-family: var(--font-display);
+  font-size: 46px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  max-width: 10ch;
+  outline: 0;
+  margin-bottom: 20px;
+}
+.auth-story > p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 40ch;
+}
+.auth-promise {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 35px;
+  color: var(--saffron);
+  max-width: 40ch;
+}
+.auth-promise strong {
+  display: block;
+  font-size: 13px;
+  color: var(--ink);
+  font-weight: 550;
+  margin-bottom: 8px;
+}
+.auth-promise p {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+.auth-story-art {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 84px;
+  background-image: url("/artwork/sampati-folk-sky.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 75% 50%;
+  border-radius: 8px;
+  opacity: 0.6;
+}
+.auth-panel {
+  min-width: 0;
+  padding: 30px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.auth-panel h2 {
+  font-family: "DM Sans", sans-serif;
+  font-size: 23px;
+  font-weight: 550;
+  letter-spacing: -0.3px;
+  color: var(--ink);
+}
+.auth-intro {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+  margin-top: 9px;
+  margin-bottom: 25px;
+}
+.auth-panel form {
+  display: grid;
+  gap: 18px;
+}
+.auth-panel form > label,
+.auth-input-group {
+  display: grid;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink);
+}
+.auth-panel input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 11px 12px;
+  border: 1px solid var(--control-line);
+  background: var(--ground);
+  color: var(--ink);
+  border-radius: 6px;
+  font-size: 14px;
+}
+.auth-panel input::placeholder {
+  color: var(--muted);
+}
+.auth-panel label small,
+.auth-input-group small {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.password-field {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.password-field input {
+  padding-right: 44px;
+}
+.password-field .icon-button {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  min-width: 36px;
+  min-height: 36px;
+  color: var(--muted);
+}
+.auth-submit {
+  width: 100%;
+  margin-top: 5px;
+  min-height: 45px;
+  font-size: 13px;
+}
+.auth-alternative {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+  margin-top: 25px;
+  padding-top: 20px;
+}
+.auth-alternative .text-button {
+  font-size: 12px;
+}
+.auth-local-note {
+  font-size: 10px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-top: 17px;
+}
+.auth-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 40px;
+  font-size: 10px;
+  color: var(--muted);
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  border-top: 1px solid var(--line);
+}
+.workspace-choice {
+  min-width: 0;
+  flex: 1;
+}
+.workspace-choice select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 3px 0;
+  border: 0;
+  background: transparent;
+  appearance: none;
+  font-family: inherit;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 550;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+.workspace-choice select option {
+  color: var(--ink);
+  background: var(--surface);
+}
+.local-user > div {
+  min-width: 0;
+}
+.local-user strong,
+.local-user small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 126px;
+}
+.account-session-button {
+  margin-left: auto;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.sidebar-signin {
+  margin-bottom: 15px;
+  width: 100%;
+  white-space: normal;
+  font-size: 10px;
+  gap: 6px;
+}
+.private-workspace-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.private-workspace-note > svg {
+  color: var(--success);
+}
+.private-workspace-note > span:first-of-type {
+  color: var(--ink);
+  font-weight: 550;
+}
+.private-role {
+  text-transform: capitalize;
+  font-size: 9px;
+  background: var(--surface-raised);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+@media (max-width: 900px) {
+  .auth-layout {
+    gap: 38px;
+    padding: 30px 26px;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+  }
+  .auth-header {
+    padding: 20px 26px;
+  }
+  .auth-story h1 {
+    font-size: 38px;
+  }
+  .auth-story > p {
+    font-size: 13px;
+  }
+  .auth-panel {
+    padding: 25px;
+  }
+}
+@media (max-width: 700px) {
+  .auth-header {
+    padding: 19px 20px;
+  }
+  .auth-header .text-button {
+    font-size: 11px;
+  }
+  .auth-header .brand {
+    display: flex;
+  }
+  .auth-layout {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    padding: 28px 20px 34px;
+    width: min(490px, 100%);
+  }
+  .auth-story {
+    padding: 0;
+  }
+  .auth-story-icon,
+  .auth-story-art,
+  .auth-promise {
+    display: none;
+  }
+  .auth-story h1 {
+    font-size: 33px;
+    max-width: none;
+    margin-bottom: 12px;
+  }
+  .auth-story > p {
+    max-width: none;
+    font-size: 12px;
+  }
+  .auth-panel {
+    padding: 24px 22px;
+  }
+  .auth-panel h2 {
+    font-size: 21px;
+  }
+  .auth-footer {
+    padding: 18px 20px;
+    font-size: 9px;
+  }
+  .auth-footer span {
+    max-width: 150px;
+    text-align: right;
+    line-height: 1.7;
+  }
+  .auth-panel input {
+    font-size: 16px;
+  }
+  .workspace-choice select {
+    font-size: 12px;
+  }
+}
+@media (pointer: coarse) {
+  .auth-panel input {
+    font-size: 16px;
+  }
+  .auth-panel button,
+  .auth-header button,
+  .account-session-button {
+    min-height: 44px;
+  }
+}
