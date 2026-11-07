@@ -182,7 +182,7 @@ export default function ReportChecks({
               : "files await"}{" "}
             review.
             {(report?.summary.pending_new_ids || 0) > 0 &&
-              ` They include ${report?.summary.pending_new_ids} new aircraft IDs that are not in the accepted register.`}
+              ` The inbox includes ${report?.summary.pending_new_ids} new aircraft ${report?.summary.pending_new_ids === 1 ? "ID" : "IDs"} outside the accepted register.`}
           </p>
           {scope === "private" && (
             <button className="button secondary" onClick={onInbox}>
@@ -253,6 +253,9 @@ export default function ReportChecks({
             </select>
           </label>
         </div>
+        <p className="quality-scroll-hint">
+          Scroll the table sideways for more report details.
+        </p>
         {!report && loading ? (
           <p className="quality-empty" role="status">
             Loading report checks…
@@ -294,9 +297,9 @@ export default function ReportChecks({
               <thead>
                 <tr>
                   <th>Aircraft</th>
-                  <th>Source report</th>
-                  <th>Reported status</th>
                   <th>Data checks</th>
+                  <th>Reported status</th>
+                  <th>Source report</th>
                   <th>Record</th>
                 </tr>
               </thead>
@@ -307,27 +310,6 @@ export default function ReportChecks({
                       <strong>{item.aircraft_id}</strong>
                       <span className="quality-secondary">
                         {item.display_name || "No display name"}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="quality-source-name">
-                        {item.source_name}
-                      </span>
-                      <time
-                        className="quality-secondary"
-                        dateTime={item.source_updated_at}
-                      >
-                        {when(item.source_updated_at)}
-                      </time>
-                    </td>
-                    <td>
-                      <span className={`status status-${item.reported_status}`}>
-                        <span aria-hidden="true" />
-                        {item.reported_status === "available"
-                          ? "Reported available"
-                          : item.reported_status === "unavailable"
-                            ? "Unavailable"
-                            : "Unknown"}
                       </span>
                     </td>
                     <td className="quality-findings">
@@ -376,6 +358,27 @@ export default function ReportChecks({
                           Complete report
                         </span>
                       )}
+                    </td>
+                    <td>
+                      <span className={`status status-${item.reported_status}`}>
+                        <span aria-hidden="true" />
+                        {item.reported_status === "available"
+                          ? "Reported available"
+                          : item.reported_status === "unavailable"
+                            ? "Unavailable"
+                            : "Unknown"}
+                      </span>
+                    </td>
+                    <td>
+                      <span className="quality-source-name">
+                        {item.source_name}
+                      </span>
+                      <time
+                        className="quality-secondary"
+                        dateTime={item.source_updated_at}
+                      >
+                        {when(item.source_updated_at)}
+                      </time>
                     </td>
                     <td>
                       <button

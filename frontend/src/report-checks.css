@@ -4,6 +4,9 @@
   line-height: 1.9;
   max-width: 75ch;
 }
+.quality-scroll-hint {
+  display: none;
+}
 .quality-inbox-note {
   display: flex;
   flex-wrap: wrap;
@@ -149,6 +152,13 @@
   outline-offset: 3px;
 }
 @media (max-width: 640px) {
+  .quality-scroll-hint {
+    display: block;
+    font-size: 11px;
+    line-height: 1.8;
+    padding: 0 16px 14px;
+    color: var(--muted);
+  }
   .quality-tabs {
     overflow-x: auto;
   }

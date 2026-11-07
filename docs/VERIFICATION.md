@@ -12,7 +12,8 @@ Rechecked on 7 November 2026 for the public source package. The earlier mileston
 - Welcome was contained at **1440, 1024, 390 and 320px**. The separate 390px touch context had no page overflow and retained 16px search-input text. The capture journey recorded **zero new console errors**.
 - The self-hosted Yatra One display font loaded successfully. Its SIL OFL 1.1 notice is included. The original personal-use font was moved into ignored private assets and is absent from the public build.
 - The mechanical detector returned no findings for the changed stylesheet and HTML. That source scan does not establish full accessibility compliance.
-- GitHub Actions is configured to build the frontend and exercise backend tests plus migrations against disposable PostgreSQL. A configured workflow is not evidence of a successful hosted run; run results appear on GitHub after publishing.
+- The [first GitHub-hosted CI run](https://github.com/Prathamji1505/sampati/actions/runs/42374760025) **passed** the frontend production build, Python dependency check, all backend tests and migration/schema checks on Ubuntu with disposable PostgreSQL. This validates that source snapshot, rather than establishing application hosting or production readiness.
+- A final read-only browser check of the Report checks readability update passed at **1440, 1024, 390 and 320px**: Data checks is the second table column, the sideways-scroll hint appears on small screens, the page remains contained and no browser errors were captured. The production build passed after that update.
 
 Screenshots were visually inspected for the established artwork, typography, spacing and readable product content. [Capture details](images/README.md) record routes and viewport sizes. These checks do not establish production deployment readiness or aviation suitability.
 
