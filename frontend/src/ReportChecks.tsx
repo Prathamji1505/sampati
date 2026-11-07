@@ -381,7 +381,11 @@ export default function ReportChecks({
                       <button
                         className="button secondary"
                         aria-label={`Inspect ${item.aircraft_id} report`}
-                        disabled={!workspace?.aircraft.some(row => row.aircraft_id === item.aircraft_id)}
+                        disabled={
+                          !workspace?.aircraft.some(
+                            (row) => row.aircraft_id === item.aircraft_id,
+                          )
+                        }
                         onClick={() => onInspect(item.aircraft_id)}
                       >
                         Inspect
