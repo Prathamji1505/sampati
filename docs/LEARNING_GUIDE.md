@@ -51,3 +51,21 @@ For example, a source can report `available` while its timestamp is older than 2
 | `scripts/backup.py` / `scripts/restore_check.py` | Backup and disposable restore rehearsal |
 
 pytest checks behaviour and permissions in isolated test-database schemas. The Playwright scripts use real Edge browser flows with temporary fictional accounts. These checks support a local learning prototype; production hosting and live aviation integrations require separate work.
+
+## Learn the disaster-relief workflow
+
+Start with [Relief requests](RELIEF_REQUESTS.md): a request records a quantity and unit reported by a human source. `backend/app/relief.py` validates exact decimal quantities and protects each edit with a version; its audit stores before/after values. Reviewing a request does not mean supplies were delivered.
+
+Then follow [Incident review](INCIDENTS.md): `backend/app/incidents.py` defines the JSON contract with Pydantic. **Preview** displays a proposed assessment without writing; **Record** stores it as Needs review. A reviewer checks source dates and limitations and provides a reason. Only a reviewed incident can start a linked relief draft, and quantity stays blank until a person enters it. The assessment's source population estimate is not a supply calculation.
+
+Study `backend/tests/test_incidents.py` for validation, organisation isolation, duplicate-safe retries and concurrent review conflicts. `scripts/browser-incidents.js` drives the same workflow through real controls. Inventory and delivery modules will extend the chain later.
+
+## Try the report checks
+
+Open **Report checks** after accepting a dataset. A source-reported available aircraft can have an old report; the status stays available and a separate finding requests a newer report. A fresh unavailable report with a name can pass the data checks, because the check result describes the report rather than the aircraft.
+
+`backend/app/quality.py` compares pending files with the accepted record by ID, source time and field values. A newer report is an incoming update; an older one is an older incoming report; different values at the same timestamp are a conflict. Equivalent pending rows add no finding. Incoming IDs that are not yet accepted are counted separately, rather than added to the register. Each finding group keeps an exact file count and shows up to three example filenames/times. Another organisation's source keys and file contents never appear in these results.
+
+The backend holds a shared workspace lock while reading accepted records and pending evidence, so an import cannot replace the records halfway through a check. It uses one clock reading for the whole response. `frontend/src/ReportChecks.tsx` provides filters, source inspection, pagination and JSON downloads. The download records check time, rule version, threshold, revision, selected filters and all matching records. It is a review artifact, not a full archive of every pending file; use the import/inbox records for the original evidence.
+
+Expanding a finding, exporting it or refreshing never confirms an import or changes status. Free-text notes are compared as source text; their meaning is not interpreted to infer maintenance condition. These are rules and comparisons, not a trained AI model. See docs/REQUIREMENTS.md for the remaining project gaps.

@@ -31,6 +31,8 @@ npm --prefix frontend ci
 
 Keep the terminal running. Open [the app](http://127.0.0.1:5173) or [API documentation](http://127.0.0.1:8000/docs). Choose **Enter workspace** to explore the fictional demo; use **Try sample data** if the register is empty. For your own empty organisation, visit `/#register`; there are no default credentials. [Follow the demo](DEMO.md).
 
+Setup also seeds three read-only relief requests and two read-only flood assessments once. It never refreshes/overwrites existing examples. Explore `/#demo/incidents` and `/#demo/relief`; private organisations start empty. Existing installations can rerun setup to apply additive migrations. [Incident workflow and JSON contract](INCIDENTS.md).
+
 DM Sans is requested from Google Fonts; system sans-serif text remains usable offline. Display lettering and artwork are local assets. No aviation feed or AI API credentials are required.
 
 ## Stop and restart

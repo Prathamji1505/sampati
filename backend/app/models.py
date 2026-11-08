@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
+from decimal import Decimal
 
-from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, ForeignKeyConstraint, Index, Integer, JSON, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, ForeignKeyConstraint, Index, Integer, JSON, Numeric, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .database import Base
@@ -151,3 +152,103 @@ class IncomingDataset(Base):
     reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     reviewer_id: Mapped[str | None] = mapped_column(ForeignKey('users.id'), nullable=True)
     import_id: Mapped[str | None] = mapped_column(ForeignKey('import_batches.id'), nullable=True)
+
+
+class ReliefRequest(Base):
+    __tablename__ = 'relief_requests'
+    __table_args__ = (
+        UniqueConstraint('workspace_id', 'reference_key'),
+        UniqueConstraint('workspace_id', 'submission_key'),
+        UniqueConstraint('workspace_id', 'id'),
+        ForeignKeyConstraint(['workspace_id', 'incident_id'], ['incidents.workspace_id', 'incidents.id']),
+        CheckConstraint("status IN ('draft', 'submitted', 'reviewed', 'cancelled')"),
+        CheckConstraint("category IN ('food', 'water', 'medicine', 'shelter', 'other')"),
+        CheckConstraint("unit IN ('items', 'boxes', 'kits', 'litres', 'kilograms', 'packs')"),
+        CheckConstraint('quantity > 0 AND quantity <= 1000000000'),
+        CheckConstraint('version >= 1'),
+        Index('ix_relief_workspace_updated', 'workspace_id', 'updated_at'),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(ForeignKey('workspaces.id'), nullable=False)
+    reference: Mapped[str] = mapped_column(String(64), nullable=False)
+    reference_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    incident_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    incident_reference: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    submission_key: Mapped[str] = mapped_column(String(36), nullable=False)
+    create_digest: Mapped[str] = mapped_column(String(64), nullable=False)
+    requesting_organisation: Mapped[str] = mapped_column(String(120), nullable=False)
+    locality: Mapped[str] = mapped_column(String(160), nullable=False)
+    category: Mapped[str] = mapped_column(String(20), nullable=False)
+    item_name: Mapped[str] = mapped_column(String(160), nullable=False)
+    quantity: Mapped[Decimal] = mapped_column(Numeric(15, 3), nullable=False)
+    unit: Mapped[str] = mapped_column(String(20), nullable=False)
+    needed_by: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    needed_by_raw: Mapped[str] = mapped_column(String(64), nullable=False)
+    source_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    note: Mapped[str] = mapped_column(Text, nullable=False, default='')
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default='draft')
+    version: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
+    created_by: Mapped[str | None] = mapped_column(ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
+    created_actor: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ReliefRequestEvent(Base):
+    __tablename__ = 'relief_request_events'
+    __table_args__ = (
+        ForeignKeyConstraint(['workspace_id', 'request_id'], ['relief_requests.workspace_id', 'relief_requests.id'], ondelete='CASCADE'),
+        UniqueConstraint('request_id', 'version'),
+        CheckConstraint("action IN ('created', 'edited', 'status_changed')"),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    request_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False)
+    action: Mapped[str] = mapped_column(String(20), nullable=False)
+    actor_id: Mapped[str | None] = mapped_column(ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
+    actor: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    reason: Mapped[str] = mapped_column(String(500), nullable=False)
+    before: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    after: Mapped[dict] = mapped_column(JSON, nullable=False)
+
+
+class Incident(Base):
+    __tablename__ = 'incidents'
+    __table_args__ = (
+        UniqueConstraint('workspace_id', 'id'),
+        UniqueConstraint('workspace_id', 'reference_key'),
+        CheckConstraint("status IN ('pending', 'reviewed', 'dismissed')"),
+        CheckConstraint('version >= 1'),
+        Index('ix_incident_workspace_received', 'workspace_id', 'received_at'),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(ForeignKey('workspaces.id'), nullable=False)
+    reference_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    digest: Mapped[str] = mapped_column(String(64), nullable=False)
+    assessment: Mapped[dict] = mapped_column(JSON, nullable=False)
+    status: Mapped[str] = mapped_column(String(20), nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_by: Mapped[str | None] = mapped_column(ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
+    created_actor: Mapped[str] = mapped_column(String(120), nullable=False)
+    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class IncidentEvent(Base):
+    __tablename__ = 'incident_events'
+    __table_args__ = (
+        ForeignKeyConstraint(['workspace_id', 'incident_id'], ['incidents.workspace_id', 'incidents.id'], ondelete='CASCADE'),
+        UniqueConstraint('incident_id', 'version'),
+    )
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    incident_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False)
+    actor_id: Mapped[str | None] = mapped_column(ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
+    actor: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    reason: Mapped[str] = mapped_column(String(500), nullable=False)
+    before_status: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    after_status: Mapped[str] = mapped_column(String(20), nullable=False)

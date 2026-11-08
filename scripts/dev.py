@@ -74,6 +74,8 @@ def setup():
             if not connection.execute('SELECT 1 FROM pg_database WHERE datname = %s', (database,)).fetchone():
                 connection.execute(sql.SQL('CREATE DATABASE {} OWNER airframe_app').format(sql.Identifier(database)))
     run([str(PYTHON), '-m', 'alembic', '-c', 'backend/alembic.ini', 'upgrade', 'head'])
+    run([str(PYTHON), '-m', 'scripts.seed_relief_demo'])
+    run([str(PYTHON), '-m', 'scripts.seed_incident_demo'])
     print('Local database and migrations are ready. Existing PostgreSQL services were not modified.')
 
 

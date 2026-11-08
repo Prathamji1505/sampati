@@ -1,17 +1,21 @@
 # Sampati — submission brief
 
-**Project:** SAMPATI · सम्पाति — Air Operations & Resource Decision Support<br>
+**Project:** SAMPATI · सम्पाति — Disaster Response & Relief Coordination<br>
 **Creator:** [Pratham Sengar](https://github.com/Prathamji1505)<br>
 **Stage:** working local prototype; fictional civilian data<br>
 **Repository:** [Prathamji1505/sampati](https://github.com/Prathamji1505/sampati)
 
 ## The problem
 
+Flood-response coordinators need to connect dated impact evidence, locally confirmed supply needs, resource reports and delivery records. Sampati's goal is to make that chain reviewable and traceable. The working prototype implements incident intake/review and relief-request recording, corrections, cancellation and history; inventory and delivery tracking are the next dependencies. See the [roadmap](ROADMAP.md) and [welfare charter](CIVILIAN_WELFARE_SCOPE.md) for acceptance gates.
+
 Aircraft reports can arrive in separate files with inconsistent fields, duplicated batches and out-of-order timestamps. A list of statuses alone makes it difficult to see which source supplied a value, when it was reported and how the register changed.
 
 This is the problem explored by the prototype. User demand, adoption and time savings have not yet been measured.
 
 ## The implemented solution
+
+The disaster-relief workflow also accepts dated flood assessments through a versioned JSON contract, retains source evidence and uncertainty, records reasoned human review and opens linked relief-request drafts. Quantities are entered by a person. This local workflow prepares an integration boundary; it does not connect to a live SATQueryAI service. Inventory, approved missions and delivery confirmations remain future milestones.
 
 Sampati validates CSV and Excel reports, shows proposed changes, and requires explicit confirmation before updating accepted records. Search and freshness filters help reviewers examine the current register; audit history preserves the change path. Organisation memberships and scoped file connections support separate workspaces and an incoming review queue.
 

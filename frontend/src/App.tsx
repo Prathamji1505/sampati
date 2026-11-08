@@ -6,6 +6,8 @@ import {
   Check,
   CheckCircle2,
   ClipboardCheck,
+  PackagePlus,
+  Waves,
   ChevronDown,
   ChevronRight,
   CircleAlert,
@@ -36,6 +38,9 @@ import { api, configureApi, downloadRegister } from "./api";
 import AuthScreen from "./AuthScreen";
 import WorkspaceTools from "./WorkspaceTools";
 import ReportChecks from "./ReportChecks";
+import ReliefRequests from "./ReliefRequests";
+import Incidents from "./Incidents";
+import type { IncidentDraft } from "./Incidents";
 import Brand from "./Brand";
 import Welcome from "./Welcome";
 import WelcomeGuide from "./WelcomeGuide";
@@ -58,6 +63,8 @@ type View =
   | "guide"
   | "overview"
   | "checks"
+  | "relief"
+  | "incidents"
   | "sources"
   | "team"
   | "account";
@@ -75,6 +82,8 @@ const routeFragments: Record<Route, string> = {
   recover: "recover",
   overview: "overview",
   checks: "checks",
+  relief: "relief",
+  incidents: "incidents",
   sources: "sources",
   team: "team",
   account: "account",
@@ -91,6 +100,8 @@ const pageNames: Record<Route, string> = {
   recover: "Recover account",
   overview: "Workspace overview",
   checks: "Report checks",
+  relief: "Relief requests",
+  incidents: "Incident review",
   sources: "Data connections",
   team: "Organisation team",
   account: "Account settings",
@@ -395,6 +406,9 @@ function Workspace({
   onSignOut: () => Promise<void>;
 }) {
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
+  const [incidentDraft, setIncidentDraft] = useState<IncidentDraft | null>(
+    null,
+  );
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
@@ -601,6 +615,8 @@ function Workspace({
     guide: "Your workspace, explained",
     overview: "Workspace overview",
     checks: "Report checks",
+    relief: "Relief requests",
+    incidents: "Incident review",
     sources: "Data connections",
     team: "Organisation team",
     account: "Account settings",
@@ -615,6 +631,10 @@ function Workspace({
       "Accepted records, source freshness and the details that need attention.",
     checks:
       "Understand which source reports need attention, with reasons and evidence.",
+    relief:
+      "Record civilian supply needs, review their details and follow every change.",
+    incidents:
+      "Review flood assessments and their evidence before recording local relief needs.",
     sources:
       "Connect changing datasets. Review incoming updates before accepting them.",
     team: "Invite teammates and give each person the access they need.",
@@ -636,9 +656,9 @@ function Workspace({
       <aside className={`sidebar ${mobileNav ? "nav-open" : ""}`}>
         <Brand onNavigate={onHome} />
         <p className="brand-description">
-          Air Operations &amp; Resource
+          Disaster Response &amp;
           <br />
-          Decision Support
+          Relief Coordination
         </p>
         <div className="workspace-switch">
           <span className="workspace-avatar">
@@ -689,6 +709,8 @@ function Workspace({
         <nav aria-label="Main navigation">
           {(
             [
+              { key: "incidents", label: "Incident review", icon: Waves },
+              { key: "relief", label: "Relief requests", icon: PackagePlus },
               { key: "aircraft", label: "Aircraft register", icon: LayoutList },
               { key: "upload", label: "Import dataset", icon: Upload },
               { key: "history", label: "Import history", icon: History },
@@ -864,6 +886,32 @@ function Workspace({
               Your organisation role is view-only. An owner or editor can import
               records.
             </div>
+          )}
+          {view === "incidents" && (
+            <Incidents
+              scope={scope}
+              session={session}
+              workspace={workspace}
+              onSignIn={onSignIn}
+              onRequest={(incident) => {
+                setIncidentDraft(incident);
+                navigate("relief");
+              }}
+              onRequests={() => {
+                setIncidentDraft(null);
+                navigate("relief");
+              }}
+            />
+          )}
+          {view === "relief" && (
+            <ReliefRequests
+              incidentDraft={incidentDraft}
+              onIncidentDraftUsed={() => setIncidentDraft(null)}
+              scope={scope}
+              session={session}
+              workspace={workspace}
+              onSignIn={onSignIn}
+            />
           )}
           {view === "checks" && (
             <ReportChecks
@@ -1619,7 +1667,7 @@ function Workspace({
           )}
         </main>
         <footer className="app-footer">
-          <span>SAMPATI · Aircraft data workspace</span>
+          <span>SAMPATI · Disaster relief workspace</span>
           <span>Fictional data · Local demo</span>
         </footer>
       </div>

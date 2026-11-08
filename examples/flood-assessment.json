@@ -1,0 +1,16 @@
+{
+  "schema_version": "sampati.incident.v1",
+  "external_reference": "EXAMPLE-FLOOD-2026-001",
+  "title": "Fictional Riverside flood assessment",
+  "hazard": "flood",
+  "assessment_kind": "impact_observation",
+  "locality": "Fictional Riverside Ward",
+  "observed_at": "2026-11-07T09:00:00+05:30",
+  "generated_at": "2026-11-07T10:00:00+05:30",
+  "source_name": "Fictional assessment desk",
+  "source_url": null,
+  "summary": "Illustrative report of water around access roads. Local needs must be checked separately.",
+  "uncertainty": "Fictional learning example. Bounding extent is illustrative; current local conditions have not been verified.",
+  "extent": { "west": 85.1, "south": 25.4, "east": 85.2, "north": 25.5 },
+  "reported_affected_people": null
+}

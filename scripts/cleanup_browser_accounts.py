@@ -4,7 +4,7 @@ import argparse
 from sqlalchemy import delete, select
 
 from backend.app.database import SessionLocal
-from backend.app.models import Aircraft, AircraftChange, DataSource, IncomingDataset, ImportBatch, Invitation, Membership, User, Workspace
+from backend.app.models import Aircraft, AircraftChange, DataSource, IncomingDataset, ImportBatch, Incident, IncidentEvent, Invitation, Membership, ReliefRequest, ReliefRequestEvent, User, Workspace
 
 
 def main():
@@ -34,7 +34,13 @@ def main():
         # Refuse foreign references; deleting these fixtures must never affect another organisation.
         if session.scalar(select(Invitation.id).where((Invitation.target_user_id.in_(requested) | Invitation.issuer_id.in_(requested)), ~Invitation.workspace_id.in_(workspace_ids)).limit(1)):
             raise RuntimeError('A fixture has invitations in another organisation. Nothing was removed.')
+        if session.scalar(select(ReliefRequest.id).where(ReliefRequest.created_by.in_(requested), ~ReliefRequest.workspace_id.in_(workspace_ids)).limit(1)) or session.scalar(select(ReliefRequestEvent.id).where(ReliefRequestEvent.actor_id.in_(requested), ~ReliefRequestEvent.workspace_id.in_(workspace_ids)).limit(1)):
+            raise RuntimeError('A fixture has relief records in another organisation. Nothing was removed.')
         for workspace_id in workspace_ids:
+            if session.scalar(select(Incident.id).where(Incident.created_by.in_(requested), ~Incident.workspace_id.in_(workspace_ids)).limit(1)) or session.scalar(select(IncidentEvent.id).where(IncidentEvent.actor_id.in_(requested), ~IncidentEvent.workspace_id.in_(workspace_ids)).limit(1)):
+                raise RuntimeError('A fixture has incident records in another organisation. Nothing was removed.')
+            session.execute(delete(ReliefRequest).where(ReliefRequest.workspace_id == workspace_id))
+            session.execute(delete(Incident).where(Incident.workspace_id == workspace_id))
             session.execute(delete(IncomingDataset).where(IncomingDataset.workspace_id == workspace_id))
             session.execute(delete(DataSource).where(DataSource.workspace_id == workspace_id))
             session.execute(delete(Invitation).where(Invitation.workspace_id == workspace_id))

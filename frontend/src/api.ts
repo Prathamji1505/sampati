@@ -19,7 +19,7 @@ export class ApiError extends Error {
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const dataRequest =
-    /^\/(workspace|imports|overview|report-checks|exports|sources|team)(\/|$)/.test(
+    /^\/(workspace|imports|overview|report-checks|relief-requests|incidents|exports|sources|team)(\/|\?|$)/.test(
       path,
     );
   const privateRequest = dataRequest && workspaceScope === "private";

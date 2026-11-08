@@ -1,6 +1,7 @@
+<p align="center"><img src="frontend/public/artwork/sampati-emblem.png" width="112" height="112" alt="Approved Sampati folk-art bird emblem"></p>
 <h1 align="center">SAMPATI · सम्पाति</h1>
-<p align="center"><strong>From scattered aircraft reports to a clear, shared picture.</strong></p>
-<p align="center">Air Operations &amp; Resource Decision Support</p>
+<p align="center"><strong>From flood-impact evidence to reviewed relief needs.</strong></p>
+<p align="center">Disaster Response &amp; Relief Coordination</p>
 
 <p align="center">
   <a href="#the-problem">The problem</a> ·
@@ -10,9 +11,13 @@
   <a href="docs/SETUP.md">Run locally</a>
 </p>
 
-**Sampati is a workspace for people who need to understand changing aircraft reports.** It brings CSV and Excel files together, explains what has changed, highlights information that needs attention, and keeps a history of accepted updates. A person reviews changes before they enter the shared register.
+**Sampati is a disaster-response project with a working workspace for reviewed relief requests and aircraft reports.** It brings CSV and Excel files together, explains what has changed, highlights information that needs attention, and keeps a history of accepted updates. A person reviews changes before they enter the shared register.
 
-The project explores a practical foundation for civilian fleet coordination: **make information understandable, current in context, and traceable before building more advanced decision support.**
+**Current direction: disaster response.** Sampati is being developed for humanitarian logistics and disaster relief. **Relief requests** now supports drafts, human review, corrections, cancellation and audit history within each organisation. The aircraft-report workspace remains its data-review foundation. Aid inventory and delivery tracking are the next planned modules. [Civilian-welfare charter and build order](docs/CIVILIAN_WELFARE_SCOPE.md).
+
+**Incident review** now accepts a versioned flood-assessment JSON contract, preserves dated evidence and uncertainty, records human review, and opens a linked relief-request draft with human-entered quantities. This is the first local step toward the proposed SATQueryAI connection. A live SATQueryAI connector, aid inventory, mission assignment, delivery tracking and live aircraft positions remain planned. [Incident workflow and shared contract](docs/INCIDENTS.md).
+
+The project builds a practical foundation for disaster-response coordination: **make information understandable, current in context, and traceable before building more advanced decision support.**
 
 ![Sampati's actual welcome screen with its bilingual identity and original soaring-bird artwork](docs/images/welcome.png)
 
@@ -25,40 +30,54 @@ The project explores a practical foundation for civilian fleet coordination: **m
 
 | Project at a glance | |
 | --- | --- |
-| **Product** | Aircraft-report management, source-data checks and human-reviewed updates |
-| **Intended users** | Civilian fleet-data coordinators, reporting teams and relief-logistics coordinators; audiences to validate through pilots |
-| **Working today** | A complete local workflow from file intake through review, confirmation, register, exports and history |
+| **Product** | Flood-incident review, relief requests and traceable supporting resource reports |
+| **Intended users** | Civilian relief coordinators, aid-inventory custodians and delivery-record reviewers; audiences to validate through pilots |
+| **Working today** | Flood-assessment preview/intake and review; linked relief drafts; request lifecycle and audit; supporting aircraft-report tools |
 | **Demonstration** | Fictional civilian records; no paid API or model download required |
-| **Engineering evidence** | 59 backend tests in the recorded verification, successful hosted CI and desktop/mobile browser checks |
+| **Engineering evidence** | 109 backend tests passed locally on 8 November 2026; production build and recorded browser checks. See docs/VERIFICATION.md for the exact scope; current changes have not been checked by hosted CI. |
 | **Stage** | Working prototype with public source; hosted application not yet configured |
 
 ## The problem
 
-Imagine taking over a shift and receiving several aircraft-status spreadsheets. One file arrived recently but contains an older report. Another marks an aircraft's status as unknown. A third repeats information already imported. You need to know which values are accepted, which source supplied them, and what still needs attention.
+After a flood, a coordinator needs to connect several different kinds of information: an assessment of the affected area, locally confirmed supply needs, reports about available resources, and evidence that help was delivered. Each can arrive from a different source at a different time.
 
-The difficult part is keeping a coherent picture as information changes.
+An impact observation is not yet a confirmed supply request. A recorded request is not yet an approved mission. A planned shipment is not yet a confirmed delivery. Sampati is being built to preserve those distinctions while helping people follow the response from evidence to action.
 
-| What makes review difficult | How Sampati responds |
+| Coordination question | Sampati's current response |
 | --- | --- |
-| Reports are spread across separate files. | Bring accepted records into one searchable organisation register. |
-| Arrival time can be mistaken for observation time. | Show source timestamps and receipt times separately. |
-| An older report can overwrite newer information. | Block older updates and contradictory values at the same source time. |
-| Repeated uploads can create duplicate history. | Recognise equivalent datasets and return the original import. |
-| Reviewers need to explain a change later. | Preserve import attribution and before/after values. |
-| A connected source sends an unexpected update. | Hold incoming files in a review inbox until an authorised person confirms them. |
+| Where did the flood assessment come from, and how old is it? | Preserve source evidence, observation/generation/receipt times and uncertainty. |
+| Has someone reviewed the assessment? | Record a reasoned human decision with version protection and review history. |
+| What supplies are actually requested? | Link a reviewed incident to a draft whose organisation, quantities and units are entered by a person. |
+| Who changed the request? | Keep attributed corrections, status changes and before/after history. |
+| Can a resource report be trusted as current information? | Keep source timestamps, freshness and conflicts visible in the aircraft-report foundation. |
+| What stock is committed, and what reached its destination? | Inventory and delivery tracking are the next development milestones. |
 
 ## Meet Sampati
 
-Sampati gives a reviewer four connected views of the same information:
+The working prototype now connects three areas:
 
-- **The register:** what the organisation has currently accepted.
-- **The review:** what a new file proposes to change.
-- **Report checks:** which source records need attention, why, and what to review next.
-- **The history:** how the register reached its current state.
+- **Incident review:** preview a fictional flood assessment, retain its original evidence and uncertainty, and record a review decision.
+- **Relief requests:** turn reviewed incident context into a human-entered request, then submit, review, correct or cancel it with an audit trail.
+- **Supporting aircraft reports:** inspect source-reported status, freshness, proposed updates and history within a verified organisation workspace.
+
+The intended response chain is shown below. **Inventory, mission coordination and delivery confirmation remain planned.**
+
+```mermaid
+flowchart LR
+    A[Impact evidence] --> B[Human incident review]
+    B --> C[Locally confirmed relief needs]
+    C -. planned .-> D[Inventory and resource checks]
+    D -. planned .-> E[Human-approved response]
+    E -. planned .-> F[Delivery confirmation]
+```
+
+The current intake implements the application-owned `sampati.incident.v1` contract. A live SATQueryAI producer must still be connected and verified. [Incident contract](docs/INCIDENTS.md) · [Relief-request workflow](docs/RELIEF_REQUESTS.md).
+
+### Supporting report-review workspace
 
 ![Actual aircraft register with fictional records, reported status, sources, timestamps and freshness](docs/images/register.png)
 
-*Actual product capture with fictional records, 7 November 2026. Freshness reflects capture time. [Screenshot provenance](docs/images/README.md).*
+*Actual product capture with fictional records, 8 November 2026. Freshness reflects capture time. [Screenshot provenance](docs/images/README.md).*
 
 Three questions stay visible throughout the workflow: **What did the source report? When did it report it? Who accepted the change?** Reported availability and data freshness remain separate, so a fresh report with an unknown status is still shown honestly.
 
@@ -90,6 +109,7 @@ The core promise is simple: **a file arriving does not automatically make it the
 
 | Product area | What a user can do |
 | --- | --- |
+| **Relief requests** | Record a civilian supply need with exact quantity/unit, locality, deadline and source; submit/review/correct/cancel with a reason and version-protected history. Viewers read; demo examples are read-only. [H01 guide](docs/RELIEF_REQUESTS.md). |
 | **Aircraft register** | Search aircraft and sources, filter status/freshness, inspect source details and export the current selection as Excel, CSV or JSON. |
 | **Import review** | Use CSV/Excel templates, inspect actionable errors, preview changes and explicitly confirm a batch. |
 | **Report checks** | Examine old/future timestamps, unknown status, missing names and pending-file disagreements. Expand evidence, inspect the source record, paginate results and export filtered findings with check time, rule version and register revision. |
@@ -118,24 +138,29 @@ The initial product hypothesis centres on teams that receive structured civilian
 | --- | --- |
 | **Fleet-data coordinator** | Bring recurring reports into a coherent register and identify records needing follow-up. |
 | **Reporting or review team** | Check proposed updates, resolve source disagreements and explain accepted changes. |
-| **Relief-logistics coordinator** | Organise source-provided aircraft information with visible timestamps and uncertainty. |
+| **Relief-logistics coordinator** | Review flood evidence, record locally confirmed needs and follow request decisions. |
 | **Organisation administrator** | Give teammates appropriate access and limit what an external source can submit. |
 
 These are intended audiences. Pilot interviews and observed workflow trials are the next step in validating the fit.
 
 ## Where this can grow
 
-The broader vision is a source-aware civilian coordination workspace built on reliable report management. The current implementation supplies the review and traceability foundation.
+The governing goal is **civilian disaster response, beginning with flood relief**. The next work follows dependencies, so a recorded delivery can eventually be traced back to a reviewed request and source evidence.
 
-| Direction | Next milestone | Evidence to collect |
+| Stage | Position | Completion gate |
 | --- | --- | --- |
-| **Validate the workflow** | Trial the review process with authorised civilian users and suitable sample reports. | Completion time, errors caught, reviewer comprehension and repeat use. |
-| **Make it accessible to teams** | Package hosted deployment with HTTPS, managed secrets and off-device backups. | Reproducible deployment, access-boundary tests, restore checks and reliability measurements. |
-| **Improve reporting fit** | Refine templates and connectors around real reporting formats. | Onboarding effort, recurring format problems and source-maintenance effort. |
-| **Add useful context** | Introduce airport or weather context for a defined civilian user task. | Provenance, update age, failure behaviour and demonstrated user value. |
-| **Evaluate advanced decision support** | Define a specific task and suitable authorised evidence before selecting rules or models. | Baselines, evaluation criteria and understandable uncertainty. |
+| **Relief requests · H01** | Implemented locally | Scoped drafts, exact units/quantities, review, corrections, cancellation and audit history. |
+| **Flood-assessment review** | Implemented locally | Versioned JSON intake, immutable evidence, dated uncertainty, reasoned review and linked relief drafts. |
+| **Aid inventory · H02** | Next dependency | Attributable receipts/reservations/issues/returns, explicit units and protection against negative or double-issued stock. |
+| **Delivery tracking · H03** | Follows inventory | Approved records, partial fulfilment, explicit returns/cancellations and source-backed delivery confirmation. |
+| **SATQueryAI adapter** | Integration work | Verify a real producer against the contract, including access, provenance, uncertainty, replays and failure behavior. |
+| **Context, evaluation, deployment · H04–H06** | Planned | Useful dated civilian context, measured user trials and a verified hosting/recovery environment. |
 
-**Commercial hypothesis:** an organisation-based subscription for shared workspaces, with onboarding and connector support as possible services. Pricing, willingness to pay, acquisition costs and retention need pilot evidence. Revenue and customer adoption have not been established.
+Aircraft operators retain dispatch authority. Live positions require an authorised source; reported availability alone does not establish mission readiness.
+
+**Commercial hypothesis:** organisation workspaces with onboarding and connector support. Validate workflow fit, willingness to pay and repeat use with civilian organisations before setting pricing or claiming adoption. Success measures should include review accuracy, time to an approved response plan, confirmed deliveries and unmet-needs follow-up.
+
+[Full roadmap and acceptance gates](docs/ROADMAP.md) · [Civilian-welfare charter](docs/CIVILIAN_WELFARE_SCOPE.md).
 
 ## The engineering behind the workflow
 
@@ -183,7 +208,7 @@ Open **[127.0.0.1:5173](http://127.0.0.1:5173)**. Setup generates local secrets 
 
 ## Evidence and current scope
 
-Recorded verification includes **59 passing backend tests**, frontend builds, migration checks, organisation-isolation tests, source-key/inbox checks, browser journeys and a backup/restore rehearsal. [Hosted CI](https://github.com/Prathamji1505/sampati/actions) and [verification notes](docs/VERIFICATION.md) identify the tested builds and limits.
+Recorded verification includes **109 passing backend tests in the latest recorded local verification**, frontend builds, migration checks, organisation-isolation tests, source-key/inbox checks, browser journeys and a backup/restore rehearsal. [Hosted CI](https://github.com/Prathamji1505/sampati/actions) and [verification notes](docs/VERIFICATION.md) identify the tested builds and limits.
 
 This release uses fictional civilian data in a local application. Its checks describe **source-record quality**; reported status remains source information. Live tracking, trained predictions, operational dispatch, airworthiness certification and production hosting are outside the implemented release. Planned capabilities above remain separate from the working prototype.
 

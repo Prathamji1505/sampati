@@ -519,7 +519,7 @@
         "url": "/artwork/sampati-emblem.png",
         "format": "PNG",
         "transparent": true,
-        "purpose": "Folk-style soaring-bird identity with its full silhouette contained.",
+        "purpose": "User-approved hand-painted folk bird (8 November 2026): layered crimson/ivory feathers, brown ink contours, pigment texture and gold details; preserve its full silhouette and old folk-art style.",
         "displaySize": "48px",
         "responsive": [
           {
@@ -640,7 +640,7 @@
   ],
   "narrative": {
     "northStar": "Source first.",
-    "overview": "SAMPATI · सम्पाति pairs a quiet black-and-charcoal workspace with crimson actions, warm ivory text and restrained saffron. The approved descriptor is “Air Operations & Resource Decision Support”. A folk-style soaring-bird emblem, Yatra One display lettering and an approved crimson/ivory/gold panorama express the identity in the header; the interface stays focused on scanning reports and completing an import.\n\nThis documents the implemented local, fictional aircraft-report prototype. The descriptor names the broader project and does not imply that future operations, live feeds or AI capabilities exist. This approved theme supersedes the provisional Airframe name, ink-blue navigation and white reading surfaces; the table, sidebar, import workflow and source-first principles remain.",
+    "overview": "SAMPATI · सम्पाति pairs a quiet black-and-charcoal workspace with crimson actions, warm ivory text and restrained saffron. The approved descriptor is “Disaster Response & Relief Coordination”. A folk-style soaring-bird emblem, Yatra One display lettering and an approved crimson/ivory/gold panorama express the identity in the header; the interface stays focused on scanning reports and completing an import.\n\nThis documents the implemented local, fictional aircraft-report prototype. The descriptor names the broader project and does not imply that future operations, live feeds or AI capabilities exist. This approved theme supersedes the provisional Airframe name, ink-blue navigation and white reading surfaces; the table, sidebar, import workflow and source-first principles remain.",
     "keyCharacteristics": [
       "Task-focused hierarchy and compact, structured data.",
       "Bilingual bird identity and an illustrated header with restrained gold.",

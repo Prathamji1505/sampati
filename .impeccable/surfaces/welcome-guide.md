@@ -16,4 +16,6 @@ QUALITY BAR: Correct separation between reading and workspace entry; direct link
 
 Footer addition: use the existing Sampati bilingual identity and “Source first. Every change, traceable.” tagline alongside the fictional-data notice. Inherit the welcome footer's divider, padding, muted copy and wrapping; keep it after the guide content. No new navigation or entry action is introduced.
 
+At narrow widths the header may wrap when the logo and return action do not fit together. The return action remains right-aligned on its second row. This preserves readable controls and page containment with the current display font; wider widths retain the original single row. The resumed four-width guide regression and fresh header-only review passed on 8 November 2026, with a ship disposition and no material fixes.
+
 Finish: production build and focused browser regression passed. Independent review of all four captures and relevant source returned ship with no material fixes. Existing design-system files and artwork were preserved. Evidence and scope are recorded in docs/VERIFICATION.md.

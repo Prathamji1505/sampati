@@ -36,3 +36,4 @@ coverage/
 .coverage
 htmlcov/
 tmp/
+output/

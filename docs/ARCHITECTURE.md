@@ -59,3 +59,12 @@ Uploads are limited to 1 MiB and 2,000 records. Preview tokens expire after 30 m
 Overview values are factual counts and deterministic attention rules over accepted records. There is no trained prediction model, live feed or external AI provider.
 
 Local HTTP cookies and the fixed allowed origins are development settings. Public hosting, HTTPS, infrastructure monitoring, managed secret storage and off-device backups require a deployment milestone. [Security boundaries](../SECURITY.md) · [Verification evidence](VERIFICATION.md).
+
+
+## Disaster-response extension
+
+`backend/app/incidents.py` and `frontend/src/Incidents.tsx` implement flood-assessment preview/intake, immutable evidence, reasoned review and linked relief drafts. Migration 005 adds incident and review records. The application-owned contract is `sampati.incident.v1`; a live producer adapter remains planned.
+
+`backend/app/relief.py` and `frontend/src/ReliefRequests.tsx` implement organisation-scoped supply requests, exact quantities, version-protected corrections and audited lifecycle changes. Migration 004 adds request and event records. Demo seeds are fictional and private organisations start empty.
+
+See [incident contract](INCIDENTS.md), [relief requests](RELIEF_REQUESTS.md) and [roadmap](ROADMAP.md). Inventory, mission assignment and delivery tracking remain separate milestones.

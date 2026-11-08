@@ -17,7 +17,7 @@ export default function Brand({
     >
       <img
         className="brand-symbol"
-        src="/artwork/sampati-emblem.png"
+        src="/artwork/sampati-emblem.png?v=b7e5b47f"
         width={48}
         height={48}
         alt=""

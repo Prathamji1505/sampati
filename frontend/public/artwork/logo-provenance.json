@@ -1,0 +1,29 @@
+{
+  "generator": "OpenAI built-in ImageGen",
+  "created": "2026-11-08",
+  "file": "sampati-emblem.png",
+  "identity": "SAMPATI · सम्पाति",
+  "userDirection": "nah bro keep it in that old folk art style",
+  "scope": "Traditional painted bird symbol replaces the rejected simplified logo; existing bilingual wordmark, colors and app artwork retained.",
+  "references": [
+    {
+      "file": "output/branding/sampati-emblem-previous.png",
+      "role": "Original compact soaring-bird composition and ink curves"
+    },
+    {
+      "file": "frontend/public/artwork/sampati-folk-sky.png",
+      "role": "Primary approved folk painting style, feather ornament and pigment reference"
+    }
+  ],
+  "prompt": "Use case: logo-brand / illustration-story.\nAsset: ONE final isolated SAMPATI bird logo emblem in the OLD INDIAN FOLK PAINTING STYLE, genuine transparent background. The user rejected a simplified modern vector-like logo and explicitly wants the old folk-art style preserved. This is a pictorial painted emblem, not a minimalist corporate icon.\nReference image 1: the older app bird emblem, for its compact soaring-bird composition and hand-inked curves.\nReference image 2: the approved bird panorama, the PRIMARY authority for the drawing style, feather ornament, pigment and expressive Indian manuscript/folk miniature character. Bring that traditional character into the small emblem.\nDraw a beautiful original mythic Sampati eagle/vulture, head facing left, graceful long hooked saffron-gold beak, almond-shaped watchful eye drawn with dark brown calligraphic ink, small swept-back head plumes. The body is ivory, with delicate individually inked neck feathers. One broad wing sweeps UP on the right with long elegant separated feather tips; the other crimson wing curves down and forward beneath the body. Short three-feather ivory tail sweeps toward the lower right. Keep the silhouette compact and balanced in a square, the head prominent and entire bird visible.\nThe wings have real layered feather rows, crimson-red outer flight feathers, ivory inner feathers, fine muted saffron-gold edges, a few tiny gold dots and petal details borrowed from the panorama. Use organic hand-drawn ink contours with subtle variation in stroke, flat hand-painted warm pigments and gentle aged paint texture WITHIN the feather shapes. The bird should look like a carefully painted detail from an old Indian illustrated manuscript. It must share the visual soul of the reference painting. About 7-9 main flight feathers in the raised wing, not dozens of microscopic lines.\nPalette: rich warm deep crimson red, warm aged ivory, tiny muted saffron/gold details, fine dark brown ink. The bird itself carries all the color. Keep the open spaces between the wings and around the head genuinely transparent with clean cutout contours.\nComposition: one centered emblem filling around 88 percent of a square canvas with calm even breathing space. No cropped beak or feather tips. Full transparent background. No scene or paper rectangle.\nDo NOT make it modern, geometric, flat-vector, glossy, gradient, 3D, esports, aggressive mascot, corporate phoenix, swan, peacock, or a literal letter S. NO floating feather, clouds, background, frame, circle, shield, crown, text, letters, wordmark, human/deity figures, weapons, aircraft, flags, official insignia, mockups, construction diagrams or brand boards. Only one traditional hand-painted bird emblem.",
+  "transparent": true,
+  "approval": {
+    "status": "approved",
+    "date": "2026-11-08",
+    "userResponse": "perfect"
+  },
+  "history": {
+    "original": "output/branding/sampati-emblem-previous.png",
+    "rejectedSimplification": "output/branding/sampati-logo-simplified-rejected.png"
+  }
+}

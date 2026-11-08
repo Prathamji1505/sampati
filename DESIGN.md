@@ -1,6 +1,6 @@
 ---
 name: "SAMPATI · सम्पाति"
-description: "Air Operations & Resource Decision Support"
+description: "Disaster Response & Relief Coordination"
 colors:
   accent: "#b72e48"
   accent-hover: "#ca3653"
@@ -136,7 +136,7 @@ components:
 
 **Creative North Star: "Source first."**
 
-SAMPATI · सम्पाति pairs a quiet black-and-charcoal workspace with crimson actions, warm ivory text and restrained saffron. The approved descriptor is “Air Operations & Resource Decision Support”. A folk-style soaring-bird emblem, Yatra One display lettering and an approved crimson/ivory/gold panorama express the identity in the header; the interface stays focused on scanning reports and completing an import.
+SAMPATI · सम्पाति pairs a quiet black-and-charcoal workspace with crimson actions, warm ivory text and restrained saffron. The approved descriptor is “Disaster Response & Relief Coordination”. A folk-style soaring-bird emblem, Yatra One display lettering and an approved crimson/ivory/gold panorama express the identity in the header; the interface stays focused on scanning reports and completing an import.
 
 This documents the implemented local, fictional aircraft-report prototype. The descriptor names the broader project and does not imply that future operations, live feeds or AI capabilities exist. This approved theme supersedes the provisional Airframe name, ink-blue navigation and white reading surfaces; the table, sidebar, import workflow and source-first principles remain.
 
@@ -202,6 +202,8 @@ State transitions are brief background/border changes; loading skeletons pulse a
 Use gently rounded, restrained geometry: compact tags, controls, navigation and larger work panels follow the frontmatter radius roles. Dots, avatars and step counters are circular.
 
 The identity uses `/artwork/sampati-emblem.png`, a transparent PNG bird emblem displayed at 48px on desktop, 31px at the tablet breakpoint and 36px in the compact mobile lockup. Preserve its alpha and contain the full silhouette. The approved panorama is `/artwork/sampati-folk-sky.png`: a soaring bird on the right with quieter space for text on the left. The original drawing supplied the folk-art style only. Asset provenance and exact prompts are recorded in `frontend/public/artwork/provenance.json` and embedded in both PNGs.
+
+The current painted emblem was explicitly approved on 8 November 2026. Its layered feathers, fine brown ink lines, warm pigment texture and gold details are part of the identity. Retain this old folk-art treatment. Approval and the exact logo prompt are recorded in `frontend/public/artwork/logo-provenance.json`. The shared brand image and browser icon use the same version query, `?v=b7e5b47f`, so browsers fetch the approved asset after the previous logo is replaced.
 
 ## Components
 

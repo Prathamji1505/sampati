@@ -45,13 +45,13 @@ export default function Welcome({
             सम्पाति
           </p>
           <p className="welcome-purpose">
-            Air Operations &amp; Resource
+            Disaster Response &amp;
             <br />
-            Decision Support
+            Relief Coordination
           </p>
           <p className="welcome-description">
-            Bring your aircraft reports together. Review every change. Keep the
-            source in view.
+            Review relief requests and aircraft reports. Keep every source and
+            change in view.
           </p>
           <button className="button primary welcome-enter" onClick={onEnter}>
             Enter workspace

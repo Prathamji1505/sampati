@@ -1,5 +1,9 @@
 # First implementation milestone
 
+## Current direction: civilian welfare
+
+On 8 November 2026 the user explicitly changed the project objective to civilian welfare, then refined it to flood response and disaster-relief coordination. The current charter is docs/CIVILIAN_WELFARE_SCOPE.md. Prior milestones below remain implementation history. Relief requests and local flood-assessment intake/review are implemented. The next dependencies are aid inventory → delivery tracking → verified civilian context → evaluation → deployment, alongside an agreed live SATQueryAI adapter. The original military air-operations brief is no longer the completion target. Existing source-report features remain supporting infrastructure.
+
 Project name: SAMPATI · सम्पाति. The first milestone is a local, fictional civilian aircraft-report workspace.
 
 1. Record the data contract and create repeatable fictional examples.
@@ -47,3 +51,25 @@ No hosting, live aviation feed, paid provider, model training, weather-based dis
 ## Next milestone: explainable source-report checks
 
 Create a concrete civilian requirements/acceptance map in docs/REQUIREMENTS.md. Implement read-only per-record checks for source freshness, incomplete fields, unknown status and pending report disagreements, preserving the original reported status. Expose reasons, source evidence, next review steps, filtering, pagination and a versioned filtered export. Verify isolation, time boundaries, pending-file grouping, read-only behavior and the rendered workflow. Operational availability calculations remain a separate unimplemented requirement; these checks do not infer maintenance condition, crew suitability or dispatch readiness.
+
+Completed: requirements checklist and Report checks are implemented. The full 61-test backend suite, browser workflow, filtered JSON content checks, touch/four-width layout checks and independent rendered review passed. Accepted data and existing users were preserved; generated QA accounts were removed. A final guide-header overflow at 320px was repaired and its full regression/review passed on resume. See docs/VERIFICATION.md for executed evidence and the remaining limits.
+
+## Disaster-response direction
+
+On 8 November 2026 the user defined Sampati as a **disaster-response and relief-coordination project**, starting with flood response. This is the governing direction for future development.
+
+The proposed connection is: **SATQueryAI impact assessment → reviewed incident alert → confirmed local needs → current aircraft reports and operator checks → human-approved relief mission → mission updates and delivery confirmation.**
+
+SATQueryAI would supply dated spatial evidence, affected-area assessments and uncertainty. Sampati would coordinate reviewed requests, resources and response records. Aircraft operators retain dispatch authority; reported availability and data freshness do not establish mission readiness. Post-event impact alerts and pre-event forecasting remain distinct capabilities.
+
+The current foundation includes aircraft-report review, relief requests and local flood-assessment intake/review. The shared incident contract and reviewed-incident linkage to human-entered relief drafts are implemented; docs/INCIDENTS.md records the workflow. The live SATQueryAI connector, inventory, mission assignment, delivery tracking and authorised live aircraft positions remain development work. H02/H03 supply and delivery milestones remain the next dependencies.
+
+Success should be evaluated through review accuracy, time to an approved response plan, delivery confirmation and follow-up of unmet needs. Social benefits and operational performance require civilian-user validation.
+
+## Completed H01: relief requests
+
+Organisation-scoped request drafts, exact quantities/units, local-time deadlines, draft corrections, submission/review/cancellation, version guards and attributed before/after history are implemented. The 82-test backend suite and full real-Edge request journey passed; a fresh full interface review returned ship. Inventory and deliveries are separate work. See docs/RELIEF_REQUESTS.md and docs/VERIFICATION.md.
+
+## Implemented flood-assessment connection
+
+The shared `sampati.incident.v1` contract, JSON preview/intake, immutable accepted flood evidence, source dates/uncertainty, reasoned review with race protection, and reviewed-incident linkage to relief drafts are implemented. The expanded backend suite passes 109 tests. No live producer connector or automatic needs/mission decision is implied. See docs/INCIDENTS.md and the dated verification evidence.

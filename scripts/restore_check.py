@@ -42,7 +42,13 @@ def main():
             with psycopg.connect(**connection_args) as restored:
                 revision = restored.execute('SELECT version_num FROM alembic_version').fetchone()[0]
                 aircraft = restored.execute('SELECT count(*) FROM aircraft').fetchone()[0]
+                relief = restored.execute('SELECT count(*) FROM relief_requests').fetchone()[0] if restored.execute("SELECT to_regclass('relief_requests')").fetchone()[0] is not None else None
+                incidents = restored.execute('SELECT count(*) FROM incidents').fetchone()[0] if restored.execute("SELECT to_regclass('incidents')").fetchone()[0] is not None else None
             print(f'Restore verified in a temporary database: schema {revision}; {aircraft} aircraft records.')
+            if relief is not None:
+                print(f'Restored relief requests: {relief}')
+            if incidents is not None:
+                print(f'Restored incident assessments: {incidents}')
         finally:
             # Identifier is checked above, and only this newly-created database is removed.
             admin.execute(sql.SQL('DROP DATABASE {}').format(sql.Identifier(check_name)))
