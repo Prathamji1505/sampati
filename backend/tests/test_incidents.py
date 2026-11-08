@@ -2,13 +2,9 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import timedelta
 
 import pytest
-from sqlalchemy import select
-
-from backend.app.auth import COOKIE
-from backend.app.models import Incident, Membership, utcnow
+from backend.app.models import Membership, utcnow
 from .test_accounts import post, signup
 from .test_relief import payload as request_payload
-from .test_workspace_tools import use_cookie
 
 
 def payload(**changes):

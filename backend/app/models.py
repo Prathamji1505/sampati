@@ -252,3 +252,86 @@ class IncidentEvent(Base):
     reason: Mapped[str] = mapped_column(String(500), nullable=False)
     before_status: Mapped[str | None] = mapped_column(String(20), nullable=True)
     after_status: Mapped[str] = mapped_column(String(20), nullable=False)
+
+
+class InventoryItem(Base):
+    __tablename__ = 'inventory_items'
+    __table_args__ = (UniqueConstraint('workspace_id', 'id'), UniqueConstraint('workspace_id', 'code_key'),
+        CheckConstraint("category IN ('food','water','medicine','shelter','other')"),
+        CheckConstraint("unit IN ('items','boxes','kits','litres','kilograms','packs')"))
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(ForeignKey('workspaces.id'), nullable=False)
+    code: Mapped[str] = mapped_column(String(64), nullable=False)
+    code_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    name: Mapped[str] = mapped_column(String(160), nullable=False)
+    category: Mapped[str] = mapped_column(String(20), nullable=False)
+    unit: Mapped[str] = mapped_column(String(20), nullable=False)
+    created_actor: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class StorageLocation(Base):
+    __tablename__ = 'storage_locations'
+    __table_args__ = (UniqueConstraint('workspace_id', 'id'), UniqueConstraint('workspace_id', 'code_key'))
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(ForeignKey('workspaces.id'), nullable=False)
+    code: Mapped[str] = mapped_column(String(64), nullable=False)
+    code_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    locality: Mapped[str] = mapped_column(String(160), nullable=False)
+    created_actor: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class StockPosition(Base):
+    __tablename__ = 'stock_positions'
+    __table_args__ = (
+        UniqueConstraint('workspace_id', 'id'), UniqueConstraint('workspace_id', 'item_id', 'location_id'),
+        ForeignKeyConstraint(['workspace_id','item_id'], ['inventory_items.workspace_id','inventory_items.id']),
+        ForeignKeyConstraint(['workspace_id','location_id'], ['storage_locations.workspace_id','storage_locations.id']),
+        CheckConstraint('on_hand >= 0 AND on_hand <= 1000000000 AND reserved >= 0 AND reserved <= on_hand'),
+        CheckConstraint('version >= 0'), Index('ix_stock_workspace_updated','workspace_id','updated_at'))
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(ForeignKey('workspaces.id'), nullable=False)
+    item_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    location_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    on_hand: Mapped[Decimal] = mapped_column(Numeric(15,3), nullable=False)
+    reserved: Mapped[Decimal] = mapped_column(Numeric(15,3), nullable=False)
+    version: Mapped[int] = mapped_column(Integer, nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class StockRecord(Base):
+    __tablename__ = 'stock_records'
+    __table_args__ = (
+        UniqueConstraint('workspace_id','position_id','id'), UniqueConstraint('workspace_id','reference_key'),
+        UniqueConstraint('workspace_id','submission_key'), UniqueConstraint('position_id','sequence'),
+        ForeignKeyConstraint(['workspace_id','position_id'], ['stock_positions.workspace_id','stock_positions.id'], ondelete='CASCADE'),
+        ForeignKeyConstraint(['workspace_id','position_id','parent_id'], ['stock_records.workspace_id','stock_records.position_id','stock_records.id']),
+        ForeignKeyConstraint(['workspace_id','request_id'], ['relief_requests.workspace_id','relief_requests.id']),
+        CheckConstraint("kind IN ('receipt','reserve','release','issue','return','report','adjustment_in','adjustment_out')"),
+        CheckConstraint("quantity <= 1000000000 AND ((kind = 'report' AND quantity >= 0) OR quantity > 0)"),
+        CheckConstraint("(kind IN ('release','issue','return')) = (parent_id IS NOT NULL)"),
+        CheckConstraint("(kind IN ('reserve','release','issue','return')) = (request_id IS NOT NULL)"),
+        CheckConstraint('sequence >= 1'))
+    id: Mapped[str] = mapped_column(String(36), primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(String(64), nullable=False)
+    position_id: Mapped[str] = mapped_column(String(36), nullable=False)
+    sequence: Mapped[int] = mapped_column(Integer, nullable=False)
+    reference: Mapped[str] = mapped_column(String(64), nullable=False)
+    reference_key: Mapped[str] = mapped_column(String(64), nullable=False)
+    submission_key: Mapped[str] = mapped_column(String(36), nullable=False)
+    digest: Mapped[str] = mapped_column(String(64), nullable=False)
+    kind: Mapped[str] = mapped_column(String(20), nullable=False)
+    quantity: Mapped[Decimal] = mapped_column(Numeric(15,3), nullable=False)
+    parent_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    request_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    request_reference: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    source_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    observed_at_raw: Mapped[str] = mapped_column(String(64), nullable=False)
+    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    actor_id: Mapped[str | None] = mapped_column(ForeignKey('users.id', ondelete='SET NULL'), nullable=True)
+    actor: Mapped[str] = mapped_column(String(120), nullable=False)
+    reason: Mapped[str] = mapped_column(String(500), nullable=False)
+    after: Mapped[dict] = mapped_column(JSON, nullable=False)

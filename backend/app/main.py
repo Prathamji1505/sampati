@@ -23,6 +23,7 @@ from .sources import router as source_router, ingest_router
 from .quality import router as quality_router
 from .relief import router as relief_router
 from .incidents import router as incident_router
+from .inventory import router as inventory_router
 from .models import Aircraft, AircraftChange, ImportBatch, Workspace, utcnow
 from .schemas import ConfirmRequest, HEADERS, MAX_BYTES, parse_timestamp
 
@@ -198,6 +199,8 @@ def example_file(example: str):
 app.include_router(auth_router)
 app.include_router(account_router)
 app.include_router(ingest_router)
+app.include_router(inventory_router, prefix='/api/demo')
+app.include_router(inventory_router, prefix='/api')
 app.include_router(incident_router, prefix='/api/demo')
 app.include_router(incident_router, prefix='/api')
 app.include_router(relief_router, prefix='/api/demo')

@@ -34,7 +34,7 @@ The project builds a practical foundation for disaster-response coordination: **
 | **Intended users** | Civilian relief coordinators, aid-inventory custodians and delivery-record reviewers; audiences to validate through pilots |
 | **Working today** | Flood-assessment preview/intake and review; linked relief drafts; request lifecycle and audit; supporting aircraft-report tools |
 | **Demonstration** | Fictional civilian records; no paid API or model download required |
-| **Engineering evidence** | 109 backend tests passed locally on 8 November 2026; production build and recorded browser checks. See docs/VERIFICATION.md for the exact scope; current changes have not been checked by hosted CI. |
+| **Engineering evidence** | 138 backend tests passed locally on 8 November 2026; production build and recorded browser checks. See docs/VERIFICATION.md for the exact scope; current changes have not been checked by hosted CI. |
 | **Stage** | Working prototype with public source; hosted application not yet configured |
 
 ## The problem
@@ -105,6 +105,8 @@ Consider the fictional aircraft **DEMO-001 / Cedar** already in the register:
 
 The core promise is simple: **a file arriving does not automatically make it the accepted truth.** One invalid row rejects the batch, and an aircraft missing from a file is not silently deleted.
 
+**H02 update:** Inventory APIs and migration 006 now implement scoped catalogs, exact stock balances, request-linked reservations and an append-only ledger. The inventory interface and end-to-end browser flow remain work in progress. [Inventory milestone](docs/INVENTORY.md).
+
 ## What is already built
 
 | Product area | What a user can do |
@@ -151,7 +153,7 @@ The governing goal is **civilian disaster response, beginning with flood relief*
 | --- | --- | --- |
 | **Relief requests · H01** | Implemented locally | Scoped drafts, exact units/quantities, review, corrections, cancellation and audit history. |
 | **Flood-assessment review** | Implemented locally | Versioned JSON intake, immutable evidence, dated uncertainty, reasoned review and linked relief drafts. |
-| **Aid inventory · H02** | Next dependency | Attributable receipts/reservations/issues/returns, explicit units and protection against negative or double-issued stock. |
+| **Aid inventory · H02** | Backend milestone; interface pending | Attributable receipts/reservations/issues/returns, explicit units and protection against negative or double-issued stock. |
 | **Delivery tracking · H03** | Follows inventory | Approved records, partial fulfilment, explicit returns/cancellations and source-backed delivery confirmation. |
 | **SATQueryAI adapter** | Integration work | Verify a real producer against the contract, including access, provenance, uncertainty, replays and failure behavior. |
 | **Context, evaluation, deployment · H04–H06** | Planned | Useful dated civilian context, measured user trials and a verified hosting/recovery environment. |
@@ -208,7 +210,7 @@ Open **[127.0.0.1:5173](http://127.0.0.1:5173)**. Setup generates local secrets 
 
 ## Evidence and current scope
 
-Recorded verification includes **109 passing backend tests in the latest recorded local verification**, frontend builds, migration checks, organisation-isolation tests, source-key/inbox checks, browser journeys and a backup/restore rehearsal. [Hosted CI](https://github.com/Prathamji1505/sampati/actions) and [verification notes](docs/VERIFICATION.md) identify the tested builds and limits.
+Recorded verification includes **138 passing backend tests in the latest recorded local verification**, frontend builds, migration checks, organisation-isolation tests, source-key/inbox checks, browser journeys and a backup/restore rehearsal. [Hosted CI](https://github.com/Prathamji1505/sampati/actions) and [verification notes](docs/VERIFICATION.md) identify the tested builds and limits.
 
 This release uses fictional civilian data in a local application. Its checks describe **source-record quality**; reported status remains source information. Live tracking, trained predictions, operational dispatch, airworthiness certification and production hosting are outside the implemented release. Planned capabilities above remain separate from the working prototype.
 

@@ -10,7 +10,7 @@ The project descriptor is **Disaster Response & Relief Coordination**. The Sampa
 
 ## Current product
 
-The working application includes organisation-scoped relief requests with draft creation, review, correction, cancellation and an audit history. It also retains the fictional civilian aircraft source-report foundation: imports, human review, a register, report checks, source connections, accounts, team roles, exports and local backups. Aid-inventory and delivery-management modules remain planned. See RELIEF_REQUESTS.md for the H01 contract and VERIFICATION.md for executed evidence.
+The working application includes dated flood-assessment JSON intake, human incident review and links to relief-request drafts, described in INCIDENTS.md. Organisation-scoped relief requests support draft creation, review, correction, cancellation and an audit history. It also retains the fictional civilian aircraft source-report foundation: imports, human review, a register, report checks, source connections, accounts, team roles, exports and local backups. Aid inventory has a backend/API milestone; its interface remains in progress. Delivery management remains planned. See RELIEF_REQUESTS.md for the H01 contract and VERIFICATION.md for executed evidence.
 
 The project is now evaluated against civilian welfare needs. Completing the original military air-operations problem statement is no longer the project objective. Historical research and verification remain records of what was considered and built; this charter sets the current scope.
 

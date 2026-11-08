@@ -1,5 +1,14 @@
 # First milestone verification
 
+## Inventory backend publication check — 8 November 2026
+
+- The expanded full backend suite passed **138 tests**, including inventory quantities, append-only records, request-linked reservations, roles/isolation, retries, balance limits and concurrent reservations. The existing upstream Starlette test-client deprecation warning remains.
+- The frontend build passed before the subsequent inventory-interface work started. This backend publication does not mark that interface or its browser journey complete.
+- All migrations through **006** applied successfully in a fresh disposable schema in the dedicated test database. Alembic model consistency passed there; the schema was removed afterwards. The live development database remained on 005.
+- The staged-source publication scan checked local links and known local secrets without findings. New inventory source, tests and migration are included; in-progress inventory-interface changes are a separate increment.
+
+See [inventory backend milestone](INVENTORY.md) for the API scope and remaining H02 work.
+
 Checked locally on 7 November 2026.
 
 ## GitHub submission preparation
@@ -153,3 +162,7 @@ Implemented and checked on 8 November 2026 for the refined flood-response direct
 - `scripts/browser-incidents.js` passed a real Edge journey: read-only demo, empty private state, malformed JSON/non-writing preview, file upload and schema download, Needs review intake, identical retry, reasoned review, linked relief form with initially blank quantity, exact human-entered quantity, stale-review rejection/reopen, paging/search, foreign-organisation 404, viewer controls, 44px touch action and 16px editor, and a lost-response-after-commit retry creating exactly one assessment/event. One intentional409 and an isolated retry abort are expected; zero unexpected main-page console/page errors were recorded.
 - All **16 final captures** (intake/preview, details, filtered list, linked request form at **1440/1024/390/320px**) passed document containment. The first render inspection caught the incident register missing the inherited table/footer classes; those classes and a mobile sideways-scroll instruction were applied together. The complete browser journey passed again with all 16 captures refreshed. No further build-thread visual hunt follows the second inspection.
 - The mechanical source detector ran once over four changed UI source files and reported no regex findings, before the final table-class/scroll-instruction correction. Parsed-page contrast/tiny-text rules were not run; this is not a full accessibility certification. The shared tokens, fonts and approved artwork were preserved.
+- A fresh independent full finish review inspected all 16 final captures and relevant contracts/source. It returned **ship**, with no material fixes, finding the inherited typography/material/palette, evidence-before-decision hierarchy, mobile adaptation and truthful scope faithful. It did not rerun the parent's runtime checks.
+- The complete H01 relief browser regression passed again after the optional link extension. The welcome-guide regression was expanded to observe incident, relief and report-check data requests as well as the original routes; it passed direct entry, API-blocked reading, reload/history/focus, all four widths, zero workspace data reads before explicit entry and zero new console errors.
+- Explicit fixture cleanup removed all generated QA accounts. The preserved baseline is **one original account, two workspaces, 24 aircraft, four imports, demo revision3**. Demo relief records remain three requests/six events; the new stable incident examples are two assessments/three events. Rerunning the incident seed added zero records and retained original evidence timestamps.
+- The final private archive `.local/backups/sampati-20261108T074415774423Z.dump` restored successfully into a newly generated disposable database: **schema005, 24 aircraft, three relief requests and two incident assessments**. The helper removed only that temporary database; the live database was unchanged.

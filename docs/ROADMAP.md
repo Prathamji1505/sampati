@@ -25,7 +25,7 @@ Incident intake is a working local integration boundary. A live SATQueryAI produ
 
 | Priority | Milestone | Completion gate |
 | --- | --- | --- |
-| **Next: H02** | Aid inventory: items, units, storage locations, receipts, reservations, issues and returns. | Attributable stock movements; explicit units; no negative balance or double issue under concurrent writes. |
+| **In progress: H02** | Backend APIs and migration are implemented; interface/browser verification remain. Aid inventory: items, units, storage locations, receipts, reservations, issues and returns. | Attributable stock movements; explicit units; no negative balance or double issue under concurrent writes. |
 | **Then: H03** | Delivery tracking linking reviewed requests and inventory issues. | Human-approved records, partial fulfilment, explicit cancellation/returns and source-backed delivery confirmation. |
 | **Parallel integration** | Live SATQueryAI adapter using `sampati.incident.v1`. | Agree producer/consumer responsibilities, access, provenance, uncertainty, replay behavior and failure handling; verify with an actual producer fixture. |
 | **H04** | Civilian context for a defined coordinator task. | Verify source terms, timestamps, stale-data behavior and the value of each feed. |
@@ -51,3 +51,6 @@ Evaluate review accuracy, time to an approved response plan, delivery confirmati
 ## Publication boundaries
 
 Publish fictional examples, contracts, source code and executed verification. Keep credentials, local databases, private uploads and scratch outputs out of Git. Describe planned integrations and social outcomes separately from implemented software. Historical milestones remain preserved in [PROJECT_PLAN.md](../PROJECT_PLAN.md).
+
+
+Inventory backend details: [INVENTORY.md](INVENTORY.md). This increment does not mark the complete H02 user workflow finished.

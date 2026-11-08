@@ -3,7 +3,7 @@ async page => {
   const origin = 'http://127.0.0.1:5173/'
   const dataRequests = []
   const errors = []
-  const dataRequest = request => { if (/\/api\/(?:demo\/)?(?:workspace|imports|overview|sources|team)(?:[/?]|$)/.test(request.url())) dataRequests.push(request.url()) }
+  const dataRequest = request => { if (/\/api\/(?:demo\/)?(?:workspace|imports|overview|report-checks|relief-requests|incidents|sources|team)(?:[/?]|$)/.test(request.url())) dataRequests.push(request.url()) }
   const consoleError = message => { if (message.type() === 'error') errors.push(message.text()) }
   page.on('request', dataRequest)
   page.on('console', consoleError)
