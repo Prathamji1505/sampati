@@ -30,4 +30,4 @@ The CSV fixtures in `examples/` and the app's generated samples are fictional so
 
 OpenAI Codex assisted implementation, debugging, tests, documentation and repository preparation. ImageGen assisted the artwork. The application itself does not call an AI model or an external aviation feed. No independent model training or aviation-performance evaluation is claimed.
 
-The README presentation was informed by Saishreek Singh's [REFLEX](https://github.com/Yoriichi-GOD/REFLEX) and [SatQuery AI](https://github.com/Yoriichi-GOD/SATquery-AI) repositories. Their source code, artwork, data and project claims were not copied into Sampati.
+The README presentation was informed by Saishreek Singh's [REFLEX](https://github.com/Yoriichi-GOD/REFLEX) repository. Its source code, artwork, data and project claims were not copied into Sampati.

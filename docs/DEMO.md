@@ -9,7 +9,7 @@ Use a private organisation with an owner/editor account for writes; the shared d
 3. Review it with a reason. A review records an evidence decision; confirm actual local needs separately.
 4. Choose **Create linked relief request** and enter the requesting organisation, supply description, quantity and unit from a fictional local report.
 5. Submit/review the request and inspect its attributed history.
-6. Explain the next dependencies: aid inventory, delivery tracking and a verified live SATQueryAI adapter. Aircraft reports are supporting information; operators retain dispatch authority.
+6. Explain the next dependencies: aid inventory, delivery tracking and a verified live assessment-source adapter. Aircraft reports are supporting information; operators retain dispatch authority.
 
 [Incident instructions](INCIDENTS.md) · [Request instructions](RELIEF_REQUESTS.md) · [Roadmap](ROADMAP.md).
 
@@ -17,7 +17,7 @@ Use a private organisation with an owner/editor account for writes; the shared d
 
 For the current flood-response path, open `/#demo/incidents` and inspect a fictional assessment's observation/generation/receipt times, uncertainty and review history. Then inspect `/#demo/relief` for separately recorded needs. These examples are read-only.
 
-To demonstrate the connected write workflow, create a temporary fictional organisation, open **Incident review → Record assessment → Use fictional example → Preview assessment → Record as Needs review**. Record a reasoned review, then choose **Create linked relief request**, enter the locally confirmed quantity/unit and save a draft. Inspect both histories. [Detailed incident walkthrough and contract](INCIDENTS.md). This does not require a SATQueryAI API key and does not demonstrate a live connector, stock allocation, dispatch or delivery.
+To demonstrate the connected write workflow, create a temporary fictional organisation, open **Incident review → Record assessment → Use fictional example → Preview assessment → Record as Needs review**. Record a reasoned review, then choose **Create linked relief request**, enter the locally confirmed quantity/unit and save a draft. Inspect both histories. [Detailed incident walkthrough and contract](INCIDENTS.md). This requires no external service credentials and does not demonstrate a live connector, stock allocation, dispatch or delivery.
 
 ## Aircraft-report foundation
 

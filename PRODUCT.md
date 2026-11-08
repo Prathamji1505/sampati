@@ -50,14 +50,18 @@ Report checks explain old/future source timestamps, unknown status, missing name
 
 No external AI provider or hosting target is selected.
 
+## Independent, multi-source product
+
+Sampati operates independently with its own records, contracts, access controls and review workflow. External analysis tools can complement it through optional adapters. The broader intake direction covers authorised databases, news/public reports, APIs, documents and forms, alongside implemented local CSV/Excel/JSON intake and human-entered requests. New connectors remain planned and must preserve provenance, dates, uncertainty and human review. See docs/DATA_SOURCES.md.
+
 ## Disaster-response direction
 
 On 8 November 2026 the user defined Sampati as a **disaster-response and relief-coordination project**, starting with flood response. This is the governing direction for future development.
 
-The proposed connection is: **SATQueryAI impact assessment → reviewed incident alert → confirmed local needs → current aircraft reports and operator checks → human-approved relief mission → mission updates and delivery confirmation.**
+The proposed connection is: **Dated impact assessment → reviewed incident alert → confirmed local needs → current aircraft reports and operator checks → human-approved relief mission → mission updates and delivery confirmation.**
 
-SATQueryAI would supply dated spatial evidence, affected-area assessments and uncertainty. Sampati would coordinate reviewed requests, resources and response records. Aircraft operators retain dispatch authority; reported availability and data freshness do not establish mission readiness. Post-event impact alerts and pre-event forecasting remain distinct capabilities.
+Assessment sources can supply dated spatial evidence, affected-area observations and uncertainty through a source-independent contract. Sampati would coordinate reviewed requests, resources and response records. Aircraft operators retain dispatch authority; reported availability and data freshness do not establish mission readiness. Post-event impact alerts and pre-event forecasting remain distinct capabilities.
 
-The current foundation includes aircraft-report review, relief requests and flood-assessment intake/review. The shared `sampati.incident.v1` contract, explicit JSON preview/recording, immutable accepted evidence, dated uncertainty, reasoned review history and reviewed-incident linkage to human-entered relief drafts are implemented locally. See docs/INCIDENTS.md. The live SATQueryAI connector, inventory, mission assignment, delivery tracking and authorised live aircraft positions remain development work. H02/H03 supply and delivery milestones remain next dependencies.
+The current foundation includes aircraft-report review, relief requests and flood-assessment intake/review. The shared `sampati.incident.v1` contract, explicit JSON preview/recording, immutable accepted evidence, dated uncertainty, reasoned review history and reviewed-incident linkage to human-entered relief drafts are implemented locally. See docs/INCIDENTS.md. The live assessment-source connector, inventory, mission assignment, delivery tracking and authorised live aircraft positions remain development work. H02/H03 supply and delivery milestones remain next dependencies.
 
 Success should be evaluated through review accuracy, time to an approved response plan, delivery confirmation and follow-up of unmet needs. Social benefits and operational performance require civilian-user validation.

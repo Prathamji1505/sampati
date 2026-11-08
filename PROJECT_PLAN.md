@@ -2,7 +2,7 @@
 
 ## Current direction: civilian welfare
 
-On 8 November 2026 the user explicitly changed the project objective to civilian welfare, then refined it to flood response and disaster-relief coordination. The current charter is docs/CIVILIAN_WELFARE_SCOPE.md. Prior milestones below remain implementation history. Relief requests and local flood-assessment intake/review are implemented. The next dependencies are aid inventory → delivery tracking → verified civilian context → evaluation → deployment, alongside an agreed live SATQueryAI adapter. The original military air-operations brief is no longer the completion target. Existing source-report features remain supporting infrastructure.
+On 8 November 2026 the user explicitly changed the project objective to civilian welfare, then refined it to flood response and disaster-relief coordination. The current charter is docs/CIVILIAN_WELFARE_SCOPE.md. Prior milestones below remain implementation history. Relief requests and local flood-assessment intake/review are implemented. The next dependencies are aid inventory → delivery tracking → verified civilian context → evaluation → deployment, alongside an agreed live assessment-source adapter. The original military air-operations brief is no longer the completion target. Existing source-report features remain supporting infrastructure.
 
 Project name: SAMPATI · सम्पाति. The first milestone is a local, fictional civilian aircraft-report workspace.
 
@@ -58,11 +58,11 @@ Completed: requirements checklist and Report checks are implemented. The full 61
 
 On 8 November 2026 the user defined Sampati as a **disaster-response and relief-coordination project**, starting with flood response. This is the governing direction for future development.
 
-The proposed connection is: **SATQueryAI impact assessment → reviewed incident alert → confirmed local needs → current aircraft reports and operator checks → human-approved relief mission → mission updates and delivery confirmation.**
+The proposed connection is: **Dated impact assessment → reviewed incident alert → confirmed local needs → current aircraft reports and operator checks → human-approved relief mission → mission updates and delivery confirmation.**
 
-SATQueryAI would supply dated spatial evidence, affected-area assessments and uncertainty. Sampati would coordinate reviewed requests, resources and response records. Aircraft operators retain dispatch authority; reported availability and data freshness do not establish mission readiness. Post-event impact alerts and pre-event forecasting remain distinct capabilities.
+Assessment sources can supply dated spatial evidence, affected-area observations and uncertainty through a source-independent contract. Sampati would coordinate reviewed requests, resources and response records. Aircraft operators retain dispatch authority; reported availability and data freshness do not establish mission readiness. Post-event impact alerts and pre-event forecasting remain distinct capabilities.
 
-The current foundation includes aircraft-report review, relief requests and local flood-assessment intake/review. The shared incident contract and reviewed-incident linkage to human-entered relief drafts are implemented; docs/INCIDENTS.md records the workflow. The live SATQueryAI connector, inventory, mission assignment, delivery tracking and authorised live aircraft positions remain development work. H02/H03 supply and delivery milestones remain the next dependencies.
+The current foundation includes aircraft-report review, relief requests and local flood-assessment intake/review. The shared incident contract and reviewed-incident linkage to human-entered relief drafts are implemented; docs/INCIDENTS.md records the workflow. The live assessment-source connector, inventory, mission assignment, delivery tracking and authorised live aircraft positions remain development work. H02/H03 supply and delivery milestones remain the next dependencies.
 
 Success should be evaluated through review accuracy, time to an approved response plan, delivery confirmation and follow-up of unmet needs. Social benefits and operational performance require civilian-user validation.
 

@@ -6,6 +6,10 @@ Direction reviewed 8 November 2026. Governing scope: [civilian-welfare charter](
 
 Help civilian coordinators turn dated flood-impact evidence into reviewed needs, accountable resource records and confirmed relief deliveries. Sampati coordinates the review and response records; aircraft operators retain dispatch authority.
 
+Sampati is independent of any particular assessment product. Local file intake is already supported; future integrations are optional adapters around Sampati's own contract. Choose sources to fit the coordinator's task rather than building the roadmap around a reference project.
+
+The multi-source direction includes authorised databases, news/public reports, APIs, assessment tools, documents and forms. These adapters are planned; they must preserve provenance and route extracted information through review. [Supported inputs and adapter rules](DATA_SOURCES.md).
+
 The intended end-to-end path is:
 
 **Impact evidence → incident review → confirmed local needs → inventory and resource checks → human-approved response → delivery confirmation → unmet-needs follow-up.**
@@ -19,7 +23,7 @@ The intended end-to-end path is:
 | Flood incidents | Versioned JSON preview/intake, immutable accepted evidence, dated uncertainty, reasoned review and links to human-entered relief drafts. | [Incident contract](INCIDENTS.md), incident tests and browser journey. |
 | Shared controls | Accounts, membership roles, version guards, migrations, local backup and restore rehearsal. | [Architecture](ARCHITECTURE.md), [verification](VERIFICATION.md). |
 
-Incident intake is a working local integration boundary. A live SATQueryAI producer is a separate next step. An impact assessment does not automatically determine supply quantities or approve a mission.
+Incident intake is a working local integration boundary. Connecting any live assessment producer is a separate, optional integration task. An impact assessment does not automatically determine supply quantities or approve a mission.
 
 ## Build order
 
@@ -27,7 +31,7 @@ Incident intake is a working local integration boundary. A live SATQueryAI produ
 | --- | --- | --- |
 | **In progress: H02** | Backend APIs and migration are implemented; interface/browser verification remain. Aid inventory: items, units, storage locations, receipts, reservations, issues and returns. | Attributable stock movements; explicit units; no negative balance or double issue under concurrent writes. |
 | **Then: H03** | Delivery tracking linking reviewed requests and inventory issues. | Human-approved records, partial fulfilment, explicit cancellation/returns and source-backed delivery confirmation. |
-| **Parallel integration** | Live SATQueryAI adapter using `sampati.incident.v1`. | Agree producer/consumer responsibilities, access, provenance, uncertainty, replay behavior and failure handling; verify with an actual producer fixture. |
+| **Parallel integration** | Optional adapters for assessment sources using `sampati.incident.v1`. | Agree producer/consumer responsibilities, access, provenance, uncertainty, replay behavior and failure handling; verify with an actual producer fixture. |
 | **H04** | Civilian context for a defined coordinator task. | Verify source terms, timestamps, stale-data behavior and the value of each feed. |
 | **H05** | Civilian-user evaluation. | Measure review accuracy, task completion, stock discrepancies and fulfilment-record accuracy against stated baselines. |
 | **H06** | Hosted deployment. | Selected target, HTTPS, protected secrets, organisation isolation, capacity and rehearsed off-device recovery. |

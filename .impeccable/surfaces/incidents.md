@@ -6,7 +6,7 @@ THESIS: Keep a flood impact observation, its source dates and uncertainty visibl
 
 OWN-WORLD: Inherit Sampati's charcoal/crimson/ivory tokens, Yatra One page title, DM Sans working text, painted bird shell and native labelled controls. No new assets, identity, visual system or motion.
 
-STORY: Scoped register → explicit JSON preview → record as Needs review → inspect dated source, extent, limitations → reasoned review → linked relief-request draft with human-entered quantities → actor/version history. Demo is fictional and read-only. No live SATQueryAI feed, forecasting, automatic needs, dispatch or delivery is claimed.
+STORY: Scoped register → explicit JSON preview → record as Needs review → inspect dated source, extent, limitations → reasoned review → linked relief-request draft with human-entered quantities → actor/version history. Demo is fictional and read-only. No live assessment feed, forecasting, automatic needs, dispatch or delivery is claimed.
 
 FIRST VIEWPORT: Scope and refresh/record actions precede review-state filters, search and the register. Mobile table scrolls internally with pagination outside. On detail, source and uncertainty precede review actions and local needs.
 

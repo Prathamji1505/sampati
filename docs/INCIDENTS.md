@@ -1,6 +1,6 @@
 # Flood assessment intake and incident review
 
-This is the first implemented connection in the disaster-response direction: **dated assessment → human review → linked relief-request draft**. It accepts fictional flood impact observations. No SATQueryAI endpoint, satellite processing, forecast model, automatic dispatch or live aircraft feed is configured.
+This is the first implemented connection in the disaster-response direction: **dated assessment → human review → linked relief-request draft**. It accepts fictional flood impact observations. No external assessment endpoint, satellite processing, forecast model, automatic dispatch or live aircraft feed is configured.
 
 Open **Incident review** in the sidebar, `#incidents` for your organisation, or `#demo/incidents` for fictional read-only examples.
 
@@ -15,7 +15,7 @@ Open **Incident review** in the sidebar, `#incidents` for your organisation, or 
 
 ## Shared contract v1
 
-The application-owned contract is proposed for a future SATQueryAI adapter; it is not a claim about SATQueryAI's existing API. Coordinate the actual producer's fields, authentication, licensing and uncertainty semantics before implementing a live connector.
+The application-owned contract is proposed for assessment sources that conform to Sampati's format, without depending on a particular product. Coordinate the actual producer's fields, authentication, licensing and uncertainty semantics before implementing a live connector.
 
 `GET /api/demo/incidents/contract` returns the machine-readable JSON Schema. **Download JSON contract** provides the same schema from the interface. A full example is in [examples/flood-assessment.json](../examples/flood-assessment.json). Each import contains one assessment, with no extra fields.
 
@@ -67,4 +67,4 @@ Accepted assessment fields cannot be edited or deleted through the API. A revise
 | `backend/tests/test_incidents.py` | Invalid inputs, permissions, duplicate retries, linkage, race protection and pagination. |
 | `scripts/browser-incidents.js` | Real Edge journey with temporary fictional accounts. |
 
-Aid inventory, mission approval, delivery confirmations and a live SATQueryAI connector remain separate work. Executed checks belong in [VERIFICATION.md](VERIFICATION.md).
+Aid inventory, mission approval, delivery confirmations and a live assessment-source connector remain separate work. Executed checks belong in [VERIFICATION.md](VERIFICATION.md).

@@ -337,7 +337,7 @@ export default function Incidents({
       {scope === "demo" && (
         <div className="relief-demo-note">
           <p>
-            Fictional flood examples · Read only. No live SATQueryAI feed is
+            Fictional flood examples · Read only. No live assessment feed is
             connected.
           </p>
           {!session?.user && (
@@ -572,7 +572,7 @@ export default function Incidents({
           </div>
           <p className="tools-muted">
             Paste one assessment or choose a JSON file. Preview it, then
-            explicitly record it as Needs review. A future SATQueryAI connector
+            explicitly record it as Needs review. Other assessment tools
             can use this shared format; a live connector is not configured.
           </p>
           <div className="incident-import-actions">

@@ -15,7 +15,7 @@
 
 **Current direction: disaster response.** Sampati is being developed for humanitarian logistics and disaster relief. **Relief requests** now supports drafts, human review, corrections, cancellation and audit history within each organisation. The aircraft-report workspace remains its data-review foundation. Aid inventory and delivery tracking are the next planned modules. [Civilian-welfare charter and build order](docs/CIVILIAN_WELFARE_SCOPE.md).
 
-**Incident review** now accepts a versioned flood-assessment JSON contract, preserves dated evidence and uncertainty, records human review, and opens a linked relief-request draft with human-entered quantities. This is the first local step toward the proposed SATQueryAI connection. A live SATQueryAI connector, aid inventory, mission assignment, delivery tracking and live aircraft positions remain planned. [Incident workflow and shared contract](docs/INCIDENTS.md).
+**Incident review** now accepts a versioned flood-assessment JSON contract, preserves dated evidence and uncertainty, records human review, and opens a linked relief-request draft with human-entered quantities. This source-independent intake can support different assessment tools and reporting workflows. A live assessment-source connector, aid inventory, mission assignment, delivery tracking and live aircraft positions remain planned. [Incident workflow and shared contract](docs/INCIDENTS.md).
 
 The project builds a practical foundation for disaster-response coordination: **make information understandable, current in context, and traceable before building more advanced decision support.**
 
@@ -71,7 +71,7 @@ flowchart LR
     E -. planned .-> F[Delivery confirmation]
 ```
 
-The current intake implements the application-owned `sampati.incident.v1` contract. A live SATQueryAI producer must still be connected and verified. [Incident contract](docs/INCIDENTS.md) · [Relief-request workflow](docs/RELIEF_REQUESTS.md).
+Sampati is a standalone coordination project. Its application-owned `sampati.incident.v1` contract accepts local assessment files without depending on another product. The broader direction includes optional inputs from **databases, news/public reports, APIs, assessment tools and other documents or forms**. Local files and human-entered requests work today; those additional connectors remain planned. Each source will retain its provenance and pass through validation and review. [Data-source strategy](docs/DATA_SOURCES.md) · [Incident contract](docs/INCIDENTS.md) · [Relief-request workflow](docs/RELIEF_REQUESTS.md).
 
 ### Supporting report-review workspace
 
@@ -155,7 +155,7 @@ The governing goal is **civilian disaster response, beginning with flood relief*
 | **Flood-assessment review** | Implemented locally | Versioned JSON intake, immutable evidence, dated uncertainty, reasoned review and linked relief drafts. |
 | **Aid inventory · H02** | Backend milestone; interface pending | Attributable receipts/reservations/issues/returns, explicit units and protection against negative or double-issued stock. |
 | **Delivery tracking · H03** | Follows inventory | Approved records, partial fulfilment, explicit returns/cancellations and source-backed delivery confirmation. |
-| **SATQueryAI adapter** | Integration work | Verify a real producer against the contract, including access, provenance, uncertainty, replays and failure behavior. |
+| **Assessment-source adapters** | Integration work | Verify a real producer against the contract, including access, provenance, uncertainty, replays and failure behavior. |
 | **Context, evaluation, deployment · H04–H06** | Planned | Useful dated civilian context, measured user trials and a verified hosting/recovery environment. |
 
 Aircraft operators retain dispatch authority. Live positions require an authorised source; reported availability alone does not establish mission readiness.

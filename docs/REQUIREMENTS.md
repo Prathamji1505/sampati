@@ -22,7 +22,7 @@ This checklist tracks what the local, fictional civilian learning prototype actu
 
 ## Flood-response connection
 
-The local incident workflow now implements a versioned flood impact-observation contract, explicit JSON preview/recording, immutable accepted evidence, source/observation/generation/receipt dates, uncertainty, scoped review with reasons/version checks, and links from reviewed incidents to relief-request drafts. See [INCIDENTS.md](INCIDENTS.md) for acceptance rules and remaining integration limits. A live SATQueryAI connection, forecasting, mission approval, inventory and confirmed delivery are not implemented by this contract.
+The local incident workflow now implements a versioned flood impact-observation contract, explicit JSON preview/recording, immutable accepted evidence, source/observation/generation/receipt dates, uncertainty, scoped review with reasons/version checks, and links from reviewed incidents to relief-request drafts. See [INCIDENTS.md](INCIDENTS.md) for acceptance rules and remaining integration limits. A live external assessment connection, forecasting, mission approval, inventory and confirmed delivery are not implemented by this contract.
 
 ## Scope of the current checks
 

@@ -15,7 +15,7 @@ This is the problem explored by the prototype. User demand, adoption and time sa
 
 ## The implemented solution
 
-The disaster-relief workflow also accepts dated flood assessments through a versioned JSON contract, retains source evidence and uncertainty, records reasoned human review and opens linked relief-request drafts. Quantities are entered by a person. This local workflow prepares an integration boundary; it does not connect to a live SATQueryAI service. Inventory, approved missions and delivery confirmations remain future milestones.
+The disaster-relief workflow also accepts dated flood assessments through a versioned JSON contract, retains source evidence and uncertainty, records reasoned human review and opens linked relief-request drafts. Quantities are entered by a person. This local workflow prepares an integration boundary; it does not connect to a live external assessment service. Inventory, approved missions and delivery confirmations remain future milestones.
 
 Sampati validates CSV and Excel reports, shows proposed changes, and requires explicit confirmation before updating accepted records. Search and freshness filters help reviewers examine the current register; audit history preserves the change path. Organisation memberships and scoped file connections support separate workspaces and an incoming review queue.
 

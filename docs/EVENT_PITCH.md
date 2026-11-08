@@ -14,7 +14,7 @@ The working local prototype lets a coordinator preview and record a dated flood 
 
 Sampati also retains its aircraft-report foundation: reviewed CSV and Excel imports, source freshness, conflict checks and organisation workspaces. These reports support coordination; operators retain dispatch authority.
 
-The next modules are aid inventory and delivery tracking. A live SATQueryAI connector is also planned around the implemented incident contract. The long-term response chain is impact evidence, reviewed needs, verified resources, human-approved response and confirmed delivery.
+The next modules are aid inventory and delivery tracking. A live assessment-source connector is also planned around the implemented incident contract. The long-term response chain is impact evidence, reviewed needs, verified resources, human-approved response and confirmed delivery.
 
 The prototype uses fictional data. We have not deployed it in a disaster or measured welfare outcomes. The next validation step is to test it with civilian coordinators and measure review accuracy, task completion and follow-up of unmet needs.
 
