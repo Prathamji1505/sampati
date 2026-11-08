@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 
 from .auth import Context
 from .database import get_session
-from .models import InventoryItem, Membership, ReliefRequest, StockPosition, StockRecord, StorageLocation, Workspace, utcnow
+from .models import InventoryItem, Membership, ReliefRequest, Shipment, StockPosition, StockRecord, StorageLocation, Workspace, utcnow
 from .relief import Category, Unit, quantity_text
 from .schemas import parse_timestamp
 
@@ -163,7 +163,7 @@ def consumed(session,parent_id):
 
 
 def record_view(item,remaining=None):
-    return {**{key:getattr(item,key) for key in ('id','sequence','reference','kind','parent_id','request_id','request_reference','source_name','observed_at_raw','observed_at','received_at','actor','reason','after')},
+    return {**{key:getattr(item,key) for key in ('id','sequence','reference','kind','parent_id','parent_reference','request_id','request_reference','source_name','observed_at_raw','observed_at','received_at','actor','reason','after')},
         'quantity':quantity_text(item.quantity),'remaining_quantity':quantity_text(remaining) if remaining is not None else None}
 
 
@@ -246,7 +246,7 @@ def check_request(session,context,request_id,item,extra=Decimal(0)):
     return request
 
 
-def record_locked(body,context,session):
+def record_locked(body,context,session,return_for_shipment_id=None):
     """Caller must hold the workspace write lock. Shared with the fictional seed."""
     fingerprint=digest(body)
     previous=session.scalar(select(StockRecord).where(StockRecord.workspace_id==context.workspace_id,StockRecord.submission_key==str(body.submission_key)))
@@ -265,7 +265,7 @@ def record_locked(body,context,session):
     if position is None:
         position=StockPosition(id=str(uuid4()),workspace_id=context.workspace_id,item_id=item.id,location_id=location.id,on_hand=Decimal(0),reserved=Decimal(0),version=0,updated_at=utcnow())
         session.add(position);session.flush()
-    request=None
+    request=None;parent=None
     if body.kind=='reserve':
         request=check_request(session,context,body.request_id,item,extra=body.quantity)
     if body.parent_id:
@@ -275,6 +275,12 @@ def record_locked(body,context,session):
             raise HTTPException(409,'Choose the original reservation or issue from this same item and location.')
         if body.quantity>parent.quantity-consumed(session,parent.id):
             raise HTTPException(409,'This exceeds the original record’s remaining quantity. Refresh the history before retrying.')
+        if body.kind=='return':
+            claims=select(func.coalesce(func.sum(Shipment.quantity-Shipment.returned),0)).where(Shipment.issue_id==parent.id,Shipment.status!='cancelled')
+            if return_for_shipment_id:
+                claims=claims.where(Shipment.id!=return_for_shipment_id)
+            if body.quantity>parent.quantity-consumed(session,parent.id)-session.scalar(claims):
+                raise HTTPException(409,'This issue is assigned to shipment records. Record an undelivered return through Delivery tracking, or cancel an unstarted shipment first.')
         request=scoped(session,ReliefRequest,context,parent.request_id)
         if body.kind=='issue':
             request=check_request(session,context,parent.request_id,item)
@@ -295,6 +301,7 @@ def record_locked(body,context,session):
     record=StockRecord(id=str(uuid4()),workspace_id=context.workspace_id,position_id=position.id,sequence=position.version,
         reference=body.reference,reference_key=body.reference.upper(),submission_key=str(body.submission_key),digest=fingerprint,
         kind=body.kind,quantity=quantity,parent_id=str(body.parent_id) if body.parent_id else None,
+        parent_reference=parent.reference if parent else None,
         request_id=request.id if request else None,request_reference=request.reference if request else None,
         source_name=body.source_name,observed_at=parse_timestamp(body.observed_at),observed_at_raw=body.observed_at,
         received_at=now,actor_id=context.actor_id,actor=context.actor,reason=body.reason,after=balances(position))

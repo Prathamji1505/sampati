@@ -44,11 +44,17 @@ def main():
                 aircraft = restored.execute('SELECT count(*) FROM aircraft').fetchone()[0]
                 relief = restored.execute('SELECT count(*) FROM relief_requests').fetchone()[0] if restored.execute("SELECT to_regclass('relief_requests')").fetchone()[0] is not None else None
                 incidents = restored.execute('SELECT count(*) FROM incidents').fetchone()[0] if restored.execute("SELECT to_regclass('incidents')").fetchone()[0] is not None else None
+                stock = restored.execute('SELECT count(*) FROM stock_records').fetchone()[0] if restored.execute("SELECT to_regclass('stock_records')").fetchone()[0] is not None else None
+                shipments = restored.execute('SELECT count(*) FROM shipments').fetchone()[0] if restored.execute("SELECT to_regclass('shipments')").fetchone()[0] is not None else None
             print(f'Restore verified in a temporary database: schema {revision}; {aircraft} aircraft records.')
             if relief is not None:
                 print(f'Restored relief requests: {relief}')
             if incidents is not None:
                 print(f'Restored incident assessments: {incidents}')
+            if stock is not None:
+                print(f'Restored stock records: {stock}')
+            if shipments is not None:
+                print(f'Restored shipments: {shipments}')
         finally:
             # Identifier is checked above, and only this newly-created database is removed.
             admin.execute(sql.SQL('DROP DATABASE {}').format(sql.Identifier(check_name)))

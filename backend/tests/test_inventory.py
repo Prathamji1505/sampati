@@ -197,3 +197,65 @@ def test_stock_history_pages_and_ceiling(client):
     first=detail(client,item,location);older=detail(client,item,location,before_sequence=first['next_before_sequence'])
     assert len(first['records'])==50 and [record['sequence'] for record in older['records']]==[2,1]
     assert older['next_before_sequence'] is None
+
+
+def test_concurrent_issues_cannot_take_the_same_reserved_stock_twice(client):
+    auth=signup(client);item,location,body,_=setup_stock(client,auth,'10')
+    request=reviewed_request(client,auth)
+    reserve=movement(client,auth,body,kind='reserve',quantity='8',request_id=request['id']).json()['record']
+    def issue(index):
+        return post(client,'/api/inventory/records',auth,json={**body,'reference':f'ISSUE-RACE-{index}',
+            'submission_key':str(uuid4()),'expected_version':2,'kind':'issue','quantity':'6','parent_id':reserve['id']})
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results=list(pool.map(issue,[1,2]))
+    assert sorted(result.status_code for result in results)==[201,409]
+    position=detail(client,item,location)['position']
+    assert position['on_hand']=='4' and position['reserved']=='2' and position['available']=='2'
+    assert movement(client,auth,body,kind='issue',quantity='6',parent_id=reserve['id']).status_code==409
+
+
+def test_concurrent_reservations_at_different_stores_share_request_limit(client):
+    auth=signup(client);item,location,body,_=setup_stock(client,auth)
+    request=reviewed_request(client,auth)
+    other=post(client,'/api/inventory/locations',auth,json={'code':'B','name':'Other store','locality':'Fictional Hill'}).json()['entry']
+    other_body={**body,'location_id':other['id'],'reference':'B-RECEIPT','submission_key':str(uuid4())}
+    assert post(client,'/api/inventory/records',auth,json=other_body).status_code==201
+    def reserve(pair):
+        index,source=pair
+        return post(client,'/api/inventory/records',auth,json={**source,'reference':f'SHARED-RACE-{index}',
+            'submission_key':str(uuid4()),'expected_version':1,'kind':'reserve','quantity':'30','request_id':request['id']})
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        results=list(pool.map(reserve,[(1,body),(2,other_body)]))
+    assert sorted(result.status_code for result in results)==[201,409]
+    assert client.get('/api/inventory/requests',params={'item_id':item['id']}).json()['items'][0]['remaining']=='10'
+
+
+def test_request_unit_correction_requires_resolving_old_allocations(client):
+    auth=signup(client);item,location,body,_=setup_stock(client,auth)
+    request=reviewed_request(client,auth)
+    reserve=movement(client,auth,body,kind='reserve',quantity='8',request_id=request['id']).json()['record']
+    draft=transition(client,auth,request,'draft').json()['request']
+    editable={key:draft[key] for key in ('requesting_organisation','locality','category','item_name','quantity','unit','needed_by','source_name','note')}
+    corrected=client.patch('/api/relief-requests/'+request['id'],headers={'X-CSRF-Token':auth['csrf_token']},
+        json={**editable,'unit':'litres','expected_version':draft['version'],'reason':'Fictional source corrected its unit.'}).json()['request']
+    corrected=transition(client,auth,corrected,'submitted').json()['request']
+    transition(client,auth,corrected,'reviewed')
+    litres=post(client,'/api/inventory/items',auth,json={'code':'WATER-LITRES','name':'Fictional drinking water','category':'water','unit':'litres'}).json()['entry']
+    litre_body={**body,'item_id':litres['id'],'reference':'LITRE-RECEIPT','submission_key':str(uuid4())}
+    assert post(client,'/api/inventory/records',auth,json=litre_body).status_code==201
+    assert movement(client,auth,body,kind='issue',quantity='1',parent_id=reserve['id']).status_code==409
+    assert movement(client,auth,litre_body,kind='reserve',quantity='1',request_id=request['id']).status_code==409
+    assert movement(client,auth,body,kind='release',quantity='8',parent_id=reserve['id']).status_code==201
+    assert movement(client,auth,litre_body,kind='reserve',quantity='1',request_id=request['id']).status_code==201
+
+
+def test_parent_records_cannot_cross_item_or_storage_boundaries(client):
+    auth=signup(client);item,location,body,_=setup_stock(client,auth)
+    request=reviewed_request(client,auth)
+    reserve=movement(client,auth,body,kind='reserve',quantity='8',request_id=request['id']).json()['record']
+    other=post(client,'/api/inventory/locations',auth,json={'code':'B','name':'Other store','locality':'Fictional Hill'}).json()['entry']
+    other_body={**body,'location_id':other['id'],'reference':'B-RECEIPT','submission_key':str(uuid4())}
+    assert post(client,'/api/inventory/records',auth,json=other_body).status_code==201
+    assert movement(client,auth,other_body,kind='issue',quantity='1',parent_id=reserve['id']).status_code==409
+    assert movement(client,auth,body,kind='return',quantity='1',parent_id=reserve['id']).status_code==409
+    assert len(detail(client,item,other)['records'])==1

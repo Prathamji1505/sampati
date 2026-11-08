@@ -74,7 +74,10 @@ export default function WorkspaceGuide({
           account imports stay separate from the demo. Connect a changing file
           from Data connections; incoming files wait for review. Invite
           teammates from Organisation team and save recovery codes in Account
-          settings. Overview summarises accepted records using counts and rules.
+          settings. Automation inbox checks structured relief files and proposes
+          new request drafts. Owners can allow a trusted source to create drafts
+          automatically; needs, stock movements and delivery evidence still need
+          human review. Overview summarises accepted records using counts and rules.
           Keep this learning prototype on your own computer.
         </p>
         <button

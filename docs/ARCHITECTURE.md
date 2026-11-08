@@ -18,6 +18,14 @@ flowchart TB
 
 ## Data lifecycle
 
+## Relief coordination and automation
+
+`incidents.py`, `relief.py`, `inventory.py` and `deliveries.py` own distinct domain transactions: assessment review, needs, stock ledger and shipment evidence. Composite foreign keys keep linked records within an organisation. Workspace/position/shipment locks and version guards protect concurrent changes; exact decimal quantities retain fixed units. A source count, issued quantity and confirmed arrival are separate facts.
+
+`automation_files.py` validates the relief CSV/JSON contract. `automation.py` owns source policies, raw intake evidence, current-request previews, decisions and optional automatic creation of new drafts. Source purposes separate aircraft credentials from relief credentials. A source can never use its key to approve requests or record inventory/delivery actions. New drafts call the existing request creation helper inside the same transaction as intake audit history.
+
+`reports.py` computes the scoped relief overview from current queues and net arrival quantities. No model inference or cross-unit aggregate is used. In packaged local mode, `scripts/run.py` applies migrations and enables static serving of the compiled frontend after API routes.
+
 1. CSV and Excel uploads use the shared schema and batch rules. One invalid row rejects the batch.
 2. Preview normalises values, fingerprints the dataset, compares it with accepted records and signs a token bound to content, workspace revision and importing account. It writes no accepted aircraft or import records.
 3. Confirmation verifies the token, locks the workspace revision and rechecks the records. Aircraft changes, the import batch and audit entries save in one database transaction.

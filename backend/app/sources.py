@@ -38,7 +38,7 @@ def describe(source):
 
 
 def find_source(session, source_id, workspace_id, lock=False):
-    query = select(DataSource).where(DataSource.id == source_id, DataSource.workspace_id == workspace_id)
+    query = select(DataSource).where(DataSource.id == source_id, DataSource.workspace_id == workspace_id, DataSource.purpose == 'aircraft')
     if lock:
         query = query.with_for_update()
     record = session.scalar(query)
@@ -67,7 +67,7 @@ def queue_rows(session, source, rows, filename):
 
 @router.get('/sources')
 def sources(context: Context, session: DB):
-    records = session.scalars(select(DataSource).where(DataSource.workspace_id == context.workspace_id).order_by(DataSource.created_at)).all()
+    records = session.scalars(select(DataSource).where(DataSource.workspace_id == context.workspace_id, DataSource.purpose == 'aircraft').order_by(DataSource.created_at)).all()
     incoming = session.execute(select(IncomingDataset, DataSource.name).join(DataSource, DataSource.id == IncomingDataset.source_id)
         .where(IncomingDataset.workspace_id == context.workspace_id).order_by(IncomingDataset.received_at.desc()).limit(100)).all()
     return {'sources': [describe(record) for record in records], 'incoming': [{'id': item.id, 'source_name': name, 'filename': item.filename,
@@ -114,7 +114,7 @@ def receive(source_id: str, request: Request, session: DB, file: UploadFile = Fi
     token = authorization[7:] if authorization.startswith('Bearer ') else ''
     with session.begin():
         source = session.scalar(select(DataSource).where(DataSource.id == source_id).with_for_update())
-        if source is None or not source.enabled or not token or not hmac.compare_digest(source.token_hash, token_digest(token)):
+        if source is None or source.purpose != 'aircraft' or not source.enabled or not token or not hmac.compare_digest(source.token_hash, token_digest(token)):
             raise HTTPException(401, 'The source key is invalid or inactive.')
         membership = session.get(Membership, (source.created_by, source.workspace_id))
         if membership is None or membership.role not in {'owner', 'editor'}:

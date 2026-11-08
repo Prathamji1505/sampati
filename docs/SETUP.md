@@ -33,6 +33,10 @@ Keep the terminal running. Open [the app](http://127.0.0.1:5173) or [API documen
 
 Setup also seeds three read-only relief requests and two read-only flood assessments once. It never refreshes/overwrites existing examples. Explore `/#demo/incidents` and `/#demo/relief`; private organisations start empty. Existing installations can rerun setup to apply additive migrations. [Incident workflow and JSON contract](INCIDENTS.md).
 
+Migration 006 adds aid inventory. Setup seeds two fictional supply items, one store, two stock positions and six stock events once, including a source count that differs from the ledger and a reservation against the reviewed shelter request. Explore `/#demo/inventory`. Private inventory begins empty; add items/stores before recording receipts. [Inventory walkthrough](INVENTORY.md).
+
+Migration 007 adds delivery tracking. Setup seeds two fictional shipments with eight evidence events against the existing shelter issue, without changing the six inventory events. Explore `/#demo/deliveries` and **Request follow-up**. One example is partially delivered and one fully delivered; the shelter request still shows 30 kits awaiting confirmation. [Delivery walkthrough and limits](DELIVERIES.md).
+
 DM Sans is requested from Google Fonts; system sans-serif text remains usable offline. Display lettering and artwork are local assets. No aviation feed or AI API credentials are required.
 
 ## Stop and restart
@@ -71,5 +75,17 @@ GitHub Actions uses a disposable PostgreSQL service for the same backend and mig
 | An example is stale or rejected as older | Checked-in examples are fixed historical reports. Use **Try sample data** on a fresh workspace for timestamps generated at request time. |
 
 ## Detailed workflows
+
+## Run the compiled application
+
+After setup and `npm --prefix frontend run build`, stop the development launcher with Ctrl+C, start the project database with `.\.venv\Scripts\python.exe scripts\dev.py db-start`, then run:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\run.py
+```
+
+Open `http://127.0.0.1:8000`. This serves the compiled interface and API from one local process and applies pending migrations. Keep its terminal running. Rebuild the interface after source changes. This local mode is separate from the two-server development launcher. Public hosting and real-data operations require their own environment and review.
+
+For relief-file automation, see [Automation inbox](AUTOMATION.md).
 
 See [the local workflow reference](LOCAL_WORKFLOW.md) for accounts, source-key file watching, backup/restore rehearsal and complete data rules. Keep `.env`, source keys, recovery codes, local databases and backups out of Git.

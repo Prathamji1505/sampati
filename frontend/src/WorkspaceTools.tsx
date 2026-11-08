@@ -20,6 +20,7 @@ import type {
   WorkspaceScope,
 } from "./types";
 import "./workspace-tools.css";
+import ReliefOverview from "./ReliefOverview";
 
 type Overview = {
   total: number;
@@ -78,6 +79,9 @@ type Props = {
   onRefresh: () => void;
   onPreview: (preview: Preview) => void;
   onInspect: (aircraft: Aircraft) => void;
+  onOpenRelief?: (
+    view: "incidents" | "relief" | "automation" | "deliveries" | "inventory",
+  ) => void;
 };
 const when = (value: string | null) =>
   value ? new Date(value).toLocaleString() : "Waiting for the first file";
@@ -235,6 +239,7 @@ export default function WorkspaceTools(props: Props) {
       </div>
       {view === "overview" && overview && (
         <>
+          <ReliefOverview onOpen={props.onOpenRelief} />
           <section className="tools-panel">
             <div className="tools-panel-heading">
               <h2>Reported status</h2>

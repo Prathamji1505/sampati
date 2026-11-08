@@ -2,16 +2,18 @@ import csv
 import hmac
 from datetime import datetime, timedelta, timezone
 import io
+import os
 import time
 from typing import Annotated
 import uuid
 
 from fastapi import APIRouter, Depends, FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import JSONResponse, Response
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy import select, text
 from sqlalchemy.orm import Session
 
-from .config import settings
+from .config import ROOT, settings
 from .auth import Context, router as auth_router
 from .database import get_session
 from .imports import compare_rows, existing_import, fingerprint, read_preview, safe_filename, snapshot
@@ -24,10 +26,12 @@ from .quality import router as quality_router
 from .relief import router as relief_router
 from .incidents import router as incident_router
 from .inventory import router as inventory_router
+from .deliveries import router as delivery_router
+from .automation import router as automation_router, ingest_router as automation_ingest_router
 from .models import Aircraft, AircraftChange, ImportBatch, Workspace, utcnow
 from .schemas import ConfirmRequest, HEADERS, MAX_BYTES, parse_timestamp
 
-app = FastAPI(title='Sampati local demo', version='0.3.0', description='Fictional civilian aircraft reports with reviewable source updates and organisation workspaces.')
+app = FastAPI(title='Sampati', version='0.4.0', description='Civilian disaster response: reviewed evidence, relief needs, stock, delivery records and draft intake automation.')
 data_router = APIRouter(tags=['Aircraft reports'])
 DB = Annotated[Session, Depends(get_session)]
 
@@ -199,6 +203,11 @@ def example_file(example: str):
 app.include_router(auth_router)
 app.include_router(account_router)
 app.include_router(ingest_router)
+app.include_router(automation_ingest_router)
+app.include_router(automation_router, prefix='/api/demo')
+app.include_router(automation_router, prefix='/api')
+app.include_router(delivery_router, prefix='/api/demo')
+app.include_router(delivery_router, prefix='/api')
 app.include_router(inventory_router, prefix='/api/demo')
 app.include_router(inventory_router, prefix='/api')
 app.include_router(incident_router, prefix='/api/demo')
@@ -213,3 +222,7 @@ app.include_router(source_router, prefix='/api/demo')
 app.include_router(source_router, prefix='/api')
 app.include_router(data_router, prefix='/api/demo')
 app.include_router(data_router, prefix='/api')
+
+# Packaged local mode serves the compiled interface after all API routes.
+if os.environ.get('SAMPATI_SERVE_FRONTEND') == 'true':
+    app.mount('/', StaticFiles(directory=ROOT / 'frontend' / 'dist', html=True), name='interface')

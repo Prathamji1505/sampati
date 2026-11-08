@@ -18,6 +18,7 @@ type ReliefRequest = {
   id: string;
   incident_id: string | null;
   incident_reference: string | null;
+  intake_id: string | null;
   reference: string;
   requesting_organisation: string;
   locality: string;
@@ -159,11 +160,17 @@ export default function ReliefRequests({
   onSignIn,
   incidentDraft,
   onIncidentDraftUsed,
+  initialRequestId,
+  onInitialRequestUsed,
+  onIntake,
 }: {
   scope: WorkspaceScope;
   session: SessionState | null;
   workspace: Workspace | null;
   onSignIn: () => void;
+  initialRequestId?: string | null;
+  onInitialRequestUsed?: () => void;
+  onIntake?: (id: string) => void;
   incidentDraft?: IncidentDraft | null;
   onIncidentDraftUsed?: () => void;
 }) {
@@ -261,6 +268,12 @@ export default function ReliefRequests({
       setBusy(false);
     }
   }
+  useEffect(() => {
+    if (initialRequestId) {
+      void openDetail(initialRequestId);
+      onInitialRequestUsed?.();
+    }
+  }, [initialRequestId]);
   function openNew() {
     setLinkedIncident(null);
     setForm(blankForm());
@@ -897,6 +910,21 @@ export default function ReliefRequests({
 
       {mode === "detail" && item && detail && (
         <>
+          {item.intake_id && onIntake && (
+            <div className="relief-demo-note">
+              <p>
+                This request was created from a saved relief file. Inspect its
+                source text, validation and intake decision.
+              </p>
+              <button
+                className="button secondary"
+                disabled={busy}
+                onClick={() => onIntake(item.intake_id!)}
+              >
+                View intake evidence
+              </button>
+            </div>
+          )}
           {item.incident_reference && (
             <p className="tools-muted">
               Linked incident: <strong>{item.incident_reference}</strong>.

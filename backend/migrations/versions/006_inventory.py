@@ -39,6 +39,7 @@ def upgrade():
         sa.Column('submission_key',sa.String(36),nullable=False),sa.Column('digest',sa.String(64),nullable=False),
         sa.Column('kind',sa.String(20),nullable=False),sa.Column('quantity',sa.Numeric(15,3),nullable=False),
         sa.Column('parent_id',sa.String(36),nullable=True),sa.Column('request_id',sa.String(36),nullable=True),
+        sa.Column('parent_reference',sa.String(64),nullable=True),
         sa.Column('request_reference',sa.String(64),nullable=True),sa.Column('source_name',sa.String(120),nullable=False),
         sa.Column('observed_at',sa.DateTime(timezone=True),nullable=False),sa.Column('observed_at_raw',sa.String(64),nullable=False),
         sa.Column('received_at',sa.DateTime(timezone=True),nullable=False),

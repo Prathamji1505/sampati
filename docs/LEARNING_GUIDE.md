@@ -21,6 +21,14 @@ Try it without a second program: create a source, choose **Generate fictional up
 
 ## Accounts and teams
 
+## How relief intake becomes drafts
+
+[Automation inbox](AUTOMATION.md) uses ordinary rules rather than a trained AI model. `automation_files.py` reads a strict CSV/JSON contract; `automation.py` compares each reference with current requests. New rows propose drafts, matching rows stay unchanged, and conflicts or invalid rows pause the file. Owners can explicitly trust a source to create new drafts automatically when every check passes. Human review still confirms needs and logistics.
+
+PostgreSQL workspace locks serialize accepted changes. Canonical fingerprints make equivalent files repeat safely. A preview hash detects changes between reading and accepting. The intake and new drafts commit together, with a provenance link and actor history. Study `test_automation.py` for malformed files, revoked keys, current-record conflicts and concurrent retries.
+
+The relief section in Overview computes queue counts and unmet needs from accepted records. Each request keeps its own unit; stock issues are never counted as arrivals. Its export is a dated snapshot for a shift handover.
+
 Passwords become Argon2 hashes through pwdlib. The browser receives an opaque HttpOnly session cookie; the database stores its digest, expiry and current organisation. A separate CSRF token accompanies browser changes. Membership, rather than a typed organisation name, grants access.
 
 An owner can invite an existing username as an editor or viewer. The code is bound to that account and expires after three days. Owners manage members and source keys; editors import/review; viewers read and export. Every organisation must retain an owner. Recovery codes are random, hashed, shown once and usable once each; save them privately before forgetting a password.
@@ -59,6 +67,22 @@ Start with [Relief requests](RELIEF_REQUESTS.md): a request records a quantity a
 Then follow [Incident review](INCIDENTS.md): `backend/app/incidents.py` defines the JSON contract with Pydantic. **Preview** displays a proposed assessment without writing; **Record** stores it as Needs review. A reviewer checks source dates and limitations and provides a reason. Only a reviewed incident can start a linked relief draft, and quantity stays blank until a person enters it. The assessment's source population estimate is not a supply calculation.
 
 Study `backend/tests/test_incidents.py` for validation, organisation isolation, duplicate-safe retries and concurrent review conflicts. `scripts/browser-incidents.js` drives the same workflow through real controls. Inventory and delivery modules will extend the chain later.
+
+## Learn the stock ledger
+
+[Aid inventory](INVENTORY.md) introduces an important distinction: a source count is a report, while a receipt, issue, return or adjustment changes the recorded ledger. Available stock is on hand minus reserved. The server uses Python `Decimal` and PostgreSQL numeric columns so fractional quantities remain exact.
+
+`backend/app/inventory.py` locks the organisation and stock position while checking the version, available stock, original reservation/issue and the reviewed request's remaining quantity. A request limit is shared across stores. An issue consumes an existing reservation rather than allocating the same supplies again. A return frees issued stock without recreating the old reservation. Read the concurrency tests in `backend/tests/test_inventory.py` to see two competing writers and the one accepted result.
+
+Duplicate-safe saves use a stable client submission key plus a unique source reference. If the server commits a receipt but the response is lost, retrying retrieves that event instead of adding the stock again. Corrections append a reasoned adjustment; the original event remains visible. H03 will add delivery evidence separately, because an issue from a store is not proof of arrival.
+
+## Learn delivery confirmation
+
+[Delivery tracking](DELIVERIES.md) adds a second distinction: issuing goods from a store is not proof of arrival. `backend/app/deliveries.py` tracks drafts, human approval and actual dispatch evidence, then derives partial/full delivery from source-confirmed quantities. Request follow-up subtracts only net confirmed arrivals from a reviewed need.
+
+An undelivered return changes both shipment history and stock. Both writes share one database transaction: either both commit or neither does. A stable submission key makes retry safe even when that transaction succeeded but the response was lost. A correction to an overstated arrival is a new linked event; it retains the original evidence and does not change stock.
+
+The server also prevents reusing an already assigned issue, returning delivered stock through the generic inventory form, or editing a request so its active shipments no longer fit. See `backend/tests/test_deliveries.py` for concurrent confirmations, atomic rollback and exact fractional examples. These checks validate recorded software behavior, not real-world deliveries.
 
 ## Try the report checks
 

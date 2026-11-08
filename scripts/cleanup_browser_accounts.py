@@ -4,7 +4,7 @@ import argparse
 from sqlalchemy import delete, select
 
 from backend.app.database import SessionLocal
-from backend.app.models import Aircraft, AircraftChange, DataSource, IncomingDataset, ImportBatch, Incident, IncidentEvent, Invitation, Membership, ReliefRequest, ReliefRequestEvent, User, Workspace
+from backend.app.models import Aircraft, AircraftChange, AutomationReceipt, AutomationReceiptEvent, AutomationSourceEvent, DataSource, IncomingDataset, ImportBatch, Incident, IncidentEvent, InventoryItem, Invitation, Membership, ReliefRequest, ReliefRequestEvent, Shipment, ShipmentEvent, StockPosition, StockRecord, StorageLocation, User, Workspace
 
 
 def main():
@@ -37,9 +37,21 @@ def main():
         if session.scalar(select(ReliefRequest.id).where(ReliefRequest.created_by.in_(requested), ~ReliefRequest.workspace_id.in_(workspace_ids)).limit(1)) or session.scalar(select(ReliefRequestEvent.id).where(ReliefRequestEvent.actor_id.in_(requested), ~ReliefRequestEvent.workspace_id.in_(workspace_ids)).limit(1)):
             raise RuntimeError('A fixture has relief records in another organisation. Nothing was removed.')
         for workspace_id in workspace_ids:
+            for model, actor_field in [(DataSource, DataSource.created_by), (AutomationReceipt, AutomationReceipt.received_actor_id), (AutomationReceiptEvent, AutomationReceiptEvent.actor_id), (AutomationSourceEvent, AutomationSourceEvent.actor_id)]:
+                if session.scalar(select(model.id).where(actor_field.in_(requested), ~model.workspace_id.in_(workspace_ids)).limit(1)):
+                    raise RuntimeError('A fixture has source or automation evidence in another organisation. Nothing was removed.')
+            if session.scalar(select(Shipment.id).where(Shipment.created_by.in_(requested), ~Shipment.workspace_id.in_(workspace_ids)).limit(1)) or session.scalar(select(ShipmentEvent.id).where(ShipmentEvent.actor_id.in_(requested), ~ShipmentEvent.workspace_id.in_(workspace_ids)).limit(1)):
+                raise RuntimeError('A fixture has delivery records in another organisation. Nothing was removed.')
+            if session.scalar(select(StockRecord.id).where(StockRecord.actor_id.in_(requested), ~StockRecord.workspace_id.in_(workspace_ids)).limit(1)):
+                raise RuntimeError('A fixture has stock records in another organisation. Nothing was removed.')
             if session.scalar(select(Incident.id).where(Incident.created_by.in_(requested), ~Incident.workspace_id.in_(workspace_ids)).limit(1)) or session.scalar(select(IncidentEvent.id).where(IncidentEvent.actor_id.in_(requested), ~IncidentEvent.workspace_id.in_(workspace_ids)).limit(1)):
                 raise RuntimeError('A fixture has incident records in another organisation. Nothing was removed.')
+            session.execute(delete(Shipment).where(Shipment.workspace_id == workspace_id))
+            session.execute(delete(StockPosition).where(StockPosition.workspace_id == workspace_id))
+            session.execute(delete(InventoryItem).where(InventoryItem.workspace_id == workspace_id))
+            session.execute(delete(StorageLocation).where(StorageLocation.workspace_id == workspace_id))
             session.execute(delete(ReliefRequest).where(ReliefRequest.workspace_id == workspace_id))
+            session.execute(delete(AutomationReceipt).where(AutomationReceipt.workspace_id == workspace_id))
             session.execute(delete(Incident).where(Incident.workspace_id == workspace_id))
             session.execute(delete(IncomingDataset).where(IncomingDataset.workspace_id == workspace_id))
             session.execute(delete(DataSource).where(DataSource.workspace_id == workspace_id))

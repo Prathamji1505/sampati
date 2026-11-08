@@ -8,7 +8,7 @@ Sampati is a standalone disaster-response and relief-coordination platform. It o
 | --- | --- | --- |
 | Local files | CSV/Excel aircraft reports and versioned JSON flood assessments are implemented. | Preserve validation, preview and explicit human acceptance. |
 | Human-entered information | Relief-request drafts and reasoned review decisions are implemented. | Keep locally confirmed quantities separate from assessment estimates. |
-| Changing files | The scoped file watcher and incoming review inbox support the existing dataset contract. | Additional formats need their own validation and review mapping. |
+| Changing files | Aircraft CSV/Excel review and relief CSV/JSON intake have scoped source keys and local watchers. Relief intake can create drafts under an explicit owner rule. | Additional formats need their own validation and review mapping. |
 | Databases | External database connectors are planned. Sampati's own PostgreSQL persistence is already implemented. | Read authorised views/exports with limited credentials, checkpoints and traceable source references. |
 | News and public reports | Automated news intake is planned. | Retain publisher, article link, publication/update time, retrieval time and supporting excerpts where permitted. Treat reports as evidence for review, rather than confirmed needs or stock. |
 | APIs and assessment tools | The local incident contract is implemented; live adapters are planned. | Map dated evidence, uncertainty and producer references into a versioned contract. |
@@ -31,4 +31,4 @@ An adapter translates a source into Sampati's contracts. It cannot bypass organi
 - Use authorised access and appropriate source terms; keep credentials out of browser code, exports and Git.
 - Verify each adapter with representative fixtures, access-boundary tests, replay/error cases and a reviewed example before advertising it as supported.
 
-The next core dependencies remain inventory and delivery tracking. Source adapters can be prioritised by a civilian user's actual workflow rather than by a reference project's technology. [Roadmap](ROADMAP.md) · [Incident contract](INCIDENTS.md).
+Inventory and delivery tracking are implemented locally. Further source adapters should be prioritised by a civilian user's actual workflow. [Automation](AUTOMATION.md) · [Roadmap](ROADMAP.md) · [Incident contract](INCIDENTS.md).

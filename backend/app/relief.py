@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 
 from .auth import Context
 from .database import get_session
-from .models import Incident, Membership, ReliefRequest, ReliefRequestEvent, Workspace, utcnow
+from .models import Incident, InventoryItem, Membership, ReliefRequest, ReliefRequestEvent, Shipment, StockPosition, Workspace, utcnow
 from .schemas import parse_timestamp
 from .services import require_workspace
 
@@ -104,7 +104,7 @@ def create_digest(body):
 
 def snapshot(item):
     return {'id': item.id, 'reference': item.reference,
-        'incident_id': item.incident_id, 'incident_reference': item.incident_reference,
+        'incident_id': item.incident_id, 'incident_reference': item.incident_reference, 'intake_id': item.intake_id,
         **{field: getattr(item, field) for field in EDITABLE if field not in {'quantity', 'needed_by'}},
         'quantity': quantity_text(item.quantity), 'needed_by': item.needed_by.astimezone(timezone.utc).isoformat(), 'needed_by_raw': item.needed_by_raw,
         'status': item.status, 'version': item.version, 'created_actor': item.created_actor,
@@ -171,35 +171,42 @@ def list_requests(context: Context, session: DB, q: str = Query(default='', max_
 def create_request(body: NewRequest, context: Context, session: DB, response: Response):
     with session.begin():
         writer(session, context)
-        digest = create_digest(body)
-        previous = session.scalar(select(ReliefRequest).where(ReliefRequest.workspace_id == context.workspace_id, ReliefRequest.submission_key == str(body.submission_key)))
-        if previous:
-            if previous.create_digest != digest:
-                raise HTTPException(409, 'This save identifier was already used for different details. Refresh the list to inspect the saved request.')
+        result = create_locked(body, context, session)
+        if result['duplicate']:
             response.status_code = 200
-            return {'request': describe(previous), 'duplicate': True}
-        if session.scalar(select(ReliefRequest.id).where(ReliefRequest.workspace_id == context.workspace_id, ReliefRequest.reference_key == body.reference.upper())):
-            raise HTTPException(409, 'That request reference already exists in this organisation. Search for it in the request list.')
-        incident = None
-        if body.incident_id is not None:
-            incident = session.scalar(select(Incident).where(Incident.workspace_id == context.workspace_id, Incident.id == str(body.incident_id)))
-            if incident is None:
-                raise HTTPException(404, 'The linked incident was not found in this organisation.')
-            if incident.status != 'reviewed':
-                raise HTTPException(409, 'Review the incident evidence before linking a new relief request.')
-        now = utcnow()
-        item = ReliefRequest(id=str(uuid4()), workspace_id=context.workspace_id, reference=body.reference,
-            incident_id=incident.id if incident else None,
-            incident_reference=incident.assessment['external_reference'] if incident else None,
-            reference_key=body.reference.upper(), submission_key=str(body.submission_key), create_digest=digest,
-            **{field: getattr(body, field) for field in EDITABLE if field != 'needed_by'},
-            needed_by=parse_timestamp(body.needed_by), needed_by_raw=body.needed_by,
-            status='draft', version=1, created_by=context.actor_id, created_actor=context.actor,
-            created_at=now, updated_at=now)
-        session.add(item)
-        session.flush()
-        add_event(session, item, context.actor, context.actor_id, 'created', 'Request recorded as a draft.', None)
-        return {'request': describe(item), 'duplicate': False}
+        return result
+
+
+def create_locked(body, context, session, *, intake_id=None, reason='Request recorded as a draft.'):
+    """Caller holds the workspace write lock; create one draft and its audit atomically."""
+    digest = create_digest(body)
+    previous = session.scalar(select(ReliefRequest).where(ReliefRequest.workspace_id == context.workspace_id, ReliefRequest.submission_key == str(body.submission_key)))
+    if previous:
+        if previous.create_digest != digest:
+            raise HTTPException(409, 'This save identifier was already used for different details. Refresh the list to inspect the saved request.')
+        return {'request': describe(previous), 'duplicate': True}
+    if session.scalar(select(ReliefRequest.id).where(ReliefRequest.workspace_id == context.workspace_id, ReliefRequest.reference_key == body.reference.upper())):
+        raise HTTPException(409, 'That request reference already exists in this organisation. Search for it in the request list.')
+    incident = None
+    if body.incident_id is not None:
+        incident = session.scalar(select(Incident).where(Incident.workspace_id == context.workspace_id, Incident.id == str(body.incident_id)))
+        if incident is None:
+            raise HTTPException(404, 'The linked incident was not found in this organisation.')
+        if incident.status != 'reviewed':
+            raise HTTPException(409, 'Review the incident evidence before linking a new relief request.')
+    now = utcnow()
+    item = ReliefRequest(id=str(uuid4()), workspace_id=context.workspace_id, reference=body.reference,
+        intake_id=intake_id, incident_id=incident.id if incident else None,
+        incident_reference=incident.assessment['external_reference'] if incident else None,
+        reference_key=body.reference.upper(), submission_key=str(body.submission_key), create_digest=digest,
+        **{field: getattr(body, field) for field in EDITABLE if field != 'needed_by'},
+        needed_by=parse_timestamp(body.needed_by), needed_by_raw=body.needed_by,
+        status='draft', version=1, created_by=context.actor_id, created_actor=context.actor,
+        created_at=now, updated_at=now)
+    session.add(item)
+    session.flush()
+    add_event(session, item, context.actor, context.actor_id, 'created', reason, None)
+    return {'request': describe(item), 'duplicate': False}
 
 
 @router.get('/relief-requests/{request_id}')
@@ -236,6 +243,11 @@ def edit_request(request_id: UUID, body: EditRequest, context: Context, session:
         before = snapshot(item)
         if normalized(body) == {key: before[key] for key in EDITABLE}:
             return {'request': describe(item), 'unchanged': True}
+        claims=session.execute(select(InventoryItem.unit,InventoryItem.category,func.sum(Shipment.quantity-Shipment.returned))
+            .join(StockPosition,Shipment.position_id==StockPosition.id).join(InventoryItem,StockPosition.item_id==InventoryItem.id)
+            .where(Shipment.request_id==item.id,Shipment.status!='cancelled').group_by(InventoryItem.unit,InventoryItem.category)).all()
+        if any(amount>0 and (unit!=body.unit or category!=body.category) for unit,category,amount in claims) or sum((amount for unit,category,amount in claims),0)>body.quantity:
+            raise HTTPException(409,'Active or delivered shipment quantities must fit this request. Resolve unstarted shipments or record returns/corrections before reducing quantities or changing units.')
         for field in EDITABLE:
             setattr(item, field, parse_timestamp(body.needed_by) if field == 'needed_by' else getattr(body, field))
         item.needed_by_raw = body.needed_by

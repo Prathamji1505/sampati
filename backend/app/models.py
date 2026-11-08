@@ -128,6 +128,10 @@ class Invitation(Base):
 
 class DataSource(Base):
     __tablename__ = 'data_sources'
+    __table_args__ = (UniqueConstraint('workspace_id','id'),
+        CheckConstraint("purpose IN ('aircraft','relief')"),
+        CheckConstraint("automation_mode IN ('review','new_drafts')"),
+        CheckConstraint("purpose = 'relief' OR automation_mode = 'review'"),CheckConstraint('policy_version >= 1'))
     id: Mapped[str] = mapped_column(String(36), primary_key=True)
     workspace_id: Mapped[str] = mapped_column(ForeignKey('workspaces.id'), nullable=False)
     created_by: Mapped[str] = mapped_column(ForeignKey('users.id'), nullable=False)
@@ -136,6 +140,9 @@ class DataSource(Base):
     enabled: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, nullable=False)
     last_received_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    purpose: Mapped[str] = mapped_column(String(20),nullable=False,default='aircraft',server_default='aircraft')
+    automation_mode: Mapped[str] = mapped_column(String(20),nullable=False,default='review',server_default='review')
+    policy_version: Mapped[int] = mapped_column(Integer,nullable=False,default=1,server_default='1')
 
 
 class IncomingDataset(Base):
@@ -161,6 +168,7 @@ class ReliefRequest(Base):
         UniqueConstraint('workspace_id', 'submission_key'),
         UniqueConstraint('workspace_id', 'id'),
         ForeignKeyConstraint(['workspace_id', 'incident_id'], ['incidents.workspace_id', 'incidents.id']),
+        ForeignKeyConstraint(['workspace_id','intake_id'],['automation_receipts.workspace_id','automation_receipts.id']),
         CheckConstraint("status IN ('draft', 'submitted', 'reviewed', 'cancelled')"),
         CheckConstraint("category IN ('food', 'water', 'medicine', 'shelter', 'other')"),
         CheckConstraint("unit IN ('items', 'boxes', 'kits', 'litres', 'kilograms', 'packs')"),
@@ -174,6 +182,7 @@ class ReliefRequest(Base):
     reference_key: Mapped[str] = mapped_column(String(64), nullable=False)
     incident_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
     incident_reference: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    intake_id: Mapped[str | None] = mapped_column(String(36),nullable=True)
     submission_key: Mapped[str] = mapped_column(String(36), nullable=False)
     create_digest: Mapped[str] = mapped_column(String(64), nullable=False)
     requesting_organisation: Mapped[str] = mapped_column(String(120), nullable=False)
@@ -325,6 +334,7 @@ class StockRecord(Base):
     kind: Mapped[str] = mapped_column(String(20), nullable=False)
     quantity: Mapped[Decimal] = mapped_column(Numeric(15,3), nullable=False)
     parent_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
+    parent_reference: Mapped[str | None] = mapped_column(String(64), nullable=True)
     request_id: Mapped[str | None] = mapped_column(String(36), nullable=True)
     request_reference: Mapped[str | None] = mapped_column(String(64), nullable=True)
     source_name: Mapped[str] = mapped_column(String(120), nullable=False)
@@ -335,3 +345,134 @@ class StockRecord(Base):
     actor: Mapped[str] = mapped_column(String(120), nullable=False)
     reason: Mapped[str] = mapped_column(String(500), nullable=False)
     after: Mapped[dict] = mapped_column(JSON, nullable=False)
+
+
+class Shipment(Base):
+    __tablename__ = 'shipments'
+    __table_args__ = (
+        UniqueConstraint('workspace_id','id'), UniqueConstraint('workspace_id','reference_key'),
+        UniqueConstraint('workspace_id','submission_key'),
+        ForeignKeyConstraint(['workspace_id','position_id','issue_id'],['stock_records.workspace_id','stock_records.position_id','stock_records.id']),
+        ForeignKeyConstraint(['workspace_id','request_id'],['relief_requests.workspace_id','relief_requests.id']),
+        CheckConstraint("status IN ('draft','approved','in_transit','partially_delivered','delivered','closed','cancelled')"),
+        CheckConstraint('quantity > 0 AND quantity <= 1000000000 AND delivered >= 0 AND returned >= 0 AND delivered + returned <= quantity'),
+        CheckConstraint('version >= 1'), Index('ix_shipment_workspace_updated','workspace_id','updated_at'))
+    id: Mapped[str] = mapped_column(String(36),primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(ForeignKey('workspaces.id'),nullable=False)
+    reference: Mapped[str] = mapped_column(String(64),nullable=False)
+    reference_key: Mapped[str] = mapped_column(String(64),nullable=False)
+    submission_key: Mapped[str] = mapped_column(String(36),nullable=False)
+    create_digest: Mapped[str] = mapped_column(String(64),nullable=False)
+    position_id: Mapped[str] = mapped_column(String(36),nullable=False)
+    issue_id: Mapped[str] = mapped_column(String(36),nullable=False)
+    request_id: Mapped[str] = mapped_column(String(36),nullable=False)
+    quantity: Mapped[Decimal] = mapped_column(Numeric(15,3),nullable=False)
+    delivered: Mapped[Decimal] = mapped_column(Numeric(15,3),nullable=False)
+    returned: Mapped[Decimal] = mapped_column(Numeric(15,3),nullable=False)
+    receiving_organisation: Mapped[str] = mapped_column(String(120),nullable=False)
+    destination: Mapped[str] = mapped_column(String(160),nullable=False)
+    note: Mapped[str] = mapped_column(Text,nullable=False)
+    status: Mapped[str] = mapped_column(String(24),nullable=False)
+    approved_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),nullable=True)
+    dispatched_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True),nullable=True)
+    version: Mapped[int] = mapped_column(Integer,nullable=False)
+    created_by: Mapped[str | None] = mapped_column(ForeignKey('users.id',ondelete='SET NULL'),nullable=True)
+    created_actor: Mapped[str] = mapped_column(String(120),nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True),nullable=False)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True),nullable=False)
+
+
+class ShipmentEvent(Base):
+    __tablename__ = 'shipment_events'
+    __table_args__ = (
+        UniqueConstraint('workspace_id','shipment_id','id'), UniqueConstraint('shipment_id','version'),
+        UniqueConstraint('workspace_id','reference_key'), UniqueConstraint('workspace_id','submission_key'),
+        ForeignKeyConstraint(['workspace_id','shipment_id'],['shipments.workspace_id','shipments.id'],ondelete='CASCADE'),
+        ForeignKeyConstraint(['workspace_id','shipment_id','parent_event_id'],['shipment_events.workspace_id','shipment_events.shipment_id','shipment_events.id']),
+        ForeignKeyConstraint(['workspace_id','stock_position_id','stock_record_id'],['stock_records.workspace_id','stock_records.position_id','stock_records.id']),
+        CheckConstraint("kind IN ('created','approved','dispatched','delivery','return','cancelled','delivery_correction')"),
+        CheckConstraint("(kind = 'delivery_correction') = (parent_event_id IS NOT NULL)"),
+        CheckConstraint("(kind = 'return') = (stock_record_id IS NOT NULL)"))
+    id: Mapped[str] = mapped_column(String(36),primary_key=True)
+    workspace_id: Mapped[str] = mapped_column(String(64),nullable=False)
+    shipment_id: Mapped[str] = mapped_column(String(36),nullable=False)
+    version: Mapped[int] = mapped_column(Integer,nullable=False)
+    kind: Mapped[str] = mapped_column(String(24),nullable=False)
+    reference: Mapped[str | None] = mapped_column(String(64),nullable=True)
+    reference_key: Mapped[str | None] = mapped_column(String(64),nullable=True)
+    submission_key: Mapped[str | None] = mapped_column(String(36),nullable=True)
+    digest: Mapped[str | None] = mapped_column(String(64),nullable=True)
+    quantity: Mapped[Decimal | None] = mapped_column(Numeric(15,3),nullable=True)
+    parent_event_id: Mapped[str | None] = mapped_column(String(36),nullable=True)
+    parent_reference: Mapped[str | None] = mapped_column(String(64),nullable=True)
+    stock_position_id: Mapped[str | None] = mapped_column(String(36),nullable=True)
+    stock_record_id: Mapped[str | None] = mapped_column(String(36),nullable=True)
+    stock_reference: Mapped[str | None] = mapped_column(String(64),nullable=True)
+    source_name: Mapped[str] = mapped_column(String(120),nullable=False)
+    observed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True),nullable=False)
+    observed_at_raw: Mapped[str] = mapped_column(String(64),nullable=False)
+    received_at: Mapped[datetime] = mapped_column(DateTime(timezone=True),nullable=False)
+    actor_id: Mapped[str | None] = mapped_column(ForeignKey('users.id',ondelete='SET NULL'),nullable=True)
+    actor: Mapped[str] = mapped_column(String(120),nullable=False)
+    reason: Mapped[str] = mapped_column(String(500),nullable=False)
+    after: Mapped[dict] = mapped_column(JSON,nullable=False)
+
+
+class AutomationSourceEvent(Base):
+    __tablename__='automation_source_events'
+    __table_args__=(ForeignKeyConstraint(['workspace_id','source_id'],['data_sources.workspace_id','data_sources.id'],ondelete='CASCADE'),UniqueConstraint('source_id','version'))
+    id: Mapped[str]=mapped_column(String(36),primary_key=True)
+    workspace_id: Mapped[str]=mapped_column(String(64),nullable=False)
+    source_id: Mapped[str]=mapped_column(String(36),nullable=False)
+    version: Mapped[int]=mapped_column(Integer,nullable=False)
+    action: Mapped[str]=mapped_column(String(24),nullable=False)
+    actor_id: Mapped[str|None]=mapped_column(ForeignKey('users.id',ondelete='SET NULL'),nullable=True)
+    actor: Mapped[str]=mapped_column(String(120),nullable=False)
+    created_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),nullable=False)
+    reason: Mapped[str]=mapped_column(String(500),nullable=False)
+    before: Mapped[dict|None]=mapped_column(JSON,nullable=True)
+    after: Mapped[dict]=mapped_column(JSON,nullable=False)
+
+
+class AutomationReceipt(Base):
+    __tablename__='automation_receipts'
+    __table_args__=(UniqueConstraint('workspace_id','id'),UniqueConstraint('source_id','fingerprint'),
+        ForeignKeyConstraint(['workspace_id','source_id'],['data_sources.workspace_id','data_sources.id']),
+        CheckConstraint("state IN ('pending','blocked','applied','dismissed')"),CheckConstraint('version >= 1'),
+        Index('ix_automation_workspace_received','workspace_id','received_at'))
+    id: Mapped[str]=mapped_column(String(36),primary_key=True)
+    workspace_id: Mapped[str]=mapped_column(String(64),nullable=False)
+    source_id: Mapped[str]=mapped_column(String(36),nullable=False)
+    fingerprint: Mapped[str]=mapped_column(String(64),nullable=False)
+    filename: Mapped[str]=mapped_column(String(200),nullable=False)
+    raw_text: Mapped[str]=mapped_column(Text,nullable=False)
+    report_reference: Mapped[str|None]=mapped_column(String(64),nullable=True)
+    observed_at: Mapped[datetime|None]=mapped_column(DateTime(timezone=True),nullable=True)
+    observed_at_raw: Mapped[str|None]=mapped_column(String(64),nullable=True)
+    rows: Mapped[list]=mapped_column(JSON,nullable=False)
+    errors: Mapped[list]=mapped_column(JSON,nullable=False)
+    state: Mapped[str]=mapped_column(String(20),nullable=False)
+    version: Mapped[int]=mapped_column(Integer,nullable=False)
+    source_policy_version: Mapped[int]=mapped_column(Integer,nullable=False)
+    source_policy_mode: Mapped[str]=mapped_column(String(20),nullable=False)
+    received_actor_id: Mapped[str|None]=mapped_column(ForeignKey('users.id',ondelete='SET NULL'),nullable=True)
+    received_actor: Mapped[str]=mapped_column(String(120),nullable=False)
+    received_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),nullable=False)
+    reviewed_at: Mapped[datetime|None]=mapped_column(DateTime(timezone=True),nullable=True)
+    automatic: Mapped[bool]=mapped_column(Boolean,nullable=False,default=False)
+    results: Mapped[list]=mapped_column(JSON,nullable=False,default=list)
+
+
+class AutomationReceiptEvent(Base):
+    __tablename__='automation_receipt_events'
+    __table_args__=(ForeignKeyConstraint(['workspace_id','receipt_id'],['automation_receipts.workspace_id','automation_receipts.id'],ondelete='CASCADE'),UniqueConstraint('receipt_id','version'))
+    id: Mapped[str]=mapped_column(String(36),primary_key=True)
+    workspace_id: Mapped[str]=mapped_column(String(64),nullable=False)
+    receipt_id: Mapped[str]=mapped_column(String(36),nullable=False)
+    version: Mapped[int]=mapped_column(Integer,nullable=False)
+    action: Mapped[str]=mapped_column(String(24),nullable=False)
+    actor_id: Mapped[str|None]=mapped_column(ForeignKey('users.id',ondelete='SET NULL'),nullable=True)
+    actor: Mapped[str]=mapped_column(String(120),nullable=False)
+    created_at: Mapped[datetime]=mapped_column(DateTime(timezone=True),nullable=False)
+    reason: Mapped[str]=mapped_column(String(500),nullable=False)
+    after: Mapped[dict]=mapped_column(JSON,nullable=False)

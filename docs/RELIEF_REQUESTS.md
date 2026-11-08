@@ -12,7 +12,7 @@ Requests can now optionally link to a reviewed flood incident in the same organi
 4. Mark submitted details reviewed, return them to Draft for correction or cancel with a reason.
 5. Read the request history to inspect the actor, time, reason and before/after values. History loads in pages of 50 events.
 
-Reviewed means someone checked the request details. This prototype lets owners/editors review requests, including their own; it does not claim independent approval or a completed delivery. Inventory and delivery linkage remain later milestones.
+Reviewed means someone checked the request details. This prototype lets owners/editors review requests, including their own; it does not claim independent approval or a completed delivery. [Inventory](INVENTORY.md) and [Delivery tracking](DELIVERIES.md) now link reviewed needs to separate stock and arrival records. Draft corrections cannot reduce quantities below active/delivered shipment claims or change their units/category until those assignments are resolved. Cancellation does not erase actual shipment evidence or automatically return inventory.
 
 ## States
 

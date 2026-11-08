@@ -76,6 +76,9 @@ def setup():
     run([str(PYTHON), '-m', 'alembic', '-c', 'backend/alembic.ini', 'upgrade', 'head'])
     run([str(PYTHON), '-m', 'scripts.seed_relief_demo'])
     run([str(PYTHON), '-m', 'scripts.seed_incident_demo'])
+    run([str(PYTHON), '-m', 'scripts.seed_inventory_demo'])
+    run([str(PYTHON), '-m', 'scripts.seed_delivery_demo'])
+    run([str(PYTHON), '-m', 'scripts.seed_automation_demo'])
     print('Local database and migrations are ready. Existing PostgreSQL services were not modified.')
 
 

@@ -8,6 +8,9 @@ import {
   ClipboardCheck,
   PackagePlus,
   Waves,
+  Warehouse,
+  Truck,
+  Inbox,
   ChevronDown,
   ChevronRight,
   CircleAlert,
@@ -34,12 +37,21 @@ import {
   Upload,
   X,
 } from "lucide-react";
-import { api, configureApi, downloadRegister } from "./api";
+import {
+  api,
+  configureApi,
+  downloadRegister,
+  pausePrivateReads,
+  resumePrivateReads,
+} from "./api";
 import AuthScreen from "./AuthScreen";
 import WorkspaceTools from "./WorkspaceTools";
 import ReportChecks from "./ReportChecks";
 import ReliefRequests from "./ReliefRequests";
 import Incidents from "./Incidents";
+import Inventory from "./Inventory";
+import Deliveries from "./Deliveries";
+import Automation from "./Automation";
 import type { IncidentDraft } from "./Incidents";
 import Brand from "./Brand";
 import Welcome from "./Welcome";
@@ -65,6 +77,9 @@ type View =
   | "checks"
   | "relief"
   | "incidents"
+  | "inventory"
+  | "deliveries"
+  | "automation"
   | "sources"
   | "team"
   | "account";
@@ -84,6 +99,9 @@ const routeFragments: Record<Route, string> = {
   checks: "checks",
   relief: "relief",
   incidents: "incidents",
+  inventory: "inventory",
+  deliveries: "deliveries",
+  automation: "automation",
   sources: "sources",
   team: "team",
   account: "account",
@@ -102,6 +120,9 @@ const pageNames: Record<Route, string> = {
   checks: "Report checks",
   relief: "Relief requests",
   incidents: "Incident review",
+  inventory: "Aid inventory",
+  deliveries: "Delivery tracking",
+  automation: "Automation inbox",
   sources: "Data connections",
   team: "Organisation team",
   account: "Account settings",
@@ -298,11 +319,17 @@ export default function App() {
   }
 
   async function signOut() {
-    await api("/auth/logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: "{}",
-    });
+    pausePrivateReads();
+    try {
+      await api("/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: "{}",
+      });
+    } catch (problem) {
+      resumePrivateReads();
+      throw problem;
+    }
     sessionEpoch.current += 1;
     setSession(null);
     setSessionMessage("");
@@ -405,6 +432,8 @@ function Workspace({
   onSignIn: () => void;
   onSignOut: () => Promise<void>;
 }) {
+  const [intakeId, setIntakeId] = useState<string | null>(null);
+  const [requestId, setRequestId] = useState<string | null>(null);
   const [workspace, setWorkspace] = useState<Workspace | null>(null);
   const [incidentDraft, setIncidentDraft] = useState<IncidentDraft | null>(
     null,
@@ -617,6 +646,9 @@ function Workspace({
     checks: "Report checks",
     relief: "Relief requests",
     incidents: "Incident review",
+    inventory: "Aid inventory",
+    deliveries: "Delivery tracking",
+    automation: "Automation inbox",
     sources: "Data connections",
     team: "Organisation team",
     account: "Account settings",
@@ -635,6 +667,12 @@ function Workspace({
       "Record civilian supply needs, review their details and follow every change.",
     incidents:
       "Review flood assessments and their evidence before recording local relief needs.",
+    inventory:
+      "Record aid supplies, reserve reviewed needs and follow every stock movement.",
+    deliveries:
+      "Follow issued supplies through reviewed shipments, confirmed arrivals and returns.",
+    automation:
+      "Connect relief files, inspect draft proposals and manage trusted-source rules.",
     sources:
       "Connect changing datasets. Review incoming updates before accepting them.",
     team: "Invite teammates and give each person the access they need.",
@@ -709,8 +747,11 @@ function Workspace({
         <nav aria-label="Main navigation">
           {(
             [
+              { key: "automation", label: "Automation inbox", icon: Inbox },
               { key: "incidents", label: "Incident review", icon: Waves },
               { key: "relief", label: "Relief requests", icon: PackagePlus },
+              { key: "inventory", label: "Aid inventory", icon: Warehouse },
+              { key: "deliveries", label: "Delivery tracking", icon: Truck },
               { key: "aircraft", label: "Aircraft register", icon: LayoutList },
               { key: "upload", label: "Import dataset", icon: Upload },
               { key: "history", label: "Import history", icon: History },
@@ -887,6 +928,36 @@ function Workspace({
               records.
             </div>
           )}
+          {view === "automation" && (
+            <Automation
+              scope={scope}
+              session={session}
+              onSignIn={onSignIn}
+              initialId={intakeId}
+              onInitialUsed={() => setIntakeId(null)}
+              onRequest={(id) => {
+                setRequestId(id);
+                setIncidentDraft(null);
+                navigate("relief");
+              }}
+            />
+          )}
+          {view === "deliveries" && (
+            <Deliveries
+              scope={scope}
+              session={session}
+              workspace={workspace}
+              onSignIn={onSignIn}
+            />
+          )}
+          {view === "inventory" && (
+            <Inventory
+              scope={scope}
+              session={session}
+              workspace={workspace}
+              onSignIn={onSignIn}
+            />
+          )}
           {view === "incidents" && (
             <Incidents
               scope={scope}
@@ -905,6 +976,12 @@ function Workspace({
           )}
           {view === "relief" && (
             <ReliefRequests
+              initialRequestId={requestId}
+              onInitialRequestUsed={() => setRequestId(null)}
+              onIntake={(id) => {
+                setIntakeId(id);
+                navigate("automation");
+              }}
               incidentDraft={incidentDraft}
               onIncidentDraftUsed={() => setIncidentDraft(null)}
               scope={scope}
@@ -936,6 +1013,7 @@ function Workspace({
               session={session}
               workspace={workspace}
               onSessionUpdated={onSessionUpdated}
+              onOpenRelief={(destination) => navigate(destination)}
               onSignIn={onSignIn}
               onRefresh={() => void refresh()}
               onPreview={(value) => {
@@ -1668,7 +1746,11 @@ function Workspace({
         </main>
         <footer className="app-footer">
           <span>SAMPATI · Disaster relief workspace</span>
-          <span>Fictional data · Local demo</span>
+          <span>
+            {scope === "demo"
+              ? "Fictional data · Local demo"
+              : "Private organisation · Local workspace"}
+          </span>
         </footer>
       </div>
       <dialog

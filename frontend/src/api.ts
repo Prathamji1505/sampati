@@ -2,10 +2,22 @@ import type { WorkspaceScope } from "./types";
 
 let workspaceScope: WorkspaceScope = "demo";
 let csrfToken: string | null = null;
+let privateReadsPaused = false;
+const pendingPrivateReads = new Set<AbortController>();
+
+export function pausePrivateReads() {
+  privateReadsPaused = true;
+  for (const controller of pendingPrivateReads) controller.abort();
+}
+
+export function resumePrivateReads() {
+  privateReadsPaused = false;
+}
 
 export function configureApi(scope: WorkspaceScope, csrf: string | null) {
   workspaceScope = scope;
   csrfToken = csrf;
+  if (scope === "demo") resumePrivateReads();
 }
 
 export class ApiError extends Error {
@@ -19,10 +31,17 @@ export class ApiError extends Error {
 
 export async function api<T>(path: string, options?: RequestInit): Promise<T> {
   const dataRequest =
-    /^\/(workspace|imports|overview|report-checks|relief-requests|incidents|exports|sources|team)(\/|\?|$)/.test(
+    /^\/(workspace|imports|overview|report-checks|relief-requests|incidents|inventory|deliveries|automation|exports|sources|team)(\/|\?|$)/.test(
       path,
     );
   const privateRequest = dataRequest && workspaceScope === "private";
+  const privateRead =
+    privateRequest &&
+    ["GET", "HEAD"].includes((options?.method || "GET").toUpperCase());
+  if (privateRead && privateReadsPaused)
+    throw new ApiError("Signing out. Background refresh is paused.", 0);
+  const readController =
+    privateRead && !options?.signal ? new AbortController() : null;
   const prefix =
     dataRequest && workspaceScope === "demo" ? "/api/demo" : "/api";
   const headers = new Headers(options?.headers);
@@ -35,17 +54,23 @@ export async function api<T>(path: string, options?: RequestInit): Promise<T> {
       headers.set("X-CSRF-Token", csrfToken);
   }
   let response: Response;
+  if (readController) pendingPrivateReads.add(readController);
   try {
     response = await fetch(prefix + path, {
       ...options,
+      signal: readController?.signal ?? options?.signal,
       headers,
       credentials: "same-origin",
     });
   } catch {
+    if (readController?.signal.aborted)
+      throw new ApiError("The background request was cancelled.", 0);
     throw new ApiError(
       "The local server could not be reached. Check that the application is running, then retry.",
       0,
     );
+  } finally {
+    if (readController) pendingPrivateReads.delete(readController);
   }
   if (!response.ok) {
     let detail = "";

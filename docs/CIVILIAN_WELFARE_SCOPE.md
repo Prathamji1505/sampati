@@ -10,7 +10,7 @@ The project descriptor is **Disaster Response & Relief Coordination**. The Sampa
 
 ## Current product
 
-The working application includes dated flood-assessment JSON intake, human incident review and links to relief-request drafts, described in INCIDENTS.md. Organisation-scoped relief requests support draft creation, review, correction, cancellation and an audit history. It also retains the fictional civilian aircraft source-report foundation: imports, human review, a register, report checks, source connections, accounts, team roles, exports and local backups. Aid inventory has a backend/API milestone; its interface remains in progress. Delivery management remains planned. See RELIEF_REQUESTS.md for the H01 contract and VERIFICATION.md for executed evidence.
+The working application includes dated flood-assessment intake/review, linked relief requests, exact aid inventory and delivery tracking. Delivery records connect inventory issues to reviewed shipment drafts, dispatch evidence, partial/full arrival confirmations, undelivered returns, corrections and request follow-up; see DELIVERIES.md. It also retains the fictional civilian aircraft source-report foundation: imports, human review, a register, report checks, source connections, accounts, team roles, exports and local backups. See RELIEF_REQUESTS.md and INVENTORY.md for the earlier contracts, and VERIFICATION.md for executed evidence.
 
 The project is now evaluated against civilian welfare needs. Completing the original military air-operations problem statement is no longer the project objective. Historical research and verification remain records of what was considered and built; this charter sets the current scope.
 
@@ -34,7 +34,7 @@ These are intended users to validate with interviews and fictional walkthroughs.
 | H05: Evaluation | Reproducible fictional workflows and an authorised civilian-user pilot plan. | Measure duplicate detection, review task completion, stock discrepancies and fulfilment-record accuracy against stated baselines; report actual results and limits; do not infer lives saved from software tests. |
 | H06: Deployment | A reviewable hosting plan, protected secrets, HTTPS/access controls, backups and restore checks for a selected environment. | Build and migration checks pass; organisation isolation is tested; recovery is rehearsed; target, access and cost decisions are recorded before publication. |
 
-**H01 is implemented** as the reviewed request register described in RELIEF_REQUESTS.md. H02–H06 remain planned; the next module is **H02: Aid inventory**. Changing this charter alone does not implement those later capabilities.
+**H01–H03 are implemented locally** as the reviewed request, stock and delivery workflows described in RELIEF_REQUESTS.md, INVENTORY.md and DELIVERIES.md. H04–H06 remain planned; the next milestone is **H04: verified civilian context**. Changing this charter alone does not implement those later capabilities.
 
 ## Data and review rules
 
@@ -46,7 +46,7 @@ The existing report checks continue to describe data quality. They do not establ
 
 ## Success for the next demo
 
-A reviewer can create a fictional request for a clearly stated quantity of relief supplies, find it in the correct organisation, change its review status with an audit trail and show that another organisation has no access. Later milestones can connect that request to inventory and confirmed deliveries. Each demonstrated capability must have its own executed evidence in VERIFICATION.md.
+A reviewer can review a fictional flood assessment, create/review a linked need, receive/reserve/issue supplies, approve a tracking draft, record actual dispatch evidence and confirm partial arrivals or undelivered returns. Request follow-up shows what still lacks source-confirmed delivery. Counts, issues and arrivals remain separate; another organisation has no access. Each demonstrated capability must have executed evidence in VERIFICATION.md.
 
 ## Disaster-response direction
 
@@ -56,6 +56,6 @@ The proposed connection is: **Dated impact assessment → reviewed incident aler
 
 Assessment sources can supply dated spatial evidence, affected-area observations and uncertainty through a source-independent contract. Sampati would coordinate reviewed requests, resources and response records. Aircraft operators retain dispatch authority; reported availability and data freshness do not establish mission readiness. Post-event impact alerts and pre-event forecasting remain distinct capabilities.
 
-The current foundation includes aircraft-report review, relief requests and local flood-assessment intake/review. The shared `sampati.incident.v1` contract and reviewed-incident linkage to human-entered relief drafts are implemented; see [INCIDENTS.md](INCIDENTS.md). A live assessment-source connector, inventory, mission assignment, delivery tracking and authorised live aircraft positions remain development work. H02/H03 supply and delivery milestones remain next dependencies.
+The current foundation includes aircraft-report review, relief requests, local incident review, aid inventory and delivery tracking. Source-backed arrival records now extend the request/issue chain; see [DELIVERIES.md](DELIVERIES.md). Live assessment-source connectors, transport/mission planning, authorised live aircraft positions, verified context, user evaluation and production hosting remain development work.
 
 Success should be evaluated through review accuracy, time to an approved response plan, delivery confirmation and follow-up of unmet needs. Social benefits and operational performance require civilian-user validation.

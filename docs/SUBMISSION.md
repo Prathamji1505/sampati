@@ -7,7 +7,7 @@
 
 ## The problem
 
-Flood-response coordinators need to connect dated impact evidence, locally confirmed supply needs, resource reports and delivery records. Sampati's goal is to make that chain reviewable and traceable. The working prototype implements incident intake/review and relief-request recording, corrections, cancellation and history; inventory and delivery tracking are the next dependencies. See the [roadmap](ROADMAP.md) and [welfare charter](CIVILIAN_WELFARE_SCOPE.md) for acceptance gates.
+Flood-response coordinators need to connect dated impact evidence, locally confirmed supply needs, resource reports and delivery records. Sampati's goal is to make that chain reviewable and traceable. The local prototype now implements incident review, reviewed requests, protected stock, human-reviewed shipment tracking, source-confirmed arrivals/returns and remaining-needs follow-up. Verified context, user evaluation and production hosting remain separate milestones. See the [roadmap](ROADMAP.md) and [welfare charter](CIVILIAN_WELFARE_SCOPE.md) for acceptance gates.
 
 Aircraft reports can arrive in separate files with inconsistent fields, duplicated batches and out-of-order timestamps. A list of statuses alone makes it difficult to see which source supplied a value, when it was reported and how the register changed.
 
@@ -15,7 +15,7 @@ This is the problem explored by the prototype. User demand, adoption and time sa
 
 ## The implemented solution
 
-The disaster-relief workflow also accepts dated flood assessments through a versioned JSON contract, retains source evidence and uncertainty, records reasoned human review and opens linked relief-request drafts. Quantities are entered by a person. This local workflow prepares an integration boundary; it does not connect to a live external assessment service. Inventory, approved missions and delivery confirmations remain future milestones.
+The disaster-relief workflow accepts dated flood assessments through a versioned JSON contract, retains source evidence and uncertainty, and links reviewed needs to protected stock records. Delivery tracking then distinguishes draft approval, actual dispatch evidence, partial/full arrivals, undelivered returns and evidence corrections. Inventory and shipment returns commit atomically; request follow-up counts only net source-confirmed arrivals. This is a local, source-independent workflow, without a live assessment feed, independent physical verification or automatic dispatch/flight authority.
 
 Sampati validates CSV and Excel reports, shows proposed changes, and requires explicit confirmation before updating accepted records. Search and freshness filters help reviewers examine the current register; audit history preserves the change path. Organisation memberships and scoped file connections support separate workspaces and an incoming review queue.
 

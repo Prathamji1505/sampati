@@ -1,6 +1,6 @@
 # Civilian prototype requirements and acceptance criteria
 
-The user selected civilian welfare as the current project objective on 8 November 2026. [The welfare charter](CIVILIAN_WELFARE_SCOPE.md) defines H01–H06: relief requests, aid inventory, delivery tracking, civilian context, evaluation and deployment. H01 is implemented; its contract is in [Relief requests](RELIEF_REQUESTS.md). H02–H06 remain planned. C01–C09 below track the implemented source-report foundation. C10 is deferred and is not a requirement for the next welfare MVP; a report-quality check must not be presented as aircraft readiness.
+The user selected civilian welfare as the current project objective on 8 November 2026. [The welfare charter](CIVILIAN_WELFARE_SCOPE.md) defines H01–H06: relief requests, aid inventory, delivery tracking, civilian context, evaluation and deployment. H01–H03 are implemented locally; their contracts are in [Relief requests](RELIEF_REQUESTS.md), [Aid inventory](INVENTORY.md) and [Delivery tracking](DELIVERIES.md). H04–H06 remain planned. C01–C09 below track the implemented source-report foundation. C10 is deferred and is not a requirement for the next welfare MVP; a report-quality check must not be presented as aircraft readiness.
 
 This checklist tracks what the local, fictional civilian learning prototype actually implements. It does not claim to solve military air operations. “Complete report” means that a source record passes the named data checks; it does not establish aircraft readiness, mechanical condition, crew suitability or flight clearance.
 
@@ -21,6 +21,12 @@ This checklist tracks what the local, fictional civilian learning prototype actu
 | C13 | Prepare production hosting | Define deployment/access requirements and verify HTTPS, secret handling, capacity, restore procedures and independent security checks for that environment. | Local prototype only; hosting remains unconfigured. |
 
 ## Flood-response connection
+
+## Relief intake and handover
+
+A01 adds strict CSV/JSON source intake, immutable raw evidence, new/duplicate/conflict previews, whole-file validation, explicit decisions and an optional owner rule that creates new drafts only. Current-record preview checks, source policy histories, repeat-safe decisions and request provenance are implemented. The real watcher supports both formats. [Automation rules](AUTOMATION.md).
+
+Overview adds scoped queues and arrival-derived remaining needs with a dated export. Units remain per request. The compiled local launcher serves the built interface and API on loopback. These features do not establish live-feed integration, field adoption or public hosting.
 
 The local incident workflow now implements a versioned flood impact-observation contract, explicit JSON preview/recording, immutable accepted evidence, source/observation/generation/receipt dates, uncertainty, scoped review with reasons/version checks, and links from reviewed incidents to relief-request drafts. See [INCIDENTS.md](INCIDENTS.md) for acceptance rules and remaining integration limits. A live external assessment connection, forecasting, mission approval, inventory and confirmed delivery are not implemented by this contract.
 
