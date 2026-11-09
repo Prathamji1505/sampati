@@ -12,7 +12,7 @@
   <a href="docs/VERIFICATION.md">Verification</a>
 </p>
 
-Sampati helps civilian relief teams connect **flood evidence, reviewed supply needs, aid stock and delivery records** in one organisation workspace. Each source, decision and unresolved quantity stays traceable, from the first report to the next shift handover.
+Sampati helps civilian relief teams see **what is needed, what is in stock and what has reached its destination**. It connects flood assessments, reviewed requests, stock movements and delivery records in one organisation workspace, with sources and decisions kept in history.
 
 **Status:** working local release **0.4**, using fictional demonstration records. Incident review, requests, inventory, delivery tracking, structured intake automation and handover are implemented. Public hosting, live feeds, trained AI and field validation remain future work. [Release scope →](docs/RELEASE.md)
 
@@ -23,6 +23,12 @@ Sampati helps civilian relief teams connect **flood evidence, reviewed supply ne
 ## Why Sampati
 
 A flood assessment, a local request, a store issue and a receiving report describe different facts. When they live in separate files, a team can lose track of what was checked, what was committed and what actually remains unresolved.
+
+The aim is clearer coordination: keep partial deliveries visible, prevent conflicting records from silently replacing accepted information, and give the next shift a traceable picture of outstanding work.
+
+**Who it is for:** relief coordinators review needs; store custodians account for supplies; delivery reviewers record receiving evidence; organisation administrators manage access and source connections.
+
+## How the work flows
 
 1. **Review the evidence.** Inspect dated flood observations, their source and uncertainty.
 2. **Confirm the need.** Record the local supply, exact quantity and unit; submit and review the request.
@@ -122,13 +128,12 @@ Recorded local checks on **8 November 2026** include **202 passing backend tests
 | What works and what remains unconfigured | [Local release scope](docs/RELEASE.md) |
 | Architecture and source files | [Architecture](docs/ARCHITECTURE.md) · [Learning guide](docs/LEARNING_GUIDE.md) |
 | Workflow contracts and boundaries | [Requirements](docs/REQUIREMENTS.md) · [Roadmap](docs/ROADMAP.md) |
-| Separate competitor/evaluation research | [Research and proposed benchmarks](docs/RESEARCH_AND_BENCHMARKS.md) |
 | Asset origins and screenshot context | [Visual provenance](docs/images/README.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) |
 
-## Purpose and next steps
+[All documentation, grouped by task →](docs/README.md)
 
-Intended users are civilian relief coordinators, inventory custodians, delivery reviewers and organisation administrators. The aim is clearer needs, accountable decisions and consistent follow-up. Workflow fit, equitable access, savings and humanitarian outcomes still need field evaluation.
+## Next steps
 
-Live source adapters, AI extraction/prediction and public hosting require separate implementation and validation. Current intake is rule-based; source reports do not certify aircraft readiness or independently authenticate physical delivery.
+The next milestones are civilian-user evaluation, live source adapters and hosted deployment. Workflow fit, equitable access, savings and humanitarian outcomes still need field evaluation. AI extraction or prediction requires separate implementation and validation; current intake is rule-based. Source reports do not certify aircraft readiness or independently authenticate physical delivery.
 
 Built by **[Pratham Sengar](https://github.com/Prathamji1505)** with assisting partner **GUNNA**. Sampati's bilingual wordmark and approved folk-art bird express the project's own identity. Source code is [MIT licensed](LICENSE); libraries, fonts and artwork retain their documented terms. [Contributing](CONTRIBUTING.md) · [Attribution and AI assistance](THIRD_PARTY_NOTICES.md)

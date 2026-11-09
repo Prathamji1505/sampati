@@ -18,7 +18,7 @@ Sampati is a standalone application for a civilian relief team to connect review
 
 Follow [SETUP.md](SETUP.md) for the prerequisites and first setup. The development launcher serves the app at `http://127.0.0.1:5173`; compiled local mode serves it at `http://127.0.0.1:8000`. Stop one before using the other. [DEMO.md](DEMO.md) describes the learning journey, and [LEARNING_GUIDE.md](LEARNING_GUIDE.md) explains the code.
 
-See [VERIFICATION.md](VERIFICATION.md) for the executed checks and [RESEARCH_AND_BENCHMARKS.md](RESEARCH_AND_BENCHMARKS.md) for separate research into related repositories and evaluation methods.
+See [VERIFICATION.md](VERIFICATION.md) for executed software checks and their limits.
 
 ## Honest release boundary
 

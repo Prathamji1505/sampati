@@ -1,4 +1,6 @@
-**GUNNU project resource guide — civilian aviation data workspace**
+# Sampati resource guide — aircraft-report foundation
+
+This early build guide describes the aircraft-report foundation. For Sampati's current disaster-response purpose, working relief features and setup, start with the [project overview](README.md) and [documentation index](docs/README.md).
 
 Research checked: 7 November 2026. This is a researched build recommendation, not a working application or a certification of aircraft availability. The scope is a simulated civilian transport/disaster-relief data workspace: upload reported aircraft status, validate information, display changes, and preserve review history. Combat allocation, weapon employment, and threat-driven military retasking are outside this guide.
 
