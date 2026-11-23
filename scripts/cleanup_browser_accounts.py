@@ -5,6 +5,7 @@ from sqlalchemy import delete, select
 
 from backend.app.database import SessionLocal
 from backend.app.models import Aircraft, AircraftChange, AutomationReceipt, AutomationReceiptEvent, AutomationSourceEvent, DataSource, IncomingDataset, ImportBatch, Incident, IncidentEvent, InventoryItem, Invitation, Membership, ReliefRequest, ReliefRequestEvent, Shipment, ShipmentEvent, StockPosition, StockRecord, StorageLocation, User, Workspace
+from backend.app.response_models import AircraftSupport, ResponseEvent, ResponsePlan, ResponseSignal
 
 
 def main():
@@ -46,6 +47,8 @@ def main():
                 raise RuntimeError('A fixture has stock records in another organisation. Nothing was removed.')
             if session.scalar(select(Incident.id).where(Incident.created_by.in_(requested), ~Incident.workspace_id.in_(workspace_ids)).limit(1)) or session.scalar(select(IncidentEvent.id).where(IncidentEvent.actor_id.in_(requested), ~IncidentEvent.workspace_id.in_(workspace_ids)).limit(1)):
                 raise RuntimeError('A fixture has incident records in another organisation. Nothing was removed.')
+            for model in (ResponseEvent, ResponsePlan, AircraftSupport, ResponseSignal):
+                session.execute(delete(model).where(model.workspace_id == workspace_id))
             session.execute(delete(Shipment).where(Shipment.workspace_id == workspace_id))
             session.execute(delete(StockPosition).where(StockPosition.workspace_id == workspace_id))
             session.execute(delete(InventoryItem).where(InventoryItem.workspace_id == workspace_id))

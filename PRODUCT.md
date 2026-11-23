@@ -50,6 +50,10 @@ Report checks explain old/future source timestamps, unknown status, missing name
 
 No external AI provider or hosting target is selected.
 
+## Civilian response preparation · 0.5
+
+Response preparation adds immutable warning/news intake with human verification, warning-only source keys and a local JSON watcher. Dated aircraft support reports remain separate from source-reported availability. The deterministic planner checks reviewed needs, prior commitments, unreserved stock, explicit item matches, sourced cargo weights and reported operator/context checks. It explains blocks, preserves original evidence snapshots, requires current evidence for coordinator review and exports preparation records. Review does not reserve supplies, book aircraft or authorise dispatch. Labelled-example evaluation supports deliberate rule refinement; it does not train a model or establish field accuracy. See docs/RESPONSE_PLANNING.md. Live feed polling, flight planning and operator clearance remain separate work.
+
 ## Independent, multi-source product
 
 Sampati operates independently with its own records, contracts, access controls and review workflow. External analysis tools can complement it through optional adapters. The broader intake direction covers authorised databases, news/public reports, APIs, documents and forms, alongside implemented local CSV/Excel/JSON intake and human-entered requests. New connectors remain planned and must preserve provenance, dates, uncertainty and human review. See docs/DATA_SOURCES.md.

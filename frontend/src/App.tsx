@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowDownToLine,
   ArrowRight,
@@ -45,13 +45,15 @@ import {
   resumePrivateReads,
 } from "./api";
 import AuthScreen from "./AuthScreen";
-import WorkspaceTools from "./WorkspaceTools";
-import ReportChecks from "./ReportChecks";
-import ReliefRequests from "./ReliefRequests";
-import Incidents from "./Incidents";
-import Inventory from "./Inventory";
-import Deliveries from "./Deliveries";
-import Automation from "./Automation";
+import WorkspacePanelBoundary from "./WorkspacePanelBoundary";
+const WorkspaceTools = lazy(() => import("./WorkspaceTools"));
+const ReportChecks = lazy(() => import("./ReportChecks"));
+const ReliefRequests = lazy(() => import("./ReliefRequests"));
+const Incidents = lazy(() => import("./Incidents"));
+const Inventory = lazy(() => import("./Inventory"));
+const Deliveries = lazy(() => import("./Deliveries"));
+const Automation = lazy(() => import("./Automation"));
+const ResponsePlanner = lazy(() => import("./ResponsePlanner"));
 import type { IncidentDraft } from "./Incidents";
 import Brand from "./Brand";
 import Welcome from "./Welcome";
@@ -80,6 +82,7 @@ type View =
   | "inventory"
   | "deliveries"
   | "automation"
+  | "response"
   | "sources"
   | "team"
   | "account";
@@ -102,6 +105,7 @@ const routeFragments: Record<Route, string> = {
   inventory: "inventory",
   deliveries: "deliveries",
   automation: "automation",
+  response: "response",
   sources: "sources",
   team: "team",
   account: "account",
@@ -123,6 +127,7 @@ const pageNames: Record<Route, string> = {
   inventory: "Aid inventory",
   deliveries: "Delivery tracking",
   automation: "Automation inbox",
+  response: "Response preparation",
   sources: "Data connections",
   team: "Organisation team",
   account: "Account settings",
@@ -649,11 +654,14 @@ function Workspace({
     inventory: "Aid inventory",
     deliveries: "Delivery tracking",
     automation: "Automation inbox",
+    response: "Response preparation",
     sources: "Data connections",
     team: "Organisation team",
     account: "Account settings",
   };
   const subtitles = {
+    response:
+      "Turn verified warnings and current resource reports into an explained civilian preparation workflow.",
     aircraft:
       "A clear view of your fleet’s reported status. Every record, with its source.",
     upload: "Check the details before anything changes in your register.",
@@ -747,6 +755,7 @@ function Workspace({
         <nav aria-label="Main navigation">
           {(
             [
+              { key: "response", label: "Response preparation", icon: Plane },
               { key: "automation", label: "Automation inbox", icon: Inbox },
               { key: "incidents", label: "Incident review", icon: Waves },
               { key: "relief", label: "Relief requests", icon: PackagePlus },
@@ -869,880 +878,923 @@ function Workspace({
           </div>
         </header>
         <main id="main" tabIndex={-1}>
-          <div className="page-heading">
-            <div className="heading-copy">
-              <h1 id="page-title" tabIndex={-1}>
-                {titles[view]}
-              </h1>
-              <p>{subtitles[view]}</p>
-            </div>
-            {view === "aircraft" && (
-              <button
-                className="button primary"
-                disabled={!canImport}
-                onClick={() => {
-                  setPreview(null);
-                  navigate("upload");
-                }}
-              >
-                <Plus size={18} />
-                Import dataset
-              </button>
-            )}
-          </div>
-          {notice && (
-            <div className="message success" role="status">
-              <CheckCircle2 size={19} />
-              <span>{notice}</span>
-              <button
-                className="icon-button"
-                onClick={() => setNotice("")}
-                aria-label="Dismiss notification"
-              >
-                <X size={16} />
-              </button>
-            </div>
-          )}
-          {error && (
-            <div className="message error" role="alert">
-              <CircleAlert size={19} />
-              <span>{error}</span>
-              {view === "aircraft" && (
-                <button className="text-button" onClick={() => void refresh()}>
-                  Retry
-                </button>
-              )}
-            </div>
-          )}
-          {scope === "private" && (
-            <div className="private-workspace-note">
-              <ShieldCheck size={15} />
-              <span>{workspace?.name || session?.workspace?.name}</span>
-              <span className="private-role">{session?.workspace?.role}</span>
-              <span>Separate from the demo and other organisations</span>
-            </div>
-          )}
-          {view === "upload" && !canImport && (
-            <div className="message error" role="alert">
-              Your organisation role is view-only. An owner or editor can import
-              records.
-            </div>
-          )}
-          {view === "automation" && (
-            <Automation
-              scope={scope}
-              session={session}
-              onSignIn={onSignIn}
-              initialId={intakeId}
-              onInitialUsed={() => setIntakeId(null)}
-              onRequest={(id) => {
-                setRequestId(id);
-                setIncidentDraft(null);
-                navigate("relief");
-              }}
-            />
-          )}
-          {view === "deliveries" && (
-            <Deliveries
-              scope={scope}
-              session={session}
-              workspace={workspace}
-              onSignIn={onSignIn}
-            />
-          )}
-          {view === "inventory" && (
-            <Inventory
-              scope={scope}
-              session={session}
-              workspace={workspace}
-              onSignIn={onSignIn}
-            />
-          )}
-          {view === "incidents" && (
-            <Incidents
-              scope={scope}
-              session={session}
-              workspace={workspace}
-              onSignIn={onSignIn}
-              onRequest={(incident) => {
-                setIncidentDraft(incident);
-                navigate("relief");
-              }}
-              onRequests={() => {
-                setIncidentDraft(null);
-                navigate("relief");
-              }}
-            />
-          )}
-          {view === "relief" && (
-            <ReliefRequests
-              initialRequestId={requestId}
-              onInitialRequestUsed={() => setRequestId(null)}
-              onIntake={(id) => {
-                setIntakeId(id);
-                navigate("automation");
-              }}
-              incidentDraft={incidentDraft}
-              onIncidentDraftUsed={() => setIncidentDraft(null)}
-              scope={scope}
-              session={session}
-              workspace={workspace}
-              onSignIn={onSignIn}
-            />
-          )}
-          {view === "checks" && (
-            <ReportChecks
-              workspace={workspace}
-              scope={scope}
-              onInspect={(id) => {
-                const item = workspace?.aircraft.find(
-                  (row) => row.aircraft_id === id,
-                );
-                if (item) setSelectedAircraft(item);
-              }}
-              onInbox={() => navigate("sources")}
-            />
-          )}
-          {(["overview", "sources", "team", "account"] as View[]).includes(
-            view,
-          ) && (
-            <WorkspaceTools
-              key={view}
-              view={view as "overview" | "sources" | "team" | "account"}
-              scope={scope}
-              session={session}
-              workspace={workspace}
-              onSessionUpdated={onSessionUpdated}
-              onOpenRelief={(destination) => navigate(destination)}
-              onSignIn={onSignIn}
-              onRefresh={() => void refresh()}
-              onPreview={(value) => {
-                setPreview(value);
-                navigate("upload");
-              }}
-              onInspect={(item) => setSelectedAircraft(item)}
-            />
-          )}
-
-          {view === "aircraft" && (
-            <>
-              <div className="register-context">
-                <span>
-                  <Database size={15} />
-                  {records.length} aircraft in your register
-                </span>
-                <span className="context-right">
-                  {workspace?.imports[0] ? (
-                    <>Last import {ago(workspace.imports[0].confirmed_at)}</>
-                  ) : (
-                    "Your first import starts here"
-                  )}
+          <WorkspacePanelBoundary key={view}>
+            <Suspense
+              fallback={
+                <p className="response-loading" role="status">
+                  Loading workspace tools…
+                </p>
+              }
+            >
+              <div className="page-heading">
+                <div className="heading-copy">
+                  <h1 id="page-title" tabIndex={-1}>
+                    {titles[view]}
+                  </h1>
+                  <p>{subtitles[view]}</p>
+                </div>
+                {view === "aircraft" && (
                   <button
-                    className={`icon-button ${refreshing ? "is-refreshing" : ""}`}
-                    aria-label="Refresh register"
-                    onClick={() => void refresh()}
-                    disabled={refreshing}
+                    className="button primary"
+                    disabled={!canImport}
+                    onClick={() => {
+                      setPreview(null);
+                      navigate("upload");
+                    }}
                   >
-                    <RefreshCw size={15} />
+                    <Plus size={18} />
+                    Import dataset
                   </button>
-                </span>
+                )}
               </div>
-              <section className="register-panel" aria-label="Aircraft records">
-                <div
-                  className="status-tabs"
-                  role="group"
-                  aria-label="Filter by reported status"
-                >
-                  {(
-                    ["all", "available", "unavailable", "unknown"] as const
-                  ).map((item) => (
-                    <button
-                      key={item}
-                      className={status === item ? "selected" : ""}
-                      aria-pressed={status === item}
-                      onClick={() => setStatus(item)}
-                    >
-                      {item === "all" ? "All aircraft" : shortStatus[item]}
-                      <span>{counts[item]}</span>
-                    </button>
-                  ))}
-                </div>
-                <div className="table-toolbar">
-                  <label className="search-field">
-                    <Search size={17} />
-                    <input
-                      value={query}
-                      onChange={(event) => setQuery(event.target.value)}
-                      placeholder="Search aircraft or source…"
-                      aria-label="Search aircraft or source"
-                    />
-                  </label>
-                  <div className="filter-controls">
-                    <label className="select-field">
-                      <Clock3 size={15} />
-                      <select
-                        value={freshness}
-                        onChange={(event) => setFreshness(event.target.value)}
-                        aria-label="Filter by report freshness"
-                      >
-                        <option value="all">All report ages</option>
-                        <option value="current">Current reports</option>
-                        <option value="review">Needs review</option>
-                      </select>
-                    </label>
-                    <label className="select-field sort-field">
-                      <select
-                        value={sort}
-                        onChange={(event) =>
-                          setSort(event.target.value as "id" | "recent")
-                        }
-                        aria-label="Sort aircraft"
-                      >
-                        <option value="id">Aircraft ID</option>
-                        <option value="recent">Most recent report</option>
-                      </select>
-                    </label>
-                  </div>
-                </div>
-                <div className="register-exports">
-                  <span>
-                    Refreshes every 30 seconds while this tab is visible.
-                  </span>
-                  <div className="tools-actions">
-                    {(["xlsx", "csv", "json"] as const).map((format) => (
-                      <button
-                        key={format}
-                        className="text-button"
-                        disabled={working || loading}
-                        onClick={() => void exportView(format)}
-                      >
-                        <ArrowDownToLine size={14} />
-                        Export{" "}
-                        {format === "xlsx" ? "Excel" : format.toUpperCase()}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                {loading ? (
-                  <div
-                    className="table-skeleton"
-                    aria-label="Loading aircraft"
-                    aria-busy="true"
+              {notice && (
+                <div className="message success" role="status">
+                  <CheckCircle2 size={19} />
+                  <span>{notice}</span>
+                  <button
+                    className="icon-button"
+                    onClick={() => setNotice("")}
+                    aria-label="Dismiss notification"
                   >
-                    {Array.from({ length: 5 }, (_, index) => (
-                      <div key={index}>
-                        <span />
-                        <span />
-                        <span />
-                      </div>
-                    ))}
-                  </div>
-                ) : !records.length ? (
-                  <div className="empty-state">
-                    <div className="empty-illustration">
-                      <FileSpreadsheet size={39} strokeWidth={1.3} />
-                      <span>
-                        <Plane size={16} />
-                      </span>
-                    </div>
-                    <h2>Your register is ready for its first aircraft.</h2>
-                    <p>
-                      Upload your CSV or Excel file to bring the records
-                      together.
-                      <br />
-                      Or explore the workflow with a fictional sample fleet.
-                    </p>
-                    <div className="empty-actions">
+                    <X size={16} />
+                  </button>
+                </div>
+              )}
+              {error && (
+                <div className="message error" role="alert">
+                  <CircleAlert size={19} />
+                  <span>{error}</span>
+                  {view === "aircraft" && (
+                    <button
+                      className="text-button"
+                      onClick={() => void refresh()}
+                    >
+                      Retry
+                    </button>
+                  )}
+                </div>
+              )}
+              {scope === "private" && (
+                <div className="private-workspace-note">
+                  <ShieldCheck size={15} />
+                  <span>{workspace?.name || session?.workspace?.name}</span>
+                  <span className="private-role">
+                    {session?.workspace?.role}
+                  </span>
+                  <span>Separate from the demo and other organisations</span>
+                </div>
+              )}
+              {view === "upload" && !canImport && (
+                <div className="message error" role="alert">
+                  Your organisation role is view-only. An owner or editor can
+                  import records.
+                </div>
+              )}
+              {view === "response" && (
+                <ResponsePlanner
+                  key={`${scope}-${session?.workspace?.id ?? "demo"}`}
+                  onNavigate={navigate}
+                />
+              )}
+              {view === "automation" && (
+                <Automation
+                  scope={scope}
+                  session={session}
+                  onSignIn={onSignIn}
+                  initialId={intakeId}
+                  onInitialUsed={() => setIntakeId(null)}
+                  onRequest={(id) => {
+                    setRequestId(id);
+                    setIncidentDraft(null);
+                    navigate("relief");
+                  }}
+                />
+              )}
+              {view === "deliveries" && (
+                <Deliveries
+                  scope={scope}
+                  session={session}
+                  workspace={workspace}
+                  onSignIn={onSignIn}
+                />
+              )}
+              {view === "inventory" && (
+                <Inventory
+                  scope={scope}
+                  session={session}
+                  workspace={workspace}
+                  onSignIn={onSignIn}
+                />
+              )}
+              {view === "incidents" && (
+                <Incidents
+                  scope={scope}
+                  session={session}
+                  workspace={workspace}
+                  onSignIn={onSignIn}
+                  onRequest={(incident) => {
+                    setIncidentDraft(incident);
+                    navigate("relief");
+                  }}
+                  onRequests={() => {
+                    setIncidentDraft(null);
+                    navigate("relief");
+                  }}
+                />
+              )}
+              {view === "relief" && (
+                <ReliefRequests
+                  initialRequestId={requestId}
+                  onInitialRequestUsed={() => setRequestId(null)}
+                  onIntake={(id) => {
+                    setIntakeId(id);
+                    navigate("automation");
+                  }}
+                  incidentDraft={incidentDraft}
+                  onIncidentDraftUsed={() => setIncidentDraft(null)}
+                  scope={scope}
+                  session={session}
+                  workspace={workspace}
+                  onSignIn={onSignIn}
+                />
+              )}
+              {view === "checks" && (
+                <ReportChecks
+                  workspace={workspace}
+                  scope={scope}
+                  onInspect={(id) => {
+                    const item = workspace?.aircraft.find(
+                      (row) => row.aircraft_id === id,
+                    );
+                    if (item) setSelectedAircraft(item);
+                  }}
+                  onInbox={() => navigate("sources")}
+                />
+              )}
+              {(["overview", "sources", "team", "account"] as View[]).includes(
+                view,
+              ) && (
+                <WorkspaceTools
+                  key={view}
+                  view={view as "overview" | "sources" | "team" | "account"}
+                  scope={scope}
+                  session={session}
+                  workspace={workspace}
+                  onSessionUpdated={onSessionUpdated}
+                  onOpenRelief={(destination) => navigate(destination)}
+                  onSignIn={onSignIn}
+                  onRefresh={() => void refresh()}
+                  onPreview={(value) => {
+                    setPreview(value);
+                    navigate("upload");
+                  }}
+                  onInspect={(item) => setSelectedAircraft(item)}
+                />
+              )}
+
+              {view === "aircraft" && (
+                <>
+                  <div className="register-context">
+                    <span>
+                      <Database size={15} />
+                      {records.length} aircraft in your register
+                    </span>
+                    <span className="context-right">
+                      {workspace?.imports[0] ? (
+                        <>
+                          Last import {ago(workspace.imports[0].confirmed_at)}
+                        </>
+                      ) : (
+                        "Your first import starts here"
+                      )}
                       <button
-                        className="button primary"
-                        onClick={() => void sample()}
-                        disabled={working || !canImport}
+                        className={`icon-button ${refreshing ? "is-refreshing" : ""}`}
+                        aria-label="Refresh register"
+                        onClick={() => void refresh()}
+                        disabled={refreshing}
                       >
-                        <Plane size={17} />
-                        Try sample data
-                        <ArrowRight size={16} />
+                        <RefreshCw size={15} />
                       </button>
-                      <button
-                        className="button secondary"
-                        disabled={!canImport}
-                        onClick={() => {
-                          setPreview(null);
-                          navigate("upload");
-                        }}
-                      >
-                        <Upload size={16} />
-                        Upload a dataset
-                      </button>
-                    </div>
-                    <span className="empty-note">
-                      <ShieldCheck size={14} />
-                      You’ll review the sample before anything is saved.
                     </span>
                   </div>
-                ) : !filtered.length ? (
-                  <div className="empty-state filtered-empty">
-                    <Search size={30} strokeWidth={1.4} />
-                    <h2>No aircraft match these filters.</h2>
-                    <p>Try a different search or clear your filters.</p>
-                    <button
-                      className="button secondary"
-                      onClick={() => {
-                        setQuery("");
-                        setStatus("all");
-                        setFreshness("all");
-                      }}
+                  <section
+                    className="register-panel"
+                    aria-label="Aircraft records"
+                  >
+                    <div
+                      className="status-tabs"
+                      role="group"
+                      aria-label="Filter by reported status"
                     >
-                      Clear filters
-                    </button>
-                  </div>
-                ) : (
-                  <div className="table-scroll">
-                    <table className="aircraft-table">
-                      <thead>
-                        <tr>
-                          <th scope="col">Aircraft</th>
-                          <th scope="col">Reported status</th>
-                          <th scope="col">Source</th>
-                          <th scope="col">Source updated</th>
-                          <th scope="col">Report freshness</th>
-                          <th scope="col">
-                            <span className="sr-only">Details</span>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {filtered.map((item) => (
-                          <tr key={item.aircraft_id}>
-                            <td>
-                              <div className="aircraft-cell">
-                                <span className="aircraft-icon">
-                                  <Plane size={18} strokeWidth={1.6} />
-                                </span>
-                                <div>
+                      {(
+                        ["all", "available", "unavailable", "unknown"] as const
+                      ).map((item) => (
+                        <button
+                          key={item}
+                          className={status === item ? "selected" : ""}
+                          aria-pressed={status === item}
+                          onClick={() => setStatus(item)}
+                        >
+                          {item === "all" ? "All aircraft" : shortStatus[item]}
+                          <span>{counts[item]}</span>
+                        </button>
+                      ))}
+                    </div>
+                    <div className="table-toolbar">
+                      <label className="search-field">
+                        <Search size={17} />
+                        <input
+                          value={query}
+                          onChange={(event) => setQuery(event.target.value)}
+                          placeholder="Search aircraft or source…"
+                          aria-label="Search aircraft or source"
+                        />
+                      </label>
+                      <div className="filter-controls">
+                        <label className="select-field">
+                          <Clock3 size={15} />
+                          <select
+                            value={freshness}
+                            onChange={(event) =>
+                              setFreshness(event.target.value)
+                            }
+                            aria-label="Filter by report freshness"
+                          >
+                            <option value="all">All report ages</option>
+                            <option value="current">Current reports</option>
+                            <option value="review">Needs review</option>
+                          </select>
+                        </label>
+                        <label className="select-field sort-field">
+                          <select
+                            value={sort}
+                            onChange={(event) =>
+                              setSort(event.target.value as "id" | "recent")
+                            }
+                            aria-label="Sort aircraft"
+                          >
+                            <option value="id">Aircraft ID</option>
+                            <option value="recent">Most recent report</option>
+                          </select>
+                        </label>
+                      </div>
+                    </div>
+                    <div className="register-exports">
+                      <span>
+                        Refreshes every 30 seconds while this tab is visible.
+                      </span>
+                      <div className="tools-actions">
+                        {(["xlsx", "csv", "json"] as const).map((format) => (
+                          <button
+                            key={format}
+                            className="text-button"
+                            disabled={working || loading}
+                            onClick={() => void exportView(format)}
+                          >
+                            <ArrowDownToLine size={14} />
+                            Export{" "}
+                            {format === "xlsx" ? "Excel" : format.toUpperCase()}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    {loading ? (
+                      <div
+                        className="table-skeleton"
+                        aria-label="Loading aircraft"
+                        aria-busy="true"
+                      >
+                        {Array.from({ length: 5 }, (_, index) => (
+                          <div key={index}>
+                            <span />
+                            <span />
+                            <span />
+                          </div>
+                        ))}
+                      </div>
+                    ) : !records.length ? (
+                      <div className="empty-state">
+                        <div className="empty-illustration">
+                          <FileSpreadsheet size={39} strokeWidth={1.3} />
+                          <span>
+                            <Plane size={16} />
+                          </span>
+                        </div>
+                        <h2>Your register is ready for its first aircraft.</h2>
+                        <p>
+                          Upload your CSV or Excel file to bring the records
+                          together.
+                          <br />
+                          Or explore the workflow with a fictional sample fleet.
+                        </p>
+                        <div className="empty-actions">
+                          <button
+                            className="button primary"
+                            onClick={() => void sample()}
+                            disabled={working || !canImport}
+                          >
+                            <Plane size={17} />
+                            Try sample data
+                            <ArrowRight size={16} />
+                          </button>
+                          <button
+                            className="button secondary"
+                            disabled={!canImport}
+                            onClick={() => {
+                              setPreview(null);
+                              navigate("upload");
+                            }}
+                          >
+                            <Upload size={16} />
+                            Upload a dataset
+                          </button>
+                        </div>
+                        <span className="empty-note">
+                          <ShieldCheck size={14} />
+                          You’ll review the sample before anything is saved.
+                        </span>
+                      </div>
+                    ) : !filtered.length ? (
+                      <div className="empty-state filtered-empty">
+                        <Search size={30} strokeWidth={1.4} />
+                        <h2>No aircraft match these filters.</h2>
+                        <p>Try a different search or clear your filters.</p>
+                        <button
+                          className="button secondary"
+                          onClick={() => {
+                            setQuery("");
+                            setStatus("all");
+                            setFreshness("all");
+                          }}
+                        >
+                          Clear filters
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="table-scroll">
+                        <table className="aircraft-table">
+                          <thead>
+                            <tr>
+                              <th scope="col">Aircraft</th>
+                              <th scope="col">Reported status</th>
+                              <th scope="col">Source</th>
+                              <th scope="col">Source updated</th>
+                              <th scope="col">Report freshness</th>
+                              <th scope="col">
+                                <span className="sr-only">Details</span>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filtered.map((item) => (
+                              <tr key={item.aircraft_id}>
+                                <td>
+                                  <div className="aircraft-cell">
+                                    <span className="aircraft-icon">
+                                      <Plane size={18} strokeWidth={1.6} />
+                                    </span>
+                                    <div>
+                                      <button
+                                        className="record-link"
+                                        onClick={() =>
+                                          setSelectedAircraft(item)
+                                        }
+                                      >
+                                        {item.aircraft_id}
+                                      </button>
+                                      <span>
+                                        {item.display_name ||
+                                          "Unnamed aircraft"}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </td>
+                                <td>
+                                  <Status value={item.reported_status} />
+                                </td>
+                                <td>
+                                  <span className="source-name">
+                                    {item.source_name}
+                                  </span>
+                                </td>
+                                <td>
+                                  <span
+                                    className="time-primary"
+                                    title={date(item.source_updated_at)}
+                                  >
+                                    {ago(item.source_updated_at)}
+                                  </span>
+                                  <span className="time-secondary">
+                                    {date(item.source_updated_at)}
+                                  </span>
+                                </td>
+                                <td>
+                                  <Freshness item={item} />
+                                </td>
+                                <td>
                                   <button
-                                    className="record-link"
+                                    className="icon-button row-arrow"
+                                    aria-label={`View ${item.aircraft_id} details`}
                                     onClick={() => setSelectedAircraft(item)}
                                   >
-                                    {item.aircraft_id}
+                                    <ChevronRight size={17} />
                                   </button>
-                                  <span>
-                                    {item.display_name || "Unnamed aircraft"}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td>
-                              <Status value={item.reported_status} />
-                            </td>
-                            <td>
-                              <span className="source-name">
-                                {item.source_name}
-                              </span>
-                            </td>
-                            <td>
-                              <span
-                                className="time-primary"
-                                title={date(item.source_updated_at)}
-                              >
-                                {ago(item.source_updated_at)}
-                              </span>
-                              <span className="time-secondary">
-                                {date(item.source_updated_at)}
-                              </span>
-                            </td>
-                            <td>
-                              <Freshness item={item} />
-                            </td>
-                            <td>
-                              <button
-                                className="icon-button row-arrow"
-                                aria-label={`View ${item.aircraft_id} details`}
-                                onClick={() => setSelectedAircraft(item)}
-                              >
-                                <ChevronRight size={17} />
-                              </button>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-                <div className="table-footer">
-                  <span>
-                    {records.length
-                      ? `Showing ${filtered.length} of ${records.length} aircraft`
-                      : "No records imported yet"}
-                  </span>
-                  <span>
-                    <span className="tiny-dot" />
-                    Source-reported information
-                  </span>
-                </div>
-              </section>
-              <div className="register-footnotes">
-                <p>
-                  <Info size={15} />
-                  {reviewCount ? `${reviewCount} reports need review. ` : ""}
-                  Reports older than {workspace?.freshness_hours ?? 24} hours
-                  need review. This is a demo setting.
-                </p>
-                <button
-                  className="text-button"
-                  onClick={() => navigate("guide")}
-                >
-                  How this works
-                  <ArrowRight size={14} />
-                </button>
-              </div>
-              <div className="source-disclaimer">
-                This workspace uses fictional civilian aircraft data. Reported
-                availability is not an airworthiness certification.
-              </div>
-            </>
-          )}
-
-          {view === "upload" && canImport && (
-            <div className="import-layout">
-              <section className="import-main">
-                <div className="import-steps" aria-label="Import progress">
-                  <span className={!preview ? "current-step" : ""}>
-                    <span>{preview ? <Check size={13} /> : "1"}</span>Select a
-                    file
-                  </span>
-                  <div />
-                  <span className={preview ? "current-step" : ""}>
-                    <span>2</span>Review & confirm
-                  </span>
-                </div>
-                {!preview ? (
-                  <>
-                    <div
-                      className={`dropzone ${dragging ? "dragging" : ""}`}
-                      onDragOver={(event) => {
-                        event.preventDefault();
-                        setDragging(true);
-                      }}
-                      onDragLeave={() => setDragging(false)}
-                      onDrop={(event) => {
-                        event.preventDefault();
-                        setDragging(false);
-                        const file = event.dataTransfer.files[0];
-                        if (file && !working) void inspect(file);
-                      }}
-                    >
-                      <div className="upload-symbol">
-                        <Upload size={30} strokeWidth={1.4} />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
-                      <h2>
-                        {working
-                          ? "Checking your dataset…"
-                          : "Bring your records together."}
-                      </h2>
+                    )}
+                    <div className="table-footer">
+                      <span>
+                        {records.length
+                          ? `Showing ${filtered.length} of ${records.length} aircraft`
+                          : "No records imported yet"}
+                      </span>
+                      <span>
+                        <span className="tiny-dot" />
+                        Source-reported information
+                      </span>
+                    </div>
+                  </section>
+                  <div className="register-footnotes">
+                    <p>
+                      <Info size={15} />
+                      {reviewCount
+                        ? `${reviewCount} reports need review. `
+                        : ""}
+                      Reports older than {workspace?.freshness_hours ?? 24}{" "}
+                      hours need review. This is a demo setting.
+                    </p>
+                    <button
+                      className="text-button"
+                      onClick={() => navigate("guide")}
+                    >
+                      How this works
+                      <ArrowRight size={14} />
+                    </button>
+                  </div>
+                  <div className="source-disclaimer">
+                    This workspace uses fictional civilian aircraft data.
+                    Reported availability is not an airworthiness certification.
+                  </div>
+                </>
+              )}
+
+              {view === "upload" && canImport && (
+                <div className="import-layout">
+                  <section className="import-main">
+                    <div className="import-steps" aria-label="Import progress">
+                      <span className={!preview ? "current-step" : ""}>
+                        <span>{preview ? <Check size={13} /> : "1"}</span>Select
+                        a file
+                      </span>
+                      <div />
+                      <span className={preview ? "current-step" : ""}>
+                        <span>2</span>Review & confirm
+                      </span>
+                    </div>
+                    {!preview ? (
+                      <>
+                        <div
+                          className={`dropzone ${dragging ? "dragging" : ""}`}
+                          onDragOver={(event) => {
+                            event.preventDefault();
+                            setDragging(true);
+                          }}
+                          onDragLeave={() => setDragging(false)}
+                          onDrop={(event) => {
+                            event.preventDefault();
+                            setDragging(false);
+                            const file = event.dataTransfer.files[0];
+                            if (file && !working) void inspect(file);
+                          }}
+                        >
+                          <div className="upload-symbol">
+                            <Upload size={30} strokeWidth={1.4} />
+                          </div>
+                          <h2>
+                            {working
+                              ? "Checking your dataset…"
+                              : "Bring your records together."}
+                          </h2>
+                          <p>
+                            Drag a CSV or Excel file here, or choose one from
+                            your computer.
+                          </p>
+                          <button
+                            className="button primary"
+                            disabled={working}
+                            onClick={() => inputRef.current?.click()}
+                          >
+                            <FolderOpen size={17} />
+                            {working
+                              ? "Validating file…"
+                              : "Choose dataset file"}
+                          </button>
+                          <span className="file-limits">
+                            CSV or .xlsx · Up to 1 MiB · 2,000 records
+                          </span>
+                          <input
+                            ref={inputRef}
+                            type="file"
+                            accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            aria-label="Choose aircraft dataset file"
+                            onChange={(event) => {
+                              const file = event.target.files?.[0];
+                              if (file) void inspect(file);
+                            }}
+                            className="sr-only"
+                            tabIndex={-1}
+                          />
+                        </div>
+                        <div className="sample-option">
+                          <span className="sample-icon">
+                            <Plane size={21} />
+                          </span>
+                          <div>
+                            <h3>Just getting started?</h3>
+                            <p>Explore an import with 12 fictional aircraft.</p>
+                          </div>
+                          <button
+                            className="button secondary"
+                            disabled={working}
+                            onClick={() => void sample()}
+                          >
+                            Use sample
+                            <ArrowRight size={15} />
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="file-summary">
+                          <span className="file-icon">
+                            <FileSpreadsheet size={23} />
+                          </span>
+                          <div>
+                            <strong>{preview.filename}</strong>
+                            <span>
+                              {preview.row_count} parsed records · Nothing saved
+                              yet
+                            </span>
+                          </div>
+                          <button
+                            className="text-button"
+                            disabled={working}
+                            onClick={() => {
+                              setPreview(null);
+                              setError("");
+                            }}
+                          >
+                            Choose another file
+                          </button>
+                        </div>
+                        <div
+                          className={`review-banner ${preview.valid ? "review-valid" : "review-invalid"}`}
+                          role={preview.valid ? "status" : "alert"}
+                        >
+                          {preview.valid ? (
+                            <CheckCircle2 size={22} />
+                          ) : (
+                            <CircleAlert size={22} />
+                          )}
+                          <div>
+                            <h2>
+                              {preview.already_imported
+                                ? "This dataset is already in your history."
+                                : preview.valid
+                                  ? "Your dataset is ready to review."
+                                  : "A few things need your attention."}
+                            </h2>
+                            <p>
+                              {preview.already_imported
+                                ? "Confirming will leave your current records unchanged."
+                                : preview.valid
+                                  ? "Review the changes below. Your register updates only after confirmation."
+                                  : "No records will be saved. Fix the issues below, then upload your file again."}
+                            </p>
+                          </div>
+                        </div>
+                        {preview.errors.length > 0 && (
+                          <div className="validation-errors">
+                            <h3>
+                              {preview.errors.length} validation{" "}
+                              {preview.errors.length === 1 ? "issue" : "issues"}
+                            </h3>
+                            <ul>
+                              {preview.errors.map((item, index) => (
+                                <li key={index}>
+                                  <span>
+                                    {item.row ? `Row ${item.row}` : "File"}
+                                    <small>{item.field}</small>
+                                  </span>
+                                  <p>{item.message}</p>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {preview.changes.length > 0 && (
+                          <>
+                            <div className="change-counts">
+                              <span>
+                                <span className="count-new">
+                                  {preview.counts.new}
+                                </span>
+                                New aircraft
+                              </span>
+                              <span>
+                                <span className="count-updated">
+                                  {preview.counts.updated}
+                                </span>
+                                Updated
+                              </span>
+                              <span>
+                                <span>{preview.counts.unchanged}</span>Unchanged
+                              </span>
+                              {preview.counts.blocked > 0 && (
+                                <span>
+                                  <span className="count-blocked">
+                                    {preview.counts.blocked}
+                                  </span>
+                                  Blocked
+                                </span>
+                              )}
+                            </div>
+                            <div className="table-scroll preview-scroll">
+                              <table className="review-table">
+                                <thead>
+                                  <tr>
+                                    <th>Aircraft</th>
+                                    <th>Change</th>
+                                    <th>Previous status</th>
+                                    <th>Incoming status</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {preview.changes.map((change) => (
+                                    <tr key={change.aircraft_id}>
+                                      <td>
+                                        <strong>{change.aircraft_id}</strong>
+                                        <small>
+                                          {change.after.display_name}
+                                        </small>
+                                      </td>
+                                      <td>
+                                        <span
+                                          className={`change-label change-${change.action}`}
+                                        >
+                                          {change.action}
+                                        </span>
+                                      </td>
+                                      <td>
+                                        {change.before ? (
+                                          <Status
+                                            value={
+                                              change.before.reported_status
+                                            }
+                                          />
+                                        ) : (
+                                          <span className="muted">
+                                            No existing record
+                                          </span>
+                                        )}
+                                      </td>
+                                      <td>
+                                        <Status
+                                          value={change.after.reported_status}
+                                        />
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            <details className="change-details">
+                              <summary>Inspect complete field changes</summary>
+                              {preview.changes
+                                .filter(
+                                  (change) =>
+                                    change.action === "new" ||
+                                    change.action === "updated" ||
+                                    change.action === "blocked",
+                                )
+                                .map((change) => (
+                                  <div
+                                    className="field-diff"
+                                    key={change.aircraft_id}
+                                  >
+                                    <h3>{change.aircraft_id}</h3>
+                                    <dl>
+                                      {Object.entries(change.after)
+                                        .filter(
+                                          ([key, value]) =>
+                                            change.before?.[
+                                              key as keyof typeof change.before
+                                            ] !== value,
+                                        )
+                                        .map(([key, value]) => (
+                                          <div key={key}>
+                                            <dt>{key.replaceAll("_", " ")}</dt>
+                                            <dd>
+                                              {change.before && (
+                                                <>
+                                                  <span className="old-value">
+                                                    {String(
+                                                      change.before[
+                                                        key as keyof typeof change.before
+                                                      ],
+                                                    ) || "(empty)"}
+                                                  </span>
+                                                  <ArrowRight size={13} />
+                                                </>
+                                              )}
+                                              <span>
+                                                {String(value) || "(empty)"}
+                                              </span>
+                                            </dd>
+                                          </div>
+                                        ))}
+                                    </dl>
+                                  </div>
+                                ))}
+                            </details>
+                          </>
+                        )}
+                        <div className="confirm-bar">
+                          <span>
+                            <ShieldCheck size={16} />
+                            {preview.valid
+                              ? "Your confirmation is required."
+                              : "Your saved records are unchanged."}
+                          </span>
+                          <button
+                            className="button primary"
+                            disabled={!preview.valid || working}
+                            onClick={() => void confirm()}
+                          >
+                            <Check size={17} />
+                            {working
+                              ? "Saving import…"
+                              : preview.already_imported
+                                ? "Confirm no changes"
+                                : "Confirm import"}
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </section>
+                  <aside className="import-help">
+                    <h2>
+                      A good file starts with
+                      <br />a clear structure.
+                    </h2>
+                    <p>
+                      Use the template to keep your column names and timestamps
+                      consistent.
+                    </p>
+                    <a
+                      className="button secondary download-template"
+                      href="/api/examples/template.csv"
+                      download
+                    >
+                      <ArrowDownToLine size={16} />
+                      Download CSV template
+                    </a>
+                    <a
+                      className="button secondary download-template"
+                      href="/api/examples/template.xlsx"
+                      download
+                    >
+                      <ArrowDownToLine size={16} />
+                      Download Excel template
+                    </a>
+                    <h3>Required columns</h3>
+                    <ul className="column-list">
+                      {[
+                        "aircraft_id",
+                        "display_name",
+                        "reported_status",
+                        "source_updated_at",
+                        "source_name",
+                        "note",
+                      ].map((name) => (
+                        <li key={name}>
+                          <Check size={12} />
+                          <code>{name}</code>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="help-small">
+                      All headers are required. Display name and note may be
+                      blank.
+                    </p>
+                    <div className="import-trust">
+                      <ShieldCheck size={18} />
                       <p>
-                        Drag a CSV or Excel file here, or choose one from your
-                        computer.
+                        Previewing a file changes nothing. Invalid batches are
+                        rejected together.
+                      </p>
+                    </div>
+                    <a
+                      className="text-button"
+                      href="/api/examples/invalid.csv"
+                      download
+                    >
+                      Download an error example
+                      <ArrowDownToLine size={13} />
+                    </a>
+                  </aside>
+                </div>
+              )}
+
+              {view === "history" && (
+                <section className="history-panel">
+                  <div className="panel-title">
+                    <h2>
+                      Confirmed imports{" "}
+                      <span>{workspace?.imports.length ?? 0}</span>
+                    </h2>
+                    <button
+                      className="button secondary"
+                      onClick={() => void refresh()}
+                      disabled={refreshing}
+                    >
+                      <RefreshCw size={15} />
+                      Refresh
+                    </button>
+                  </div>
+                  {!workspace?.imports.length ? (
+                    <div className="empty-state">
+                      <History size={35} strokeWidth={1.3} />
+                      <h2>Your import history will live here.</h2>
+                      <p>
+                        Confirm your first dataset to start a traceable history.
                       </p>
                       <button
                         className="button primary"
-                        disabled={working}
-                        onClick={() => inputRef.current?.click()}
+                        onClick={() => navigate("upload")}
                       >
-                        <FolderOpen size={17} />
-                        {working ? "Validating file…" : "Choose dataset file"}
-                      </button>
-                      <span className="file-limits">
-                        CSV or .xlsx · Up to 1 MiB · 2,000 records
-                      </span>
-                      <input
-                        ref={inputRef}
-                        type="file"
-                        accept=".csv,.xlsx,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                        aria-label="Choose aircraft dataset file"
-                        onChange={(event) => {
-                          const file = event.target.files?.[0];
-                          if (file) void inspect(file);
-                        }}
-                        className="sr-only"
-                        tabIndex={-1}
-                      />
-                    </div>
-                    <div className="sample-option">
-                      <span className="sample-icon">
-                        <Plane size={21} />
-                      </span>
-                      <div>
-                        <h3>Just getting started?</h3>
-                        <p>Explore an import with 12 fictional aircraft.</p>
-                      </div>
-                      <button
-                        className="button secondary"
-                        disabled={working}
-                        onClick={() => void sample()}
-                      >
-                        Use sample
+                        Import a dataset
                         <ArrowRight size={15} />
                       </button>
                     </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="file-summary">
-                      <span className="file-icon">
-                        <FileSpreadsheet size={23} />
-                      </span>
-                      <div>
-                        <strong>{preview.filename}</strong>
-                        <span>
-                          {preview.row_count} parsed records · Nothing saved yet
-                        </span>
-                      </div>
-                      <button
-                        className="text-button"
-                        disabled={working}
-                        onClick={() => {
-                          setPreview(null);
-                          setError("");
-                        }}
-                      >
-                        Choose another file
-                      </button>
-                    </div>
-                    <div
-                      className={`review-banner ${preview.valid ? "review-valid" : "review-invalid"}`}
-                      role={preview.valid ? "status" : "alert"}
-                    >
-                      {preview.valid ? (
-                        <CheckCircle2 size={22} />
-                      ) : (
-                        <CircleAlert size={22} />
-                      )}
-                      <div>
-                        <h2>
-                          {preview.already_imported
-                            ? "This dataset is already in your history."
-                            : preview.valid
-                              ? "Your dataset is ready to review."
-                              : "A few things need your attention."}
-                        </h2>
-                        <p>
-                          {preview.already_imported
-                            ? "Confirming will leave your current records unchanged."
-                            : preview.valid
-                              ? "Review the changes below. Your register updates only after confirmation."
-                              : "No records will be saved. Fix the issues below, then upload your file again."}
-                        </p>
-                      </div>
-                    </div>
-                    {preview.errors.length > 0 && (
-                      <div className="validation-errors">
-                        <h3>
-                          {preview.errors.length} validation{" "}
-                          {preview.errors.length === 1 ? "issue" : "issues"}
-                        </h3>
-                        <ul>
-                          {preview.errors.map((item, index) => (
-                            <li key={index}>
-                              <span>
-                                {item.row ? `Row ${item.row}` : "File"}
-                                <small>{item.field}</small>
-                              </span>
-                              <p>{item.message}</p>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    {preview.changes.length > 0 && (
-                      <>
-                        <div className="change-counts">
-                          <span>
-                            <span className="count-new">
-                              {preview.counts.new}
-                            </span>
-                            New aircraft
+                  ) : (
+                    <div className="history-list">
+                      {workspace.imports.map((batch) => (
+                        <button
+                          className="history-row"
+                          key={batch.id}
+                          onClick={() => void openImport(batch.id)}
+                          disabled={working}
+                        >
+                          <span className="file-icon">
+                            <FileCheck2 size={22} />
                           </span>
-                          <span>
-                            <span className="count-updated">
-                              {preview.counts.updated}
-                            </span>
-                            Updated
-                          </span>
-                          <span>
-                            <span>{preview.counts.unchanged}</span>Unchanged
-                          </span>
-                          {preview.counts.blocked > 0 && (
+                          <div>
+                            <strong>{batch.filename}</strong>
                             <span>
-                              <span className="count-blocked">
-                                {preview.counts.blocked}
-                              </span>
-                              Blocked
+                              {date(batch.confirmed_at)} · {batch.actor}
                             </span>
-                          )}
-                        </div>
-                        <div className="table-scroll preview-scroll">
-                          <table className="review-table">
-                            <thead>
-                              <tr>
-                                <th>Aircraft</th>
-                                <th>Change</th>
-                                <th>Previous status</th>
-                                <th>Incoming status</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {preview.changes.map((change) => (
-                                <tr key={change.aircraft_id}>
-                                  <td>
-                                    <strong>{change.aircraft_id}</strong>
-                                    <small>{change.after.display_name}</small>
-                                  </td>
-                                  <td>
-                                    <span
-                                      className={`change-label change-${change.action}`}
-                                    >
-                                      {change.action}
-                                    </span>
-                                  </td>
-                                  <td>
-                                    {change.before ? (
-                                      <Status
-                                        value={change.before.reported_status}
-                                      />
-                                    ) : (
-                                      <span className="muted">
-                                        No existing record
-                                      </span>
-                                    )}
-                                  </td>
-                                  <td>
-                                    <Status
-                                      value={change.after.reported_status}
-                                    />
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                        <details className="change-details">
-                          <summary>Inspect complete field changes</summary>
-                          {preview.changes
-                            .filter(
-                              (change) =>
-                                change.action === "new" ||
-                                change.action === "updated" ||
-                                change.action === "blocked",
-                            )
-                            .map((change) => (
-                              <div
-                                className="field-diff"
-                                key={change.aircraft_id}
-                              >
-                                <h3>{change.aircraft_id}</h3>
-                                <dl>
-                                  {Object.entries(change.after)
-                                    .filter(
-                                      ([key, value]) =>
-                                        change.before?.[
-                                          key as keyof typeof change.before
-                                        ] !== value,
-                                    )
-                                    .map(([key, value]) => (
-                                      <div key={key}>
-                                        <dt>{key.replaceAll("_", " ")}</dt>
-                                        <dd>
-                                          {change.before && (
-                                            <>
-                                              <span className="old-value">
-                                                {String(
-                                                  change.before[
-                                                    key as keyof typeof change.before
-                                                  ],
-                                                ) || "(empty)"}
-                                              </span>
-                                              <ArrowRight size={13} />
-                                            </>
-                                          )}
-                                          <span>
-                                            {String(value) || "(empty)"}
-                                          </span>
-                                        </dd>
-                                      </div>
-                                    ))}
-                                </dl>
-                              </div>
-                            ))}
-                        </details>
-                      </>
-                    )}
-                    <div className="confirm-bar">
-                      <span>
-                        <ShieldCheck size={16} />
-                        {preview.valid
-                          ? "Your confirmation is required."
-                          : "Your saved records are unchanged."}
-                      </span>
-                      <button
-                        className="button primary"
-                        disabled={!preview.valid || working}
-                        onClick={() => void confirm()}
-                      >
-                        <Check size={17} />
-                        {working
-                          ? "Saving import…"
-                          : preview.already_imported
-                            ? "Confirm no changes"
-                            : "Confirm import"}
-                      </button>
+                          </div>
+                          <div className="history-counts">
+                            <span>
+                              <b>{batch.new_count}</b> added
+                            </span>
+                            <span>
+                              <b>{batch.updated_count}</b> updated
+                            </span>
+                            <span>{batch.unchanged_count} unchanged</span>
+                          </div>
+                          <span className="import-revision">
+                            v{batch.revision}
+                          </span>
+                          <ChevronRight size={18} />
+                        </button>
+                      ))}
                     </div>
-                  </>
-                )}
-              </section>
-              <aside className="import-help">
-                <h2>
-                  A good file starts with
-                  <br />a clear structure.
-                </h2>
-                <p>
-                  Use the template to keep your column names and timestamps
-                  consistent.
-                </p>
-                <a
-                  className="button secondary download-template"
-                  href="/api/examples/template.csv"
-                  download
-                >
-                  <ArrowDownToLine size={16} />
-                  Download CSV template
-                </a>
-                <a
-                  className="button secondary download-template"
-                  href="/api/examples/template.xlsx"
-                  download
-                >
-                  <ArrowDownToLine size={16} />
-                  Download Excel template
-                </a>
-                <h3>Required columns</h3>
-                <ul className="column-list">
-                  {[
-                    "aircraft_id",
-                    "display_name",
-                    "reported_status",
-                    "source_updated_at",
-                    "source_name",
-                    "note",
-                  ].map((name) => (
-                    <li key={name}>
-                      <Check size={12} />
-                      <code>{name}</code>
-                    </li>
-                  ))}
-                </ul>
-                <p className="help-small">
-                  All headers are required. Display name and note may be blank.
-                </p>
-                <div className="import-trust">
-                  <ShieldCheck size={18} />
-                  <p>
-                    Previewing a file changes nothing. Invalid batches are
-                    rejected together.
-                  </p>
-                </div>
-                <a
-                  className="text-button"
-                  href="/api/examples/invalid.csv"
-                  download
-                >
-                  Download an error example
-                  <ArrowDownToLine size={13} />
-                </a>
-              </aside>
-            </div>
-          )}
-
-          {view === "history" && (
-            <section className="history-panel">
-              <div className="panel-title">
-                <h2>
-                  Confirmed imports{" "}
-                  <span>{workspace?.imports.length ?? 0}</span>
-                </h2>
-                <button
-                  className="button secondary"
-                  onClick={() => void refresh()}
-                  disabled={refreshing}
-                >
-                  <RefreshCw size={15} />
-                  Refresh
-                </button>
-              </div>
-              {!workspace?.imports.length ? (
-                <div className="empty-state">
-                  <History size={35} strokeWidth={1.3} />
-                  <h2>Your import history will live here.</h2>
-                  <p>
-                    Confirm your first dataset to start a traceable history.
-                  </p>
-                  <button
-                    className="button primary"
-                    onClick={() => navigate("upload")}
-                  >
-                    Import a dataset
-                    <ArrowRight size={15} />
-                  </button>
-                </div>
-              ) : (
-                <div className="history-list">
-                  {workspace.imports.map((batch) => (
-                    <button
-                      className="history-row"
-                      key={batch.id}
-                      onClick={() => void openImport(batch.id)}
-                      disabled={working}
-                    >
-                      <span className="file-icon">
-                        <FileCheck2 size={22} />
-                      </span>
-                      <div>
-                        <strong>{batch.filename}</strong>
-                        <span>
-                          {date(batch.confirmed_at)} · {batch.actor}
-                        </span>
-                      </div>
-                      <div className="history-counts">
-                        <span>
-                          <b>{batch.new_count}</b> added
-                        </span>
-                        <span>
-                          <b>{batch.updated_count}</b> updated
-                        </span>
-                        <span>{batch.unchanged_count} unchanged</span>
-                      </div>
-                      <span className="import-revision">v{batch.revision}</span>
-                      <ChevronRight size={18} />
-                    </button>
-                  ))}
-                </div>
+                  )}
+                  <div className="table-footer">
+                    <span>Up to 50 most recent confirmed imports</span>
+                    <span>Repeat datasets don’t create new entries.</span>
+                  </div>
+                </section>
               )}
-              <div className="table-footer">
-                <span>Up to 50 most recent confirmed imports</span>
-                <span>Repeat datasets don’t create new entries.</span>
-              </div>
-            </section>
-          )}
 
-          {view === "guide" && (
-            <WorkspaceGuide
-              freshnessHours={workspace?.freshness_hours}
-              disabled={!canImport}
-              onStart={() => {
-                setPreview(null);
-                navigate("upload");
-              }}
-            />
-          )}
+              {view === "guide" && (
+                <WorkspaceGuide
+                  freshnessHours={workspace?.freshness_hours}
+                  disabled={!canImport}
+                  onStart={() => {
+                    setPreview(null);
+                    navigate("upload");
+                  }}
+                />
+              )}
+            </Suspense>
+          </WorkspacePanelBoundary>
         </main>
         <footer className="app-footer">
           <span>SAMPATI · Disaster relief workspace</span>

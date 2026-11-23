@@ -14,7 +14,7 @@
 
 Sampati helps civilian relief teams see **what is needed, what is in stock and what has reached its destination**. It connects flood assessments, reviewed requests, stock movements and delivery records in one organisation workspace, with sources and decisions kept in history.
 
-**Status:** working local release **0.4**, using fictional demonstration records. Incident review, requests, inventory, delivery tracking, structured intake automation and handover are implemented. Public hosting, live feeds, trained AI and field validation remain future work. [Release scope →](docs/RELEASE.md)
+**Status:** working local release **0.5**, using fictional demonstration records. Warning intake, explained response preparation, incident review, requests, inventory, deliveries, structured intake automation and handover are implemented. Public hosting, live public feeds, trained AI and field validation remain future work. [Release scope →](docs/RELEASE.md)
 
 <a href="docs/images/remaining-needs.png"><img src="docs/images/remaining-needs.png" width="1440" alt="Actual Sampati relief follow-up workspace: 40 shelter kits requested, 10 source-confirmed and 30 still needed, with the full civilian coordination navigation"></a>
 
@@ -83,6 +83,7 @@ The phone image is browser emulation. Wider tables scroll inside their own regio
 
 | Area | Working capability | Explore |
 | --- | --- | --- |
+| **Response preparation** | Verify warning/news reports, check exact stock and aircraft support, explain blocks and save a reviewable civilian workflow. | [Planner and rule evaluation](docs/RESPONSE_PLANNING.md) |
 | **Incident review** | JSON assessment preview, immutable evidence, dates/uncertainty and reasoned review. | [Contract](docs/INCIDENTS.md) |
 | **Relief requests** | Exact quantity/unit, locality, deadline, corrections, submission/review/cancellation and history. | [Request rules](docs/RELIEF_REQUESTS.md) |
 | **Aid inventory** | Items/stores, protected balances, separate count reports, reservations, issues, releases and returns. | [Stock ledger](docs/INVENTORY.md) |
@@ -116,9 +117,11 @@ For compiled single-server use, build the interface, stop the development launch
 
 **React 19 + TypeScript + Vite** power the interface. **FastAPI + Pydantic** validate contracts and permissions. **SQLAlchemy + Psycopg + PostgreSQL** persist organisation-scoped records; **Alembic** evolves the schema.
 
+Response preparation uses versioned deterministic rules. Its labelled-example evaluation tool helps refine rules and expose false-reviewable outcomes; no model training or independent verification of source reports is implied. Workspace panels load on demand to reduce the initial interface payload.
+
 Workspace locks, current-version checks and canonical repeat detection protect accepted changes. Exact decimal storage keeps quantities in their declared units. Related stock, shipment and audit records commit atomically.
 
-Recorded local checks on **8 November 2026** include **202 passing backend tests**, the production build, migration consistency, real-browser workflows, actual CSV/JSON watcher submissions, retries/concurrency and a disposable backup restore. These are software checks, not model-accuracy or welfare measurements. [Executed verification and limits](docs/VERIFICATION.md) · [GitHub Actions](https://github.com/Prathamji1505/sampati/actions)
+Local checks on **22–23 November 2026** include **242 passing backend tests**, the production build, migration consistency, real-browser workflows, actual file-watcher submissions, retries/concurrency and a disposable backup restore. Preparation checks also cover saved-input revision and preservation of source observation dates. These are software checks, not model-accuracy or welfare measurements. [Executed verification and limits](docs/VERIFICATION.md) · [GitHub Actions](https://github.com/Prathamji1505/sampati/actions)
 
 ## Explore the project
 

@@ -4,6 +4,7 @@ from sqlalchemy import create_engine, pool
 from backend.app.config import settings
 from backend.app.database import Base
 from backend.app import models  # noqa: F401 -- register mapped tables
+from backend.app import response_models  # noqa: F401 -- response evidence tables
 
 config = context.config
 target_metadata = Base.metadata

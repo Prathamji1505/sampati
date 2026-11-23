@@ -24,6 +24,8 @@ flowchart TB
 
 `automation_files.py` validates the relief CSV/JSON contract. `automation.py` owns source policies, raw intake evidence, current-request previews, decisions and optional automatic creation of new drafts. Source purposes separate aircraft credentials from relief credentials. A source can never use its key to approve requests or record inventory/delivery actions. New drafts call the existing request creation helper inside the same transaction as intake audit history.
 
+`response_rules.py` evaluates clock-injected civilian preparation facts without database, network or UI side effects. `response.py` loads current organisation-scoped facts under workspace locks and owns immutable warning evidence, dated aircraft support, saved preparation snapshots and human review. `response_models.py` and migration009 persist these records. Warning-only credentials can queue unverified evidence but cannot review or commit resources. Evaluation hashes detect changed dependencies or crossed freshness thresholds. The React response workspace loads on demand, preserves unfinished forms between its sections and explicitly loads saved inputs when preparing a revision. See [response planning](RESPONSE_PLANNING.md).
+
 `reports.py` computes the scoped relief overview from current queues and net arrival quantities. No model inference or cross-unit aggregate is used. In packaged local mode, `scripts/run.py` applies migrations and enables static serving of the compiled frontend after API routes.
 
 1. CSV and Excel uploads use the shared schema and batch rules. One invalid row rejects the batch.

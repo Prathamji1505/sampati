@@ -1,0 +1,27 @@
+{
+  "contract": "sampati.response-evaluation.v1",
+  "description": "Authored fictional rule examples, not field data or a trained model.",
+  "now": "2026-11-22T09:00:00+00:00",
+  "freshness_hours": 24,
+  "base_facts": {
+    "signal": {"state": "verified", "observed_at": "2026-11-22T08:00:00+00:00", "expires_at": "2026-11-22T12:00:00+00:00", "certainty": "observed", "locality": "Fictional River Ward"},
+    "conditions": {"observed_at": "2026-11-22T08:00:00+00:00", "weather": "confirmed", "destination_access": "confirmed"},
+    "needs": [{"request_id": "fictional-request-1", "reference": "NEED-1", "status": "reviewed", "needed_by": "2026-11-22T12:00:00+00:00", "locality": "Fictional River Ward", "quantity": "10.125", "committed": "0", "unit": "packs", "item_unit": "packs", "category": "water", "item_category": "water", "item_name_confirmed": true, "incompatible_commitments": false, "item_id": "fictional-item-1", "location_id": "fictional-store-1", "on_hand": "100", "reserved": "0", "stock_version": 1, "stock_updated_at": "2026-11-22T08:00:00+00:00", "unit_weight_kg": "2", "weight_source": "Fictional packing sheet"}],
+    "aircraft": [{"aircraft_id": "FICTIONAL-CIV-1", "display_name": "Fictional civilian aircraft", "reported_status": "available", "source_updated_at": "2026-11-22T08:00:00+00:00", "support": {"observed_at": "2026-11-22T08:00:00+00:00", "cargo_allowance_kg": "21", "crew": "confirmed", "maintenance": "confirmed", "fuel": "confirmed"}}]
+  },
+  "cases": [
+    {"name": "current_complete_evidence", "patches": [], "expected_status": "reviewable", "required_blockers": [], "expected_cargo_kg": "20.25"},
+    {"name": "unverified_news", "patches": [{"path": ["signal", "state"], "value": "unreviewed"}], "expected_status": "blocked", "required_blockers": ["signal_unverified"]},
+    {"name": "expired_warning", "patches": [{"path": ["signal", "expires_at"], "value": "2026-11-22T09:00:00+00:00"}], "expected_status": "blocked", "required_blockers": ["signal_outdated"]},
+    {"name": "unknown_certainty", "patches": [{"path": ["signal", "certainty"], "value": "unknown"}], "expected_status": "blocked", "required_blockers": ["signal_uncertain"]},
+    {"name": "weather_hold", "patches": [{"path": ["conditions", "weather"], "value": "hold"}], "expected_status": "blocked", "required_blockers": ["conditions_weather"]},
+    {"name": "missing_access", "patches": [{"path": ["conditions", "destination_access"], "value": "unknown"}], "expected_status": "blocked", "required_blockers": ["conditions_destination_access"]},
+    {"name": "stock_already_reserved", "patches": [{"path": ["needs", 0, "reserved"], "value": "95"}], "expected_status": "blocked", "required_blockers": ["stock_shortfall"]},
+    {"name": "mismatched_item_unit", "patches": [{"path": ["needs", 0, "item_unit"], "value": "boxes"}], "expected_status": "blocked", "required_blockers": ["item_mismatch"]},
+    {"name": "need_already_committed", "patches": [{"path": ["needs", 0, "committed"], "value": "10.125"}], "expected_status": "blocked", "required_blockers": ["already_allocated"]},
+    {"name": "crew_hold", "patches": [{"path": ["aircraft", 0, "support", "crew"], "value": "hold"}], "expected_status": "blocked", "required_blockers": ["no_aircraft_candidate"]},
+    {"name": "insufficient_cargo_allowance", "patches": [{"path": ["aircraft", 0, "support", "cargo_allowance_kg"], "value": "20.249"}], "expected_status": "blocked", "required_blockers": ["no_aircraft_candidate"]},
+    {"name": "stale_aircraft_report", "patches": [{"path": ["aircraft", 0, "source_updated_at"], "value": "2026-11-20T08:00:00+00:00"}], "expected_status": "blocked", "required_blockers": ["no_aircraft_candidate"]},
+    {"name": "wrong_locality", "patches": [{"path": ["needs", 0, "locality"], "value": "Fictional Other Ward"}], "expected_status": "blocked", "required_blockers": ["locality_mismatch"]}
+  ]
+}

@@ -28,10 +28,11 @@ from .incidents import router as incident_router
 from .inventory import router as inventory_router
 from .deliveries import router as delivery_router
 from .automation import router as automation_router, ingest_router as automation_ingest_router
+from .response import router as response_router, ingest_router as response_ingest_router
 from .models import Aircraft, AircraftChange, ImportBatch, Workspace, utcnow
 from .schemas import ConfirmRequest, HEADERS, MAX_BYTES, parse_timestamp
 
-app = FastAPI(title='Sampati', version='0.4.0', description='Civilian disaster response: reviewed evidence, relief needs, stock, delivery records and draft intake automation.')
+app = FastAPI(title='Sampati', version='0.5.0', description='Civilian disaster response: reviewed warnings, explained preparation workflows, relief needs, stock and delivery evidence.')
 data_router = APIRouter(tags=['Aircraft reports'])
 DB = Annotated[Session, Depends(get_session)]
 
@@ -204,6 +205,9 @@ app.include_router(auth_router)
 app.include_router(account_router)
 app.include_router(ingest_router)
 app.include_router(automation_ingest_router)
+app.include_router(response_ingest_router)
+app.include_router(response_router, prefix='/api/demo')
+app.include_router(response_router, prefix='/api')
 app.include_router(automation_router, prefix='/api/demo')
 app.include_router(automation_router, prefix='/api')
 app.include_router(delivery_router, prefix='/api/demo')

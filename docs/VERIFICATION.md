@@ -1,5 +1,19 @@
 # First milestone verification
 
+## Local release 0.5: civilian response preparation
+
+Executed on 22 November 2026; finish-review verdict completed on 23 November. The complete242-test suite, production build, dependency check and migration consistency check passed again on23 November. The compiled0.5 app and read-only response endpoints were verified on loopback, with original development record counts preserved. Earlier milestone checks below are retained as dated records.
+
+- The complete backend suite passed **242 tests**, including **40 response checks/parameter cases**. The response checks cover missing/negative evidence, exact stock and cargo arithmetic, shared-stock bounds, stable ordering, source-age boundaries, immutable warnings, scope/roles/CSRF, key rotation/revocation and issuer membership, saved-evidence invalidation, simultaneous save/review retries and support-report versions. Existing upstream test-client warnings remain.
+- TypeScript/Vite production build and `pip check` passed. Workspace tools now load on demand; a failed module download has a visible reload action while navigation remains usable. No runtime library was added.
+- Migration **009** applied in fresh disposable schemas in the dedicated test database; Alembic model consistency passed. The local development database then advanced from008 to009 after a verified backup, preserving existing record counts. Its schema009 archive restored successfully into a new temporary database, which was removed afterwards.
+- The real Edge journey passed warning entry/verification, a missing-support block, operator support editing, form preservation across sections, exact cargo calculation, lost-response save recovery producing one plan, review without stock changes, changed-evidence recheck, warning-only intake and narrow-screen containment at **1440/1024/390/320px**. Phone controls retained16px input text and44px targets. Expected retry aborts were induced deliberately; the successful journey recorded zero browser exceptions.
+- The final browser journey also reopened a saved plan after a full reload, explicitly loaded its saved inputs into a new draft, evaluated current stock, saved a distinct revision and checked the original evidence was unchanged. It verified that editing an older support report preserves its observation age and exact timestamp precision. The same precision is retained when a saved context report is reused.
+- A separate real-browser check deliberately blocked a workspace module download, verified the recovery message and usable navigation, then removed the block and recovered through **Reload workspace** on desktop and phone layouts.
+- The source design detector ran once and returned no regex findings. Independent visual review inspected the twelve original captures, requested two source-truth/recovery corrections, then scored both corrections and the stale-heading ambiguity **resolved**, disposition **ship at the reviewed scope**. The four affected recaptures were valid. Existing design tokens, fonts and approved artwork were preserved; this was not an exhaustive accessibility audit.
+
+These checks establish local software behaviour against authored examples. They do not establish independent source truth, field decision accuracy, aircraft readiness, dispatch authority or humanitarian outcomes. Live public-feed adapters, aviation planning and civilian-user evaluation remain separate work. See [the preparation contract and rule-evaluation workflow](RESPONSE_PLANNING.md).
+
 ## Inventory backend publication check — 8 November 2026
 
 - The expanded full backend suite passed **138 tests**, including inventory quantities, append-only records, request-linked reservations, roles/isolation, retries, balance limits and concurrent reservations. The existing upstream Starlette test-client deprecation warning remains.

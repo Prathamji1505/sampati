@@ -129,7 +129,7 @@ class Invitation(Base):
 class DataSource(Base):
     __tablename__ = 'data_sources'
     __table_args__ = (UniqueConstraint('workspace_id','id'),
-        CheckConstraint("purpose IN ('aircraft','relief')"),
+        CheckConstraint("purpose IN ('aircraft','relief','response')"),
         CheckConstraint("automation_mode IN ('review','new_drafts')"),
         CheckConstraint("purpose = 'relief' OR automation_mode = 'review'"),CheckConstraint('policy_version >= 1'))
     id: Mapped[str] = mapped_column(String(36), primary_key=True)

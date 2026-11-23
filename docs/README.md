@@ -24,6 +24,7 @@ Sampati is a standalone civilian disaster-response and relief-coordination appli
 
 | Workflow | Guide |
 | --- | --- |
+| Verify warning/news evidence and prepare an explained resource workflow | [Response preparation and deterministic rules](RESPONSE_PLANNING.md) |
 | Review dated flood assessments and create linked needs | [Incidents](INCIDENTS.md) |
 | Record, submit, review and correct a supply request | [Relief requests](RELIEF_REQUESTS.md) |
 | Account for receipts, reservations, issues and returns | [Aid inventory](INVENTORY.md) |

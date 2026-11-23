@@ -31,4 +31,6 @@ Use fictional organisation-level information. Keep keys, passwords and recovery 
 
 ## Go deeper
 
-[Incidents](INCIDENTS.md) · [Requests](RELIEF_REQUESTS.md) · [Inventory](INVENTORY.md) · [Deliveries](DELIVERIES.md) · [Automation](AUTOMATION.md) · [Verification](VERIFICATION.md)
+For the 0.5 preparation workflow, open **Response preparation**. A warning starts unreviewed; combine its verified evidence with reviewed supply requests, exact stock, sourced weights and dated aircraft/context reports. The planner explains missing checks before it allows coordinator review. Its saved review does not reserve supplies or authorise flight. [Follow the preparation guide](RESPONSE_PLANNING.md).
+
+[Response preparation](RESPONSE_PLANNING.md) · [Incidents](INCIDENTS.md) · [Requests](RELIEF_REQUESTS.md) · [Inventory](INVENTORY.md) · [Deliveries](DELIVERIES.md) · [Automation](AUTOMATION.md) · [Verification](VERIFICATION.md)
