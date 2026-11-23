@@ -14,6 +14,7 @@ async page => {
     check(await recovery.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Recovery page overflows phone width');
     await recovery.screenshot({path:'.impeccable/review/response-module-error-mobile.png',fullPage:true});
     await recovery.setViewportSize({width:1440,height:1000});
+    await recovery.getByRole('button',{name:'Aircraft & data',exact:true}).click();
     await recovery.getByRole('button',{name:/^Aircraft register/}).click();
     await recovery.getByRole('heading',{name:'Aircraft register',exact:true}).waitFor();
     await recovery.getByRole('button',{name:'Response preparation',exact:true}).click();

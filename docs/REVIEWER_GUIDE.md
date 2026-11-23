@@ -2,6 +2,8 @@
 
 Start the local app using [SETUP.md](SETUP.md). Use the shared **Demo workspace** to inspect fixed fictional records. Create your own organisation for a complete write walkthrough. No paid API or model download is required.
 
+The sidebar keeps Overview and the main relief tasks visible. Expand **Aircraft & data** for the aircraft register, imports, history, report checks and data connections; expand **Workspace settings** for team and account pages. **Workspace guide** and the session action stay below the scrolling menu. On a phone, open the menu button; choose a destination, press Escape or tap outside to close it.
+
 ## See the result first
 
 1. Open **Delivery tracking → Request follow-up**.

@@ -79,6 +79,7 @@ async page => {
   await retry.getByRole('button',{name:'Record stock event',exact:true}).click();await retry.getByRole('alert').filter({hasText:'The local server could not be reached'}).waitFor();await retry.getByRole('button',{name:'Record stock event',exact:true}).click();await retry.getByRole('status').filter({hasText:'This event was already recorded'}).waitFor()
   current=await get(page,positionPath);check(current.position.on_hand==='87.125' && current.records.filter(record=>record.reference==='QA-RETRY-001').length===1,'Lost-response retry duplicated stock')
   await retryContext.close()
+  await page.getByRole('button',{name:'Aircraft & data',exact:true}).click()
   await page.getByRole('navigation',{name:'Main navigation'}).getByRole('button',{name:/^Aircraft register/}).click()
   let releaseRefresh,markHeld
   const gate=new Promise(resolve=>{releaseRefresh=resolve});const held=new Promise(resolve=>{markHeld=resolve})

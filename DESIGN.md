@@ -185,7 +185,7 @@ Retain the fixed desktop sidebar, workspace top bar, page heading with action, a
 
 The page-heading region has a minimum height of 200px on desktop and 185px at 850px and below. Its copy occupies up to 52% of the desktop width, leaving room for the bird on the right. At 640px and below, copy may use 88% and the import action sits beneath the heading text.
 
-The standard sidebar is 236px wide, with a matching content offset and 38px horizontal workspace inset. It narrows to 210px at 1180px and 185px at 850px. At 640px and below, the sidebar becomes a menu drawer under the 64px header; the compact bilingual brand occupies the header and the content offset disappears. Mobile main content uses 18px horizontal padding.
+The standard sidebar is 236px wide, with a matching content offset and 38px horizontal workspace inset. Keep its readable width on smaller desktop windows. Seven relief destinations remain visible; Aircraft & data and Workspace settings expand to reveal supporting pages. Only the navigation list scrolls, while the guide and session action stay below it. At 640px and below, the sidebar becomes a drawer under the 64px header, up to 280px wide with at least 48px left outside it for closing; the compact bilingual brand occupies the header and the content offset disappears. Mobile main content uses 18px horizontal padding.
 
 Import has a flexible work column and a 240px help column. At 850px and below it becomes one column and hides the help aside. At 1600px and above, workspace insets expand to 52px. Spacing uses the recurring frontmatter steps with component-specific insets where observed; it is not a rigid grid.
 
@@ -213,7 +213,7 @@ The current painted emblem was explicitly approved on 8 November 2026. Its layer
 - **Status and freshness:** Text accompanies each dot or tag. Available uses success; unavailable uses warning; unknown uses neutral. Freshness is a separate indicator and never certifies availability or airworthiness.
 - **Panels and tables:** Work panels use a surface fill, thin divider border and panel radius. Table headers use the raised surface; row hover is tonal. Keep aligned timestamps and the source-and-freshness relationship.
 - **Import:** Dashed upload boundary, numbered progress, actionable validation and a review table showing previous/incoming values. Dragging uses the soft crimson surface. Confirmation stays explicit; empty, loading, disabled and error states remain visible.
-- **Identity:** Use the transparent bird emblem with the Yatra One SAMPATI wordmark and सम्पाति. Keep the descriptor in the desktop sidebar and the bilingual compact lockup in the mobile header. The approved panorama belongs behind the page-heading region, with its text scrim and bottom fade.
+- **Identity:** Use the transparent bird emblem with the Yatra One SAMPATI wordmark and सम्पाति. Keep the bilingual identity in the desktop sidebar and its compact lockup in the mobile header. The approved panorama belongs behind the page-heading region, with its text scrim and bottom fade.
 
 ## Do's and Don'ts
 

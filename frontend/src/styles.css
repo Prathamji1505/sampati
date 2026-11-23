@@ -57,7 +57,7 @@
 }
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: min(320px, 100%);
 }
 button,
 input,
@@ -159,7 +159,8 @@ input {
   background: var(--nav);
   border-right: 1px solid var(--line);
   color: var(--muted);
-  padding: 32px 16px 0;
+  padding: 20px 12px 0;
+  overflow: hidden;
   z-index: 20;
 }
 .brand {
@@ -206,9 +207,8 @@ input {
   display: flex;
   gap: 10px;
   align-items: center;
-  margin: 24px 5px 27px;
-  padding: 12px 8px;
-  border-top: 1px solid var(--line);
+  margin: 14px 0 14px;
+  padding: 12px 6px;
   border-bottom: 1px solid var(--line);
 }
 .workspace-avatar {
@@ -240,17 +240,92 @@ input {
   margin-left: auto;
   color: var(--muted);
 }
-.nav-group-label {
-  font-size: 9px;
-  letter-spacing: 1.7px;
-  color: var(--muted);
-  font-weight: 600;
-  padding: 0 16px;
-  margin-bottom: 12px;
+.sidebar .brand,
+.sidebar .workspace-switch,
+.sidebar-bottom {
+  flex-shrink: 0;
 }
-.sidebar nav {
+.sidebar .workspace-navigation {
+  display: block;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 3px 4px 8px;
+  margin: 0 -4px;
+  overscroll-behavior: contain;
+}
+.nav-primary,
+.nav-subitems {
   display: grid;
-  gap: 5px;
+  gap: 2px;
+}
+.nav-subitems[hidden] {
+  display: none;
+}
+.workspace-navigation button:focus-visible {
+  outline-offset: -3px;
+}
+.nav-utilities {
+  border-top: 1px solid var(--line);
+  margin-top: 10px;
+  padding-top: 8px;
+}
+.sidebar .nav-item,
+.nav-group-toggle {
+  min-width: 0;
+  min-height: 44px;
+  gap: 10px;
+  padding: 10px;
+  font-size: 13px;
+}
+.sidebar .nav-item > svg,
+.nav-group-toggle > svg {
+  flex-shrink: 0;
+}
+.nav-item-label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.nav-group-toggle {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  font-weight: 500;
+}
+.nav-group-toggle > span {
+  flex: 1;
+  min-width: 0;
+}
+.nav-group-toggle > span > small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--accent-text);
+}
+.nav-group-toggle.contains-current {
+  color: var(--ink);
+}
+.nav-group-toggle.contains-current > svg:first-child {
+  color: var(--accent-text);
+}
+.nav-subitems {
+  margin: 3px 0 8px 8px;
+  padding-left: 7px;
+  border-left: 1px solid var(--line);
+}
+.sidebar .nav-subitems .nav-item {
+  font-size: 12px;
+  padding-left: 7px;
+  gap: 8px;
+}
+.nav-backdrop {
+  display: none;
 }
 .nav-item {
   display: flex;
@@ -275,6 +350,10 @@ input {
     background: var(--surface-raised);
     color: var(--ink);
   }
+  .nav-group-toggle:hover {
+    background: var(--surface-raised);
+    color: var(--ink);
+  }
 }
 .nav-item.active {
   background: var(--accent-soft);
@@ -293,8 +372,8 @@ input {
   border-radius: 5px;
 }
 .sidebar-bottom {
-  margin-top: auto;
-  padding-top: 50px;
+  padding: 8px 0 12px;
+  border-top: 1px solid var(--line);
 }
 .demo-context {
   display: flex;
@@ -322,7 +401,7 @@ input {
   gap: 10px;
   align-items: center;
   border-top: 1px solid var(--line);
-  padding: 20px 8px;
+  padding: 12px 6px 0;
 }
 .user-avatar {
   width: 31px;
@@ -1940,12 +2019,12 @@ a {
 }
 @media (max-width: 1180px) {
   .sidebar {
-    width: 210px;
+    width: 236px;
     padding-left: 12px;
     padding-right: 12px;
   }
   .main-shell {
-    margin-left: 210px;
+    margin-left: 236px;
   }
   .brand {
     font-size: 25px;
@@ -1995,11 +2074,11 @@ a {
 }
 @media (max-width: 850px) {
   .sidebar {
-    width: 185px;
-    padding: 27px 9px 0;
+    width: 236px;
+    padding: 20px 12px 0;
   }
   .main-shell {
-    margin-left: 185px;
+    margin-left: 236px;
   }
   .brand {
     font-size: 23px;
@@ -2025,7 +2104,7 @@ a {
   }
   .workspace-switch {
     gap: 7px;
-    margin-top: 28px;
+    margin-top: 14px;
   }
   .workspace-switch strong,
   .local-user strong {
@@ -2034,9 +2113,6 @@ a {
   .workspace-switch small,
   .local-user small {
     font-size: 9px;
-  }
-  .workspace-switch > svg {
-    display: none;
   }
   .topbar {
     padding: 0 22px;
@@ -2121,13 +2197,21 @@ a {
 @media (max-width: 640px) {
   .sidebar {
     display: none;
-    width: 236px;
+    width: min(280px, calc(100% - 48px));
     top: 64px;
-    padding: 25px 16px 0;
+    padding: 16px 12px 0;
     box-shadow: 12px 0 35px #00000066;
   }
   .sidebar.nav-open {
     display: flex;
+  }
+  .nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 64px 0 0 min(280px, calc(100% - 48px));
+    z-index: 19;
+    background: #00000099;
+    border: 0;
   }
   .sidebar .brand {
     display: none;

@@ -346,12 +346,6 @@
   font-size: 13px;
   overflow-wrap: anywhere;
 }
-.sidebar {
-  overflow-y: auto;
-}
-.sidebar-bottom {
-  padding-top: 25px;
-}
 .export-actions {
   display: flex;
   align-items: center;

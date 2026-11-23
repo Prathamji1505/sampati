@@ -68,6 +68,7 @@ async page => {
   await page.getByRole('heading', { name: 'Your workspace, explained', exact: true }).waitFor()
   await page.screenshot({ path: '.impeccable/review/mobile-guide.png', fullPage: true })
   await page.setViewportSize({ width: 1440, height: 1000 })
+  await page.getByRole('button', { name: 'Aircraft & data', exact: true }).click()
   await page.getByRole('button', { name: /^Aircraft register \d+$/ }).click()
   return { passed: ['preview does not save', 'confirmed import persists', 'search', 'status filter', 'freshness filter', 'aircraft details', 'import audit', 'repeat upload is a no-op', 'invalid file cannot be confirmed', 'reload persistence', 'mobile no page overflow', 'mobile navigation'], aircraft: (await state()).aircraft.length }
 }

@@ -1,5 +1,11 @@
 # First milestone verification
 
+## Navigation refinement — 23 November 2026
+
+The sidebar now groups supporting aircraft/data and workspace administration while keeping seven relief destinations visible. In the actual in-app browser, all 14 main destinations and the guide remained reachable; current deep links revealed their group. Keyboard disclosure, active-item focus, Escape/outside close with focus return, and automatic close after mobile navigation passed. Final containment checks covered 1440, 1024, 782, 390 and 320 px, plus a 782×520 short window: no sideways sidebar overflow, no default menu scrolling at the reported 782×721 size, and help/session access remained fixed while long menus scrolled. The 320 px check compares page width with the document's client width, accounting for classic vertical scrollbars. Mobile targets measured at least 44 px. The TypeScript/production build passed and the source design detector returned no regex findings. Existing browser regression scripts were adapted for the new groups and syntax-checked; their complete write journeys were not repeated for this navigation-only change.
+
+Independent finish review inspected the final nine navigation captures and source, confirmed the documentation and phone-overflow corrections, and returned **ship at the reviewed sidebar scope**. The existing palette, fonts and approved artwork were preserved. The temporary browser viewport override was reset after verification.
+
 ## Local release 0.5: civilian response preparation
 
 Executed on 22 November 2026; finish-review verdict completed on 23 November. The complete242-test suite, production build, dependency check and migration consistency check passed again on23 November. The compiled0.5 app and read-only response endpoints were verified on loopback, with original development record counts preserved. Earlier milestone checks below are retained as dated records.

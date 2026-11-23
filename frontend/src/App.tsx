@@ -5,12 +5,6 @@ import {
   BookOpen,
   Check,
   CheckCircle2,
-  ClipboardCheck,
-  PackagePlus,
-  Waves,
-  Warehouse,
-  Truck,
-  Inbox,
   ChevronDown,
   ChevronRight,
   CircleAlert,
@@ -21,12 +15,6 @@ import {
   FolderOpen,
   History,
   Info,
-  LayoutList,
-  BarChart3,
-  Plug,
-  Users,
-  Settings,
-  LogIn,
   LogOut,
   Menu,
   Plane,
@@ -46,6 +34,8 @@ import {
 } from "./api";
 import AuthScreen from "./AuthScreen";
 import WorkspacePanelBoundary from "./WorkspacePanelBoundary";
+import WorkspaceNavigation from "./WorkspaceNavigation";
+import type { WorkspaceView } from "./WorkspaceNavigation";
 const WorkspaceTools = lazy(() => import("./WorkspaceTools"));
 const ReportChecks = lazy(() => import("./ReportChecks"));
 const ReliefRequests = lazy(() => import("./ReliefRequests"));
@@ -70,22 +60,7 @@ import type {
   WorkspaceScope,
 } from "./types";
 
-type View =
-  | "aircraft"
-  | "upload"
-  | "history"
-  | "guide"
-  | "overview"
-  | "checks"
-  | "relief"
-  | "incidents"
-  | "inventory"
-  | "deliveries"
-  | "automation"
-  | "response"
-  | "sources"
-  | "team"
-  | "account";
+type View = WorkspaceView;
 type Route =
   "welcome" | "welcomeGuide" | "login" | "register" | "recover" | View;
 const routeFragments: Record<Route, string> = {
@@ -462,6 +437,21 @@ function Workspace({
     changes: Change[];
   } | null>(null);
   const [mobileNav, setMobileNav] = useState(false);
+  useEffect(() => {
+    if (mobileNav) {
+      const current = document.querySelector<HTMLElement>(
+        ".sidebar [aria-current='page']",
+      );
+      const first = document.querySelector<HTMLElement>(
+        ".workspace-navigation button",
+      );
+      (current?.getClientRects().length ? current : first)?.focus();
+    }
+  }, [mobileNav]);
+  function closeNavigation() {
+    setMobileNav(false);
+    document.getElementById("navigation-toggle")?.focus();
+  }
   const inputRef = useRef<HTMLInputElement>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const canImport = scope === "demo" || session?.workspace?.role !== "viewer";
@@ -699,13 +689,24 @@ function Workspace({
       >
         Skip to content
       </a>
-      <aside className={`sidebar ${mobileNav ? "nav-open" : ""}`}>
+      {mobileNav && (
+        <button
+          className="nav-backdrop"
+          aria-label="Close navigation"
+          onClick={closeNavigation}
+        />
+      )}
+      <aside
+        id="workspace-navigation"
+        className={`sidebar ${mobileNav ? "nav-open" : ""}`}
+        aria-label="Workspace navigation"
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            closeNavigation();
+          }
+        }}
+      >
         <Brand onNavigate={onHome} />
-        <p className="brand-description">
-          Disaster Response &amp;
-          <br />
-          Relief Coordination
-        </p>
         <div className="workspace-switch">
           <span className="workspace-avatar">
             {scope === "demo"
@@ -751,41 +752,12 @@ function Workspace({
           </div>
           <ChevronDown size={14} aria-hidden="true" />
         </div>
-        <div className="nav-group-label">WORKSPACE</div>
-        <nav aria-label="Main navigation">
-          {(
-            [
-              { key: "response", label: "Response preparation", icon: Plane },
-              { key: "automation", label: "Automation inbox", icon: Inbox },
-              { key: "incidents", label: "Incident review", icon: Waves },
-              { key: "relief", label: "Relief requests", icon: PackagePlus },
-              { key: "inventory", label: "Aid inventory", icon: Warehouse },
-              { key: "deliveries", label: "Delivery tracking", icon: Truck },
-              { key: "aircraft", label: "Aircraft register", icon: LayoutList },
-              { key: "upload", label: "Import dataset", icon: Upload },
-              { key: "history", label: "Import history", icon: History },
-              { key: "overview", label: "Overview", icon: BarChart3 },
-              { key: "checks", label: "Report checks", icon: ClipboardCheck },
-              { key: "sources", label: "Data connections", icon: Plug },
-              { key: "team", label: "Organisation team", icon: Users },
-              { key: "account", label: "Account settings", icon: Settings },
-            ] as const
-          ).map((item) => (
-            <button
-              key={item.key}
-              className={`nav-item ${view === item.key ? "active" : ""}`}
-              aria-current={view === item.key ? "page" : undefined}
-              onClick={() => navigate(item.key)}
-              disabled={item.key === "upload" && !canImport}
-            >
-              <item.icon size={18} />
-              <span>{item.label}</span>
-              {item.key === "aircraft" && (
-                <span className="nav-count">{counts.all}</span>
-              )}
-            </button>
-          ))}
-        </nav>
+        <WorkspaceNavigation
+          view={view}
+          onNavigate={navigate}
+          canImport={canImport}
+          aircraftCount={counts.all}
+        />
         <div className="sidebar-bottom">
           <button
             className={`nav-item ${view === "guide" ? "active" : ""}`}
@@ -795,43 +767,38 @@ function Workspace({
             <BookOpen size={18} />
             Workspace guide
           </button>
-          <div className="demo-context">
-            <ShieldCheck size={19} />
-            <div>
-              <strong>A space to learn.</strong>
-              <p>Fictional records. Real workflow.</p>
+          {session?.user && (
+            <div className="local-user">
+              <span className="user-avatar">
+                {session?.user?.display_name[0]?.toUpperCase() || "D"}
+              </span>
+              <div>
+                <strong title={session?.user?.display_name}>
+                  {session?.user?.display_name || "Demo visitor"}
+                </strong>
+                <small>
+                  {session?.user
+                    ? `@${session.user.username}`
+                    : "Explore with sample data"}
+                </small>
+              </div>
+              <button
+                className="icon-button account-session-button"
+                aria-label="Sign out"
+                title="Sign out"
+                disabled={working}
+                onClick={() => void leaveAccount()}
+              >
+                <LogOut size={17} />
+              </button>
             </div>
-          </div>
-          <div className="local-user">
-            <span className="user-avatar">
-              {session?.user?.display_name[0]?.toUpperCase() || "D"}
-            </span>
-            <div>
-              <strong title={session?.user?.display_name}>
-                {session?.user?.display_name || "Demo visitor"}
-              </strong>
-              <small>
-                {session?.user
-                  ? `@${session.user.username}`
-                  : "Explore with sample data"}
-              </small>
-            </div>
-            <button
-              className="icon-button account-session-button"
-              aria-label={session?.user ? "Sign out" : "Sign in"}
-              title={session?.user ? "Sign out" : "Sign in"}
-              disabled={working}
-              onClick={session?.user ? () => void leaveAccount() : onSignIn}
-            >
-              {session?.user ? <LogOut size={17} /> : <LogIn size={17} />}
-            </button>
-          </div>
+          )}
           {!session?.user && (
             <button
               className="button secondary sidebar-signin"
               onClick={onSignIn}
             >
-              Sign in or create an account
+              Sign in
               <ArrowRight size={14} />
             </button>
           )}
@@ -841,10 +808,12 @@ function Workspace({
         <header className="topbar">
           <div className="breadcrumbs">
             <button
+              id="navigation-toggle"
               className="icon-button menu-button"
               onClick={() => setMobileNav(!mobileNav)}
               aria-label="Toggle navigation"
               aria-expanded={mobileNav}
+              aria-controls="workspace-navigation"
             >
               <Menu size={20} />
             </button>

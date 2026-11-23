@@ -31,6 +31,9 @@ async page => {
   const navigate = async (target, name) => {
     if (await target.getByRole('button', { name: 'Toggle navigation', exact: true }).isVisible())
       await target.getByRole('button', { name: 'Toggle navigation', exact: true }).click()
+    const group = ['Organisation team', 'Account settings'].includes(name) ? 'Workspace settings' : 'Aircraft & data'
+    const disclosure = target.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name: new RegExp('^' + group) })
+    if (await disclosure.getAttribute('aria-expanded') !== 'true') await disclosure.click()
     await target.getByRole('navigation', { name: 'Main navigation' }).getByRole('button', { name, exact: name !== 'Aircraft register' }).click()
   }
   await page.setViewportSize({ width: 1440, height: 1000 })
