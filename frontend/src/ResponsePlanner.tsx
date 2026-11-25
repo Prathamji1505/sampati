@@ -684,7 +684,7 @@ function Warnings({
                     name="reference"
                     required
                     maxLength={64}
-                    pattern="[A-Za-z0-9][A-Za-z0-9._/\-]*"
+                    pattern={"[A-Za-z0-9][A-Za-z0-9._\\x2f\\x2d]*"}
                   />
                 </Field>
                 <Field title="Report type">
