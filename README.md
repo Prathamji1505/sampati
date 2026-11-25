@@ -18,7 +18,13 @@ Sampati helps civilian relief teams see **what is needed, what is in stock and w
 
 <a href="docs/images/remaining-needs.png"><img src="docs/images/remaining-needs.png" width="1440" alt="Actual Sampati relief follow-up workspace: 40 shelter kits requested, 10 source-confirmed and 30 still needed, with the full civilian coordination navigation"></a>
 
-*Actual product capture, 8 November 2026. The shared fictional example has 40 kits requested, 10 recorded as arrived and 30 still needed. These are software demonstration records. [Screenshot provenance](docs/images/README.md) · [Follow this example](docs/REVIEWER_GUIDE.md).*
+*Actual product capture, refreshed 25 November 2026. The shared fictional example has 40 kits requested, 10 recorded as arrived and 30 still needed. These are software demonstration records. [Screenshot provenance](docs/images/README.md) · [Follow this example](docs/REVIEWER_GUIDE.md).*
+
+### Latest progress · 25 November 2026
+
+Release **0.5** adds warning/news review, dated aircraft-support evidence and an explained response-preparation workflow. It brings reviewed needs, exact stock, prior commitments, sourced cargo weights and operator/context reports into a saved preparation record. The sidebar now keeps the relief tasks visible and groups supporting aircraft/data and workspace settings. All product captures below show the current interface.
+
+[Progress and next milestones](docs/PROGRESS.md) · [Response-preparation guide](docs/RESPONSE_PLANNING.md)
 
 ## Why Sampati
 
@@ -40,6 +46,12 @@ Transport operators retain authority over actual operations. A stock issue alone
 
 ## See the workspace
 
+### Prepare a response with visible evidence
+
+<a href="docs/images/response-preparation.png"><img src="docs/images/response-preparation.png" width="1440" alt="Actual Sampati preparation result: 40 fictional water packs, 80 kilograms proposed cargo, explicit evidence checks and coordinator review"></a>
+
+The new planner explains missing evidence before allowing coordinator review. In this **isolated fictional test workspace**, 40 packs at 2 kg per pack produce an 80 kg proposal. Review leaves all 100 packs in stock; committing resources and obtaining operator dispatch approval remain separate actions. [Preparation rules and limits](docs/RESPONSE_PLANNING.md)
+
 ### Review evidence and incoming needs
 
 <a href="docs/images/intake-evidence.png"><img src="docs/images/intake-evidence.png" width="1440" alt="Actual Automation Inbox detail with dated source context, policy version, rule version and a new request draft proposal"></a>
@@ -53,7 +65,15 @@ CSV/JSON relief files become **new draft proposals, unchanged duplicates or conf
 Exact stock balances, request-linked movements, immutable shipment references and source-backed arrivals make the chain inspectable. Undelivered returns update the original store and shipment together; corrections retain the original evidence. [Inventory](docs/INVENTORY.md) · [Delivery tracking](docs/DELIVERIES.md)
 
 <details>
-<summary><strong>More actual screens</strong> — incidents, inventory, handover and mobile</summary>
+<summary><strong>More actual screens</strong> — warnings, requests, incidents, inventory, handover and mobile</summary>
+
+#### Warning and news review
+
+![Fictional warning with source, observation time, expiry and a recorded human review](docs/images/warning-review.png)
+
+#### Relief requests
+
+![Fictional relief-request register in the current organisation workspace](docs/images/relief-requests.png)
 
 #### Flood incident review
 
@@ -76,6 +96,13 @@ Exact stock balances, request-linked movements, immutable shipment references an
 <img src="docs/images/relief-mobile.png" width="390" alt="Sampati's Automation Inbox in a 390-pixel touch-enabled browser context">
 
 The phone image is browser emulation. Wider tables scroll inside their own region. Captures use the fictional shared demo; dates and freshness reflect capture time. [Open full-size screens and provenance](docs/images/README.md).
+
+#### Current mobile navigation and preparation
+
+<img src="docs/images/navigation-mobile.png" width="330" alt="Current mobile menu with the primary relief tasks, grouped aircraft/data and workspace settings, guide and session action">
+<img src="docs/images/response-mobile.png" width="330" alt="Coordinator-reviewed fictional preparation with proposed quantities and explained workflow steps on a phone-sized screen">
+
+Preparation and warning captures use a disposable fictional test workspace; the other module captures use the shared fictional demo. No real organisation data is shown.
 
 </details>
 
@@ -121,7 +148,7 @@ Response preparation uses versioned deterministic rules. Its labelled-example ev
 
 Workspace locks, current-version checks and canonical repeat detection protect accepted changes. Exact decimal storage keeps quantities in their declared units. Related stock, shipment and audit records commit atomically.
 
-Local checks on **22–23 November 2026** include **242 passing backend tests**, the production build, migration consistency, real-browser workflows, actual file-watcher submissions, retries/concurrency and a disposable backup restore. Preparation checks also cover saved-input revision and preservation of source observation dates. These are software checks, not model-accuracy or welfare measurements. [Executed verification and limits](docs/VERIFICATION.md) · [GitHub Actions](https://github.com/Prathamji1505/sampati/actions)
+The **25 November 2026** refresh passed **242 backend tests**, the production build, migration consistency, dependency checks and the two current screenshot journeys. The earlier 22–23 November verification also records full browser workflows, actual file-watcher submissions, retries/concurrency, a disposable backup restore, saved-input revision and preservation of source observation dates. These are software checks, not model-accuracy or welfare measurements. [Executed verification and limits](docs/VERIFICATION.md) · [GitHub Actions](https://github.com/Prathamji1505/sampati/actions)
 
 ## Explore the project
 
@@ -129,9 +156,11 @@ Local checks on **22–23 November 2026** include **242 passing backend tests**,
 | --- | --- |
 | A reproducible product demonstration | [Reviewer guide](docs/REVIEWER_GUIDE.md) |
 | What works and what remains unconfigured | [Local release scope](docs/RELEASE.md) |
+| What changed recently and what comes next | [Progress snapshot](docs/PROGRESS.md) |
 | Architecture and source files | [Architecture](docs/ARCHITECTURE.md) · [Learning guide](docs/LEARNING_GUIDE.md) |
 | Workflow contracts and boundaries | [Requirements](docs/REQUIREMENTS.md) · [Roadmap](docs/ROADMAP.md) |
 | Asset origins and screenshot context | [Visual provenance](docs/images/README.md) · [Third-party notices](THIRD_PARTY_NOTICES.md) |
+| Dated problem, alternatives and commercial research | [Research notes](docs/research/README.md) |
 
 [All documentation, grouped by task →](docs/README.md)
 

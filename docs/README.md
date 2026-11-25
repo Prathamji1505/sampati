@@ -8,8 +8,10 @@ Sampati is a standalone civilian disaster-response and relief-coordination appli
 | --- | --- |
 | Follow one example from need to arrival | [Product walkthrough](REVIEWER_GUIDE.md) |
 | See what works in the current local release | [Release scope](RELEASE.md) |
+| See the latest progress and next evidence gates | [Progress snapshot](PROGRESS.md) |
 | Understand the civilian purpose and boundaries | [Civilian welfare scope](CIVILIAN_WELFARE_SCOPE.md) |
 | See the remaining development milestones | [Roadmap](ROADMAP.md) |
+| Explore dated problem, alternative and commercial evidence | [Research notes](research/README.md) |
 
 ## Run and learn
 

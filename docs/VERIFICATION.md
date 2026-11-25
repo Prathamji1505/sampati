@@ -1,5 +1,16 @@
 # First milestone verification
 
+## Repository and screenshot refresh — 25 November 2026
+
+- The full backend suite passed **242 tests**. The existing upstream Starlette test-client deprecation warning remains. An initial run was stopped while PostgreSQL was recovering from an earlier shutdown; the complete passing run began after the database was ready.
+- The production build passed, including TypeScript checking. Alembic model/schema consistency and Python dependency checks passed.
+- `scripts/capture_showcase.js` refreshed **15 shared-demo screenshots**, including the current navigation and mobile menu. It reported zero console/page errors, no page overflow, zero accepted-data writes and unchanged aircraft revision/import and module record counts. The sample import was previewed but never confirmed.
+- `scripts/capture_response_showcase.js` captured **six additional screens** in a temporary schema of the dedicated test database. It exercised fictional warning entry/review, a missing-support block, operator evidence, a 40-pack/80 kg preparation and coordinator review without changing the 100-pack stock position. A separate touch context reopened the saved preparation with no page overflow. The final run reported zero browser exceptions or console errors.
+- Capturing the warning form exposed an invalid native HTML pattern for reference punctuation in Chromium's Unicode-set mode. The pattern now encodes slash/hyphen safely. Browser checks confirmed that `QA/WARN-01` passes and `QA!WARN` fails native validation. The production build passed after correction.
+- [Screenshot provenance](images/README.md) records the current source, routes, dimensions and fictional-data boundaries. Earlier source dates remain intact. The dated November 9 research notes are indexed as background, rather than presented as freshly retrieved evidence or an implemented capability.
+
+These checks cover the refresh and named scenarios. They do not repeat every prior browser journey or establish real-world accuracy, full accessibility, deployment readiness or humanitarian outcomes.
+
 ## Navigation refinement — 23 November 2026
 
 The sidebar now groups supporting aircraft/data and workspace administration while keeping seven relief destinations visible. In the actual in-app browser, all 14 main destinations and the guide remained reachable; current deep links revealed their group. Keyboard disclosure, active-item focus, Escape/outside close with focus return, and automatic close after mobile navigation passed. Final containment checks covered 1440, 1024, 782, 390 and 320 px, plus a 782×520 short window: no sideways sidebar overflow, no default menu scrolling at the reported 782×721 size, and help/session access remained fixed while long menus scrolled. The 320 px check compares page width with the document's client width, accounting for classic vertical scrollbars. Mobile targets measured at least 44 px. The TypeScript/production build passed and the source design detector returned no regex findings. Existing browser regression scripts were adapted for the new groups and syntax-checked; their complete write journeys were not repeated for this navigation-only change.

@@ -1,6 +1,6 @@
 # Sampati: disaster-response roadmap
 
-Direction reviewed 22 November 2026. Governing scope: [civilian-welfare charter](CIVILIAN_WELFARE_SCOPE.md).
+Progress snapshot updated 25 November 2026; governing direction retained from 22 November. [Current progress](PROGRESS.md) · [Civilian-welfare charter](CIVILIAN_WELFARE_SCOPE.md).
 
 ## The goal
 
